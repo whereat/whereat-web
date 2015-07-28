@@ -1,7 +1,10 @@
+'use strict';
+
 const Marty = require('marty');
 const Root = require('./components/Root');
 const React = require('react');
 const Application = require('./application');
+require('./styles/main.less');
 
 window.React = React;
 window.Marty = Marty;
