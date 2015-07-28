@@ -7,7 +7,7 @@ var config = {
   entry: path.resolve(__dirname, 'app/main.jsx'),
   output: {
     path: 'build',
-    filename: '/app.js'
+    filename: './app.js'
   },
   plugins: [
     new webpack.DefinePlugin({ "process.env": JSON.stringify(process.env)}),
