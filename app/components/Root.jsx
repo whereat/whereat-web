@@ -1,5 +1,6 @@
 const Marty = require('marty');
 const BaseComponent = require('./BaseComponent');
+const Header = require('./Header');
 
 class Root extends BaseComponent {
   constructor(){
@@ -7,7 +8,9 @@ class Root extends BaseComponent {
   }
 
   render(){
-    return (<h1>Hello World!</h1>);
+    return (
+      <Header />
+    );
   };
 }
 
