@@ -1,0 +1,25 @@
+{
+  "name": "whereat-web",
+  "version": "1.0.0",
+  "description": "location sharing app for activists",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:the-learning-collective/whereat-web.git"
+  },
+  "keywords": [
+    "mobile",
+    "web",
+    "location",
+    "socialJustice"
+  ],
+  "author": "@aguestuser",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/the-learning-collective/whereat-web/issues"
+  },
+  "homepage": "https://github.com/the-learning-collective/whereat-web"
+}
