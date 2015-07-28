@@ -1,0 +1,29 @@
+html, body {
+  min-width: 320px;
+  min-height: 100%;
+}
+
+// there appears to be a bootstrap bug here
+.glyphicon-plus:before {
+  content: "+";
+}
+
+body {
+  background: transparent;
+}
+
+#content {
+  min-height: 100%;
+}
+
+@media (max-width: @screen-xs) {
+  body {
+    font-size: 10px;
+  }
+}
+
+.separator {
+  color: #9E9E9E;
+  font-weight: bold;
+  margin: 0 10px 0 10px;
+}

@@ -6,7 +6,6 @@ var deps = [
   'react/dist/react-with-addons.js',
   'marty/dist/marty.min.js',
   'immutable/dist/immutable.min.js',
-//  'jquery/dist/jquery.min.js',
   'lodash/index.js'
 ];
 
@@ -20,7 +19,6 @@ var config = {
       'react',
       'marty',
       'immutable',
-//      'jquery',
       'lodash'
     ]
   },
@@ -36,20 +34,20 @@ var config = {
   module: {
     loaders: [
       { test: path.resolve(node_modules, deps[0]),
-        loader: "expose?React" },
+        loader: "expose?React" },// get rid of this?
       { test: /\.jsx?$/,
         exclude: [node_modules],
         loaders: ['react-hot', 'babel'] },
+      {
+        test: /\.css$/,
+        loader: 'style-loader!css-loader!postcss-loader'
+      },
       { test: /\.less$/,
-        loader: 'style-loader!css-loader!less-loader' },
-      { test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,
-        loader: "url?limit=10000&minetype=application/font-woff" },
-      { test: /\.woff2(\?v=\d+\.\d+\.\d+)?$/,
-        loader: "url?limit=10000&minetype=application/font-woff" },
-      { test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
-        loader: "url?limit=10000&minetype=application/octet-stream" },
-      { test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
-        loader: "file" },
+        loader: 'style-loader!css-loader!postcss-loader!less-loader' },
+      {
+        test: /\.(eot|ttf|woff|woff2|svg|svgz)($|\?)/,
+        loader: 'file'
+      },
       { test: /\.xml$/,
         loader: 'xml-loader' },
       { test: /\.(jpe?g|png|gif)$/i,
