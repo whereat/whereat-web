@@ -1,9 +1,47 @@
 @import "./bootstrap/bootstrap.less";
-@import "./root.less";
-@import "./globals.less";
-@import "./navbar.less";
 
-.body {
+// there appears to be a bootstrap bug here
+.glyphicon-plus:before {
+  content: "+";
+}
+
+//globals
+
+body {
+  background: transparent;
+  padding: 1em;
+  min-height: 100%;
+  font-size: large;
+}
+
+#content {
+  min-height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: transparent;
+  overflow: hidden;
+}
+
+// header
+
+.navbar {
+  .navbar-collapse {
+    overflow: hidden;
+  }
+}
+
+// display
+
+.display {
+  position: relative;
+}
+
+.goButton {
+  margin: 0;
   position: fixed;
-  top: 5em;
+  top: 50%;
+  left: 50%;
+  margin-right: -50%;
+  transform: translate(-50%, -50%);
 }
