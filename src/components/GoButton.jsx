@@ -1,24 +1,16 @@
 const Marty = require('marty');
 const BaseComponent = require('./BaseComponent');
 const Tappable = require('react-tappable');
+const { wait } = require('../modules/async');
 
 
 class GoButton extends BaseComponent {
 
   constructor(){
     super();
-    this.go = {
-      radius: 110,
-      diameter: () => this.go.radius * 2,
-      color: {
-        off: '#dd3b47',
-        on: '#30ff40'
-      }
-    };
-    this.events = {
-      onClick: this._handleClick,
-      onPress: this._handlePress
-    };
+    this.bindAll('_handlePress', '_handleClick');
+    this.go = { radius: 110, diameter: () => this.go.radius * 2 };
+    this.events = { onClick: this._handleClick, onPress: this._handlePress };
   }
 
   render(){
@@ -26,20 +18,27 @@ class GoButton extends BaseComponent {
     return (
       <Tappable {...events} >
         <svg className="goButton" width={go.diameter()} height={go.diameter()}>
-          <circle cx={go.radius} cy={go.radius} r={go.radius} fill={go.color.off} />
+          <circle cx={go.radius} cy={go.radius} r={go.radius} fill={this.props.color} />
         </svg>
       </Tappable>
     );
   };
 
   _handleClick(){
-    alert('I got clicked!');
+    this.app.shareActions.ping();
   }
 
   _handlePress(){
-    alert('I got pressed!');
+    this.app.shareActions.togglePoll();
   }
 
 }
 
-module.exports = Marty.createContainer(GoButton);
+module.exports = Marty.createContainer(GoButton, {
+  listenTo: ['goButtonStore'],
+  fetch: {
+    color() {
+      return this.app.goButtonStore.state.get('color');
+    }
+  }
+});
