@@ -70,7 +70,6 @@
     "chai-as-promised": "^5.0.0",
     "http-server": "^0.8.0",
     "mocha": "^2.2.5",
-    "mocha-babel": "^3.0.0",
-    "node-inspector": "^0.11.2"
+    "mocha-babel": "^3.0.0"
   }
 }
