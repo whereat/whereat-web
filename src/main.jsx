@@ -16,7 +16,7 @@ if (process.env.NODE_ENV !== 'test'){
 
   let rootInstance = React.render((
     <ApplicationContainer app={app}>
-      <Root />
+      <Root className="root"/>
     </ApplicationContainer>
   ), document.getElementById('content'));
 
