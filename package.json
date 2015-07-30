@@ -57,6 +57,7 @@
     "react": "^0.13.3",
     "react-bootstrap": "^0.22.6",
     "react-hot-loader": "^1.2.7",
+    "react-tappable": "^0.5.7",
     "react-tools": "^0.13.3",
     "style-loader": "^0.12.2",
     "superagent": "^1.2.0",
