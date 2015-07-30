@@ -2,7 +2,19 @@ const Marty = require('marty');
 const BaseComponent = require('./BaseComponent');
 const { Grid, Row } = require('react-bootstrap');
 const Header = require('./Header');
-const Body = require('./Body');
+const Display = require('./Display');
+
+/*
+
+Root
+|
+|- Header
+|- Display
+   |
+   |- GoButton
+   |- Map
+
+*/
 
 class Root extends BaseComponent {
   constructor(){
@@ -11,14 +23,14 @@ class Root extends BaseComponent {
 
   render(){
     return (
-      <Grid >
-        <Row>
-          <Header className="header"/>
-        </Row>
-        <Row>
-          <Body />
-        </Row>
-      </Grid>
+      <div className="root">
+        <div className="header">
+          <Header />
+        </div>
+        <div className="display">
+          <Display />
+        </div>
+      </div>
     );
   };
 }
