@@ -3,9 +3,9 @@ logs
 *.log
 
 # Build files
-!build/
-build/*
-!build/index-template.html
+!build/prod/
+build/prod/*
+!build/prod/index-template.html
 
 # Runtime data
 pids
