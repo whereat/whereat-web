@@ -4,16 +4,16 @@ var webpack = require('webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 var config = {
-  entry: path.resolve(__dirname, 'app/main.jsx'),
+  entry: path.resolve(__dirname, 'src/main.jsx'),
   output: {
-    path: 'build',
+    path: 'build/prod',
     filename: './app.js'
   },
   plugins: [
     new webpack.DefinePlugin({ "process.env": JSON.stringify(process.env)}),
     new HtmlWebpackPlugin({
       inject: true,
-      template: path.resolve(__dirname, 'build/index-template.html')
+      template: path.resolve(__dirname, 'build/prod/index-template.html')
     })
   ],
   module: {

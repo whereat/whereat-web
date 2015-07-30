@@ -13,7 +13,7 @@ var config = {
   entry: {
     app: [
     'webpack/hot/dev-server',
-      path.resolve(__dirname, 'app/main.jsx')
+      path.resolve(__dirname, 'src/main.jsx')
     ],
     vendors: [
       'react',
@@ -23,9 +23,9 @@ var config = {
     ]
   },
   output: {
-    path: path.resolve(__dirname, 'build'),
+    path: path.resolve(__dirname, 'build/dev'),
     filename: 'app.js',
-    publicPath: 'http://localhost:8090/build'
+    publicPath: 'http://localhost:8090/build/dev'
   },
   plugins: [
     new webpack.optimize.CommonsChunkPlugin('vendors', 'vendors.js'),
