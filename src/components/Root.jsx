@@ -1,6 +1,8 @@
 const Marty = require('marty');
 const BaseComponent = require('./BaseComponent');
+const { Grid, Row } = require('react-bootstrap');
 const Header = require('./Header');
+const Body = require('./Body');
 
 class Root extends BaseComponent {
   constructor(){
@@ -9,7 +11,14 @@ class Root extends BaseComponent {
 
   render(){
     return (
-      <Header />
+      <Grid >
+        <Row>
+          <Header className="header"/>
+        </Row>
+        <Row>
+          <Body />
+        </Row>
+      </Grid>
     );
   };
 }
