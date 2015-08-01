@@ -17,90 +17,118 @@ const GoButton = require('../../src/components/GoButton');
 
 describe('GoButton Component', () => {
 
-  const setup = (color) => {
+  describe('contents', () => {
 
-    const spies = {
-      ping: sinon.spy(),
-      togglePoll: sinon.spy()
+    describe('tappable', () => {
+
+      it('is rendered with correct state', () => {
+        const gb = testTree(<GoButton.InnerComponent />);
+
+        gb.tappable.getClassName().should.equal('Tappable-inactive');
+      });
+    });
+
+    describe('svg', () => {
+
+      it('is rendered with correct dimensions', () => {
+        const gb = testTree(<GoButton.InnerComponent />);
+
+        gb.svg.getAttribute('width').should.equal(GO_DIAMETER);
+        gb.svg.getAttribute('height').should.equal(GO_DIAMETER);
+      });
+    });
+
+    describe('circle', () => {
+
+      it('is rendered with correct dimensions', () => {
+        const gb = testTree(<GoButton.InnerComponent />);
+
+        gb.circle.getAttribute('cx').should.equal(GO_RADIUS);
+        gb.circle.getAttribute('cy').should.equal(GO_RADIUS);
+        gb.circle.getAttribute('r').should.equal(GO_RADIUS);
+      });
+    });
+
+    it('is rendered with correct color based on prop', () => {
+      const gb = testTree(<GoButton.InnerComponent color={RED} />);
+      gb.circle.getAttribute('fill').should.equal(RED);
+
+      const gb2 = testTree(<GoButton.InnerComponent color={GREEN} />);
+      gb2.circle.getAttribute('fill').should.equal(GREEN);
+    });
+  });
+
+  describe('events', () =>{
+
+    const setup = (color) => {
+
+      const spies = {
+        ping: sinon.spy(),
+        togglePoll: sinon.spy()
+      };
+
+      const app = createApplication(Application, {
+        stub: {
+          goButtonStore: createStore({
+            getColor: sinon.stub().returns(color)
+          }),
+          shareActions: {
+            ping: spies.ping,
+            togglePoll: spies.togglePoll
+          }
+        }
+      });
+
+      return [app, spies];
     };
 
-    const app = createApplication(Application, {
-      stub: {
-        goButtonStore: createStore({
-          getColor: sinon.stub().returns(color)
-        }),
-        shareActions: {
-          ping: spies.ping,
-          togglePoll: spies.togglePoll
-        }
-      }
+    describe('clicking go button', () => {
+
+      it('calls shareActions#ping', () => {
+        const [app, {ping}] = setup(RED);
+        const gb = testTree(<GoButton/>, { context: { app: app }});
+        gb.click();
+
+        ping.should.have.been.calledOnce;
+      });
     });
 
-    return [app, spies];
-  };
+    xdescribe('pressing go button', () => {
 
-  const press = (node) => (
-    Promise.resolve()
-      .then(() => node.simulate.touchStart)
-      .then(() => wait(1))
-      .then(() => node.simulate.touchEnd)
-  );
+      const press = (node) => (
+        Promise.resolve()
+          .then(() => node.simulate.touchStart)
+          .then(() => wait(1))
+          .then(() => node.simulate.touchEnd)
+      );
 
-  describe('Inner Component', () => {
+      it('calls shareActions#poll', (done) => {
+        const [app, {togglePoll}] = setup(RED);
+        const gb = testTree(<GoButton />, {context: {app: app}});
 
-    it('contains a tappable svg circle with correct dimensions and color', () => {
-      const app = setup()[0];
-      const gb = testTree(<GoButton.InnerComponent color={RED} />);
+        press(gb).should.be.fulfilled
+          .then(() => togglePoll.should.have.been.calledOnce)
+          .should.notify(done);
 
-      gb.tappable.getClassName().should.equal('Tappable-inactive');
-      gb.svg.getAttribute('width').should.equal(GO_DIAMETER);
-      gb.svg.getAttribute('height').should.equal(GO_DIAMETER);
-      gb.circle.getAttribute('cx').should.equal(GO_RADIUS);
-      gb.circle.getAttribute('cy').should.equal(GO_RADIUS);
-      gb.circle.getAttribute('r').should.equal(GO_RADIUS);
-      gb.circle.getAttribute('fill').should.equal(RED);
+        // TODO: how to simulate a long press?
+      });
     });
-  });
 
-  describe('clicking go button', () => {
+    xdescribe('listening to store', () => {
 
-    it('calls shareActions#ping', () => {
-      const [app, {ping}] = setup(RED);
-      const gb = testTree(<GoButton/>, { context: { app: app }});
-      gb.click();
+      it('changes color when GoButtonStore state changes', () => {
+        const app = setup(RED)[0];
+        const gb = testTree(<GoButton />, { context: { app: app }});
 
-      ping.should.have.been.calledOnce;
-    });
-  });
+        gb.getProp('color').should.eql(RED);
 
-  xdescribe('pressing go button', () => {
-
-    it('calls shareActions#poll', (done) => {
-      const [app, {togglePoll}] = setup(RED);
-      const gb = testTree(<GoButton />, {context: {app: app}});
-
-      press(gb).should.be.fulfilled
-        .then(() => togglePoll.should.have.been.calledOnce)
-        .should.notify(done);
-
-      // TODO: how to simulate a long press?
-    });
-  });
-
-  xdescribe('listening to store', () => {
-
-    it('changes color when GoButtonStore state changes', () => {
-      const app = setup(RED)[0];
-      const gb = testTree(<GoButton />, { context: { app: app }});
-
-      gb.getProp('color').should.eql(RED);
-
-      // TODO: why does `gb` have no color prop provided by store?
-      // This contradicts example provided here:
-      // https://github.com/martyjs/marty-test-examples/blob/master/app/components/foo.js
-      // Only way to get `gb.getProp('color')` to return anything is
-      // to provide `color={RED}` as a prop in line 94.
-      // But that defeats the purpose of placing the store listener under test!
+        // TODO: why does `gb` have no color prop provided by store?
+        // This contradicts example provided here:
+        // https://github.com/martyjs/marty-test-examples/blob/master/app/components/foo.js
+        // Only way to get `gb.getProp('color')` to return anything is
+        // to provide `color={RED}` as a prop in line 94.
+        // But that defeats the purpose of placing the store listener under test!
+      });
     });
   });
 });
