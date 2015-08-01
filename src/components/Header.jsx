@@ -1,4 +1,4 @@
-const BaseComponent = require('./BaseComponent');
+const BaseComponent = require('./BaseComponent.jsx');
 const Marty = require('marty');
 const { Grid, Row, Col, Navbar, Nav, NavItem, DropdownButton, MenuItem } = require('react-bootstrap');
 
