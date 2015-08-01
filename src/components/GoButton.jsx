@@ -2,6 +2,8 @@ const Marty = require('marty');
 const BaseComponent = require('./BaseComponent.jsx');
 const Tappable = require('react-tappable');
 const { wait } = require('../modules/async');
+const { RED, GREEN } = require('../constants/Colors');
+const { GO_RADIUS, GO_DIAMETER } = require('../constants/Dimensions');
 
 
 class GoButton extends BaseComponent {
@@ -17,8 +19,8 @@ class GoButton extends BaseComponent {
     const { go, events } = this;
     return (
       <Tappable ref="tappable" {...events} >
-        <svg ref="svg" className="goButton" width={go.diameter()} height={go.diameter()}>
-          <circle ref="circle" cx={go.radius} cy={go.radius} r={go.radius} fill={this.props.color} />
+        <svg ref="svg" className="goButton" width={GO_DIAMETER} height={GO_DIAMETER}>
+          <circle ref="circle" cx={GO_RADIUS} cy={GO_RADIUS} r={GO_RADIUS} fill={this.props.color} />
         </svg>
       </Tappable>
     );
