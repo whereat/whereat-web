@@ -8,9 +8,9 @@ class ShareActions extends Marty.ActionCreators {
 
   ping(){
     return Promise.resolve()
-      .then(res => this.dispatch(ShareConstants.PING_STARTING))
-      .then(res => wait(pingInteval))
-      .then(res => this.dispatch(ShareConstants.PING_DONE));
+      .then(() => this.dispatch(ShareConstants.PING_STARTING))
+      .then(() => wait(pingInteval))
+      .then(() => this.dispatch(ShareConstants.PING_DONE));
   }
 
   endPing(){
