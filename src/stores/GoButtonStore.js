@@ -18,6 +18,8 @@ class GoButtonStore extends Marty.Store {
     };
   }
 
+  //handlers
+
   on(){
     this.replaceState(Map({color: GREEN }));
   }
@@ -30,6 +32,12 @@ class GoButtonStore extends Marty.Store {
     this.state.get('color') === RED ?
       this.replaceState(Map({ color: GREEN })) :
       this.replaceState(Map({ color: RED }));
+  }
+
+  //accessors
+
+  getColor(){
+    return this.state.get('color');
   }
 }
 

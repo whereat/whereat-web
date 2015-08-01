@@ -3,7 +3,6 @@ const ShareConstants = require('../constants/ShareConstants');
 const { wait } = require('../modules/async');
 const pingInteval = .1;
 
-
 class ShareActions extends Marty.ActionCreators {
 
   ping(){

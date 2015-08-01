@@ -1,5 +1,5 @@
 const Marty = require('marty');
-const BaseComponent = require('./BaseComponent');
+const BaseComponent = require('./BaseComponent.jsx');
 const Tappable = require('react-tappable');
 const { wait } = require('../modules/async');
 
@@ -16,9 +16,9 @@ class GoButton extends BaseComponent {
   render(){
     const { go, events } = this;
     return (
-      <Tappable {...events} >
-        <svg className="goButton" width={go.diameter()} height={go.diameter()}>
-          <circle cx={go.radius} cy={go.radius} r={go.radius} fill={this.props.color} />
+      <Tappable ref="tappable" {...events} >
+        <svg ref="svg" className="goButton" width={go.diameter()} height={go.diameter()}>
+          <circle ref="circle" cx={go.radius} cy={go.radius} r={go.radius} fill={this.props.color} />
         </svg>
       </Tappable>
     );
@@ -38,7 +38,7 @@ module.exports = Marty.createContainer(GoButton, {
   listenTo: ['goButtonStore'],
   fetch: {
     color() {
-      return this.app.goButtonStore.state.get('color');
+      return this.app.goButtonStore.getColor();
     }
   }
 });

@@ -10,7 +10,7 @@ const should = chai.should();
 chai.use(sinonChai);
 chai.use(chaiAsPromised);
 
-describe('GoButtonStore', () => {
+describe('ShareActions', () => {
 
   const setup = () => {
     return createApplication(Application, { include: ['shareActions'] });
