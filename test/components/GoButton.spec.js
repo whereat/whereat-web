@@ -7,6 +7,7 @@ const should = chai.should();
 const React = require('react');
 const Application = require('../../src/application');
 const { RED, GREEN } = require('../../src/constants/Colors');
+const { GO_RADIUS, GO_DIAMETER } = require('../../src/constants/Dimensions');
 const { createStore, createApplication } = require('marty/test-utils');
 const testTree = require('react-test-tree');
 
@@ -15,28 +16,27 @@ const GoButton = require('../../src/components/GoButton');
 describe('GoButton Component', () => {
 
   const setup = (spy) => {
-    const app = createApplication(Application, {
+    return [createApplication(Application, {
       stub: {
         goButtonStore: createStore({
           getColor: spy
         })
       }
-    });
-    return [app, spy];
+    }), spy];
   };
 
-  describe('GoButton Component', () => {
+  describe('Inner Component', () => {
 
-    it('contains a tappable svg circle', () => {
-      const spy = sinon.spy();
-      const app = setup(spy)[0];
-      const gb = testTree(<GoButton color={RED} />, { context: { app: app }});
+    it('contains a tappable svg circle with correct dimensions and color', () => {
+      const app = setup({})[0];
+      const gb = testTree(<GoButton.InnerComponent color={RED} />);
 
-      gb.svg.getAttribute('width').should.equal(220);
-      gb.svg.getAttribute('height').should.equal(220);
-      gb.circle.getAttribute('cx').should.equal(110);
-      gb.circle.getAttribute('cy').should.equal(110);
-      gb.circle.getAttribute('r').should.equal(110);
+      gb.tappable.getClassName().should.equal('Tappable-inactive');
+      gb.svg.getAttribute('width').should.equal(GO_DIAMETER.toString());
+      gb.svg.getAttribute('height').should.equal(GO_DIAMETER.toString());
+      gb.circle.getAttribute('cx').should.equal(GO_RADIUS.toString());
+      gb.circle.getAttribute('cy').should.equal(GO_RADIUS.toString());
+      gb.circle.getAttribute('r').should.equal(GO_RADIUS.toString());
       gb.circle.getAttribute('fill').should.equal(RED);
     });
   });
