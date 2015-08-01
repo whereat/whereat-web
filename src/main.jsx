@@ -9,7 +9,7 @@ require('./styles/main.less');
 window.React = React;
 window.Marty = Marty;
 
-//if (process.env.NODE_ENV !== 'test'){
+if (process.env.NODE_ENV !== 'test'){
 
   const app = new Application();
   const { ApplicationContainer } = require('marty');
@@ -25,4 +25,4 @@ window.Marty = Marty;
       getRootInstances: () => [rootInstance]
     });
   }
-//}
+}
