@@ -25,7 +25,7 @@ describe('GoButton Component', () => {
     return [app, spy];
   };
 
-  describe('Inner Component', () => {
+  describe('GoButton Component', () => {
 
     it('contains a tappable svg circle', () => {
       const spy = sinon.spy();
