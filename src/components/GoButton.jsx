@@ -11,14 +11,12 @@ class GoButton extends BaseComponent {
   constructor(){
     super();
     this.bindAll('_handlePress', '_handleClick');
-    this.go = { radius: 110, diameter: () => this.go.radius * 2 };
     this.events = { onClick: this._handleClick, onPress: this._handlePress };
   }
 
   render(){
-    const { go, events } = this;
     return (
-      <Tappable ref="tappable" {...events} >
+      <Tappable ref="tappable" {...this.events} >
         <svg ref="svg" className="goButton" width={GO_DIAMETER} height={GO_DIAMETER}>
           <circle ref="circle" cx={GO_RADIUS} cy={GO_RADIUS} r={GO_RADIUS} fill={this.props.color} />
         </svg>
