@@ -10,9 +10,6 @@ const { dispatch, hasDispatched, createApplication } = require('marty/test-utils
 const should = chai.should();
 chai.use(sinonChai);
 
-// const chaiAsPromised = require('chai-as-promised');
-// chai.use(chaiAsPromised);
-
 describe('GoButtonStore', () => {
 
   const setup = (color) => {

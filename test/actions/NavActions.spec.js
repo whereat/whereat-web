@@ -1,15 +1,10 @@
-//const sinon = require('sinon');
 const chai = require('chai');
-//const sinonChai = require('sinon-chai');
-//const chaiAsPromised = require('chai-as-promised');
 const Application = require('../../src/application');
 const NavConstants = require('../../src/constants/NavConstants');
 const { HOME, MAP } = require('../../src/constants/Pages');
 const { hasDispatched, createApplication } = require('marty/test-utils');
 
 const should = chai.should();
-//chai.use(sinonChai);
-//chai.use(chaiAsPromised);
 
 describe('NavActions', () => {
 
@@ -28,5 +23,18 @@ describe('NavActions', () => {
         hasDispatched(app, NavConstants.PAGE_REQUESTED, HOME).should.equal(true);
       });
     });
+
+    describe('map', () =>{
+
+      it('dispatches PAGE_REQUESTED, \'map\'', () =>{
+        const app = setup();
+        app.navActions.goto(MAP);
+
+        hasDispatched(app, NavConstants.PAGE_REQUESTED, MAP).should.equal(true);
+      });
+    });
+
+
+
   });
 });
