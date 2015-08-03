@@ -1,3 +1,4 @@
 module.exports = {
-  goButtonStore: require('./GoButtonStore')
+  goButtonStore: require('./GoButtonStore'),
+  navStore: require('./NavStore')
 };
