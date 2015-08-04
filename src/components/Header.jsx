@@ -1,7 +1,7 @@
 const BaseComponent = require('./BaseComponent.jsx');
 const Marty = require('marty');
 const { HOME, MAP } = require('../constants/Pages');
-const { Grid, Row, Col, Navbar, Nav, NavItem, DropdownButton, MenuItem } = require('react-bootstrap');
+const { Navbar, Nav, NavItem } = require('react-bootstrap');
 
 class Header extends BaseComponent {
 
