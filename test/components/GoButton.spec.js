@@ -68,9 +68,7 @@ describe('GoButton Component', () => {
       };
 
       const app = createApplication(Application, {
-        include: [
-          'goButtonStore'
-        ],
+        include: ['goButtonStore'],
         stub: {
           shareActions: {
             ping: spies.ping,
@@ -93,24 +91,22 @@ describe('GoButton Component', () => {
       });
     });
 
-    xdescribe('pressing go button', () => {
+    describe('pressing go button', () => {
 
       const press = (node) => (
         Promise.resolve()
-          .then(() => node.simulate.touchStart)
+          .then(() => node.simulate.mouseDown())
           .then(() => wait(1))
-          .then(() => node.simulate.touchEnd)
+          .then(() => node.simulate.mouseUp())
       );
 
-      it('calls shareActions#poll', (done) => {
+      it.only('calls shareActions#poll', (done) => {
         const [app, {togglePoll}] = setup(RED);
         const gb = testTree(<GoButton />, {context: {app: app}});
 
         press(gb).should.be.fulfilled
           .then(() => togglePoll.should.have.been.calledOnce)
           .should.notify(done);
-
-        // TODO: how to simulate a long press?
       });
     });
 
