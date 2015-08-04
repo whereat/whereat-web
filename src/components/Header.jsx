@@ -21,24 +21,27 @@ class Header extends BaseComponent {
           inverse
           toggleNavKey={0} >
 
-          <Nav right eventKey={0} ref="nav" refCollection="menuItems">
-            {this._menuItems([HOME, MAP])}
-          </Nav>
+
+            <Nav right eventKey={0} ref="nav">
+              {this._menuItems([HOME, MAP])}
+            </Nav>
+
         </Navbar>
 
     );
   }
 
   _menuItems(pages){
-    return pages.map((pg, i) => (
-      <NavItem
-        eventKey={i+1}
-        target="#"
-        className="menuItem"
-        ref={`menuItem${i+1}`}
-        onSelect={this._handleSelect(pg)}
-      > {pg} </NavItem>
-    ));
+    return (
+      pages.map((pg, i) => (
+        <NavItem
+          eventKey={i+1}
+          className="navItem"
+          ref={`navItem${i+1}`}
+          onSelect={this._handleSelect(pg)}
+          > {pg}
+        </NavItem>
+      )));
   }
 
   _handleSelect(page){

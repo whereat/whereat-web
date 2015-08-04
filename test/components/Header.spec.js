@@ -39,9 +39,8 @@ describe('Header Component', () => {
       it('contains correctly ordered list of pages', () => {
         const [app, hdr, goto] = setup();
 
-        hdr.menuItems.length.should.equal(2);
-        hdr.menuItems[0].innerText.trim().should.equal(HOME);
-        hdr.menuItems[1].innerText.trim().should.equal(MAP);
+        hdr.navItem1.innerText.trim().should.equal(HOME);
+        hdr.navItem2.innerText.trim().should.equal(MAP);
       });
     });
   });
@@ -54,7 +53,7 @@ describe('Header Component', () => {
 
         it('calls navAction#goto(HOME)', () => {
           const[app, hdr, goto] = setup();
-          hdr.menuItems[0].simulate.select();
+          hdr.navItem1.simulate.select();
 
           goto.should.have.been.calledWith(HOME);
         });
@@ -64,7 +63,7 @@ describe('Header Component', () => {
 
         it('calls navAction#goto(MAP)', () => {
           const[app, hdr, goto] = setup();
-          hdr.menuItems[1].simulate.select();
+          hdr.navItem2.simulate.select();
 
           goto.should.have.been.calledWith(MAP);
         });
