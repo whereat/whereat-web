@@ -1,13 +1,16 @@
 const BaseComponent = require('./BaseComponent.jsx');
 const Marty = require('marty');
+const { HOME, MAP } = require('../constants/Pages');
 const { Grid, Row, Col, Navbar, Nav, NavItem, DropdownButton, MenuItem } = require('react-bootstrap');
 
 class Header extends BaseComponent {
+
   constructor(options){
     super(options);
+    this.bindAll('_handleSelect');
   }
+
   render() {
-    const items = [];
     return (
 
         <Navbar
@@ -15,16 +18,31 @@ class Header extends BaseComponent {
           className="navbar"
           fluid={true}
           fixedTop={true}
-          inverse toggleNavKey={0}
-          >
-          <Nav eventKey={0} right className="nav">
-              <MenuItem eventKey={1}>
-                Hi!
-              </MenuItem>
+          inverse
+          toggleNavKey={0} >
+
+          <Nav right eventKey={0} ref="nav" refCollection="menuItems">
+            {this._menuItems([HOME, MAP])}
           </Nav>
         </Navbar>
 
     );
+  }
+
+  _menuItems(pages){
+    return pages.map((pg, i) => (
+      <NavItem
+        eventKey={i+1}
+        target="#"
+        className="menuItem"
+        ref={`menuItem${i+1}`}
+        onSelect={this._handleSelect(pg)}
+      > {pg} </NavItem>
+    ));
+  }
+
+  _handleSelect(page){
+    return () => this.app.navActions.goto(page);
   }
 }
 
