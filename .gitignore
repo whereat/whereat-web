@@ -39,5 +39,8 @@ node_modules
 
 # mac stuff
 .DS_Store
-
 flycheck
+
+# intellij stuff
+.idea/
+*.iml
