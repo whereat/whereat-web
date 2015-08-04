@@ -6,7 +6,7 @@ const { Map } = require('immutable');
 const Application = require('../../src/application');
 const NavConstants = require('../../src/constants/NavConstants');
 const { HOME, MAP } = require('../../src/constants/Pages');
-const { dispatch, hasDispatched, createApplication } = require('marty/test-utils');
+const { dispatch, createApplication } = require('marty/test-utils');
 
 const should = chai.should();
 chai.use(sinonChai);
@@ -16,8 +16,10 @@ describe('NavStore', () => {
   const setup = (page) => {
     const app = createApplication(Application, { include: ['navStore'] });
     app.navStore.state = Map({ page: page });
+
     const listener = sinon.spy();
     app.navStore.addChangeListener(listener);
+
     return [app, listener];
   };
 
