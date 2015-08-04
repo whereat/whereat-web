@@ -100,7 +100,7 @@ describe('GoButton Component', () => {
           .then(() => node.simulate.mouseUp())
       );
 
-      it.only('calls shareActions#poll', (done) => {
+      it('calls shareActions#poll', (done) => {
         const [app, {togglePoll}] = setup(RED);
         const gb = testTree(<GoButton />, {context: {app: app}});
 
