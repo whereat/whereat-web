@@ -1,4 +1,3 @@
-var React = require('react');
 const Application = require('../../src/application');
 
 const Header = require('../../src/components/Header');
