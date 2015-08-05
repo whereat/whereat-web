@@ -17,10 +17,12 @@ class MapContainer extends BaseComponent {
       /* <div>
          "I'm a map!"
          </div> */
-      <Map center={this._positionify(s17)} zoom={13} >
-        <TileLayer url={url} attribution={attribution} />
-        {this._markerify(s17)}
-      </Map>
+      <div id="map">
+        <Map center={this._positionify(s17)} zoom={13} >
+          <TileLayer url={url} attribution={attribution} />
+          {this._markerify(s17)}
+        </Map>
+      </div>
       );
     }
 
