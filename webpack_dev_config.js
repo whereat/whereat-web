@@ -6,7 +6,7 @@ var deps = [
   'react/dist/react-with-addons.js',
   'marty/dist/marty.min.js',
   'immutable/dist/immutable.min.js',
-  'lodash/index.js'
+  //'lodash/index.js'
 ];
 
 var config = {
