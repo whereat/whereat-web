@@ -14,9 +14,6 @@ class MapContainer extends BaseComponent {
     const url = "http://{s}.tile.osm.org/{z}/{x}/{y}.png"
     const attribution = '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
     return (
-      /* <div>
-         "I'm a map!"
-         </div> */
       <div id="map">
         <Map center={this._positionify(s17)} zoom={13} >
           <TileLayer url={url} attribution={attribution} />

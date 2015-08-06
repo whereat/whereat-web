@@ -15,7 +15,7 @@ describe('NavStore', () => {
 
   const setup = (page) => {
     const app = createApplication(Application, { include: ['navStore'] });
-    app.navStore.state = Map({ page: page });
+    app.navStore.state = Map({ page: page , expanded: false });
 
     const listener = sinon.spy();
     app.navStore.addChangeListener(listener);
@@ -23,51 +23,106 @@ describe('NavStore', () => {
     return [app, listener];
   };
 
-  describe('#goto', () => {
+  describe('handlers', () => {
 
-    describe('HOME', () => {
+    describe('#goto', () => {
 
-      it('sets page to HOME', () => {
-        const app = setup(HOME)[0];
-        dispatch(app, NavConstants.PAGE_REQUESTED, HOME);
+      describe('HOME', () => {
 
-        app.navStore.state.get('page').should.equal(HOME);
+        it('sets page to HOME', () => {
+          const app = setup(MAP)[0];
+          dispatch(app, NavConstants.PAGE_REQUESTED, HOME);
+
+          app.navStore.state.get('page').should.equal(HOME);
+        });
+
+        it('notifies listeners of state change', () => {
+          const [app, listener] = setup(MAP);
+          dispatch(app, NavConstants.PAGE_REQUESTED, HOME);
+
+          listener.should.have.been.calledOnce;
+          listener.should.have.been.calledWith(Map({ page: HOME, expanded: true }));
+        });
       });
 
-      it('notifies listeners of state change', () => {
-        const [app, listener] = setup(HOME);
-        dispatch(app, NavConstants.PAGE_REQUESTED, HOME);
+      describe('MAP', () => {
 
-        return listener.should.have.been.calledWith(Map({ page: HOME}), app.navStore);
+        it('sets page to MAP', () => {
+          const app = setup(MAP)[0];
+          dispatch(app, NavConstants.PAGE_REQUESTED, MAP);
+
+          app.navStore.state.get('page').should.equal(MAP);
+        });
+
+        it('notifies listeners of state change', () => {
+          const [app, listener] = setup(HOME);
+          dispatch(app, NavConstants.PAGE_REQUESTED, MAP);
+
+          listener.should.have.been.calledOnce;
+          listener.should.have.been.calledWith(Map({ page: MAP, expanded: true }));
+        });
       });
     });
 
-    describe('MAP', () => {
+    describe('#toggle()', () => {
 
-      it('sets page to MAP', () => {
-        const app = setup(MAP)[0];
-        dispatch(app, NavConstants.PAGE_REQUESTED, MAP);
+      it('toggles `expanded` btw true and false', () => {
+        const [app, listener] = setup(HOME);
+        app.navStore.state.get('expanded').should.equal(false);
 
-        app.navStore.state.get('page').should.equal(MAP);
+        dispatch(app, NavConstants.NAV_TOGGLED);
+        app.navStore.state.get('expanded').should.equal(true);
+
+        dispatch(app, NavConstants.NAV_TOGGLED);
+        app.navStore.state.get('expanded').should.equal(false);
       });
 
-      it('notifies listeners of state change', () => {
+      it('notifies listers of state change', () => {
         const [app, listener] = setup(HOME);
-        dispatch(app, NavConstants.PAGE_REQUESTED, MAP);
 
-        return listener.should.have.been.calledWith(Map({ page: MAP }), app.navStore);
+        dispatch(app, NavConstants.NAV_TOGGLED);
+        listener.should.have.been.calledWith(Map({ page: HOME, expanded: true}));
+
+        dispatch(app, NavConstants.NAV_TOGGLED);
+        listener.should.have.been.calledWith(Map({ page: HOME, expanded: false }));
+      });
+
+      it('responds to both NAV_TOGGLED and PAGE_SELECTED', () => {
+        const [app, listener] = setup(HOME);
+
+        dispatch(app, NavConstants.NAV_TOGGLED);
+        app.navStore.state.get('expanded').should.equal(true);
+
+        dispatch(app, NavConstants.PAGE_REQUESTED);
+        app.navStore.state.get('expanded').should.equal(false);
+
+        listener.should.have.been.calledTwice;
       });
     });
   });
 
-  describe('#getPage', () => {
+  describe('accessors', () => {
 
-    it('returns current page', ()=> {
-      const app = setup(HOME)[0];
-      app.navStore.getPage().should.equal(HOME);
+    describe('#getPage', () => {
 
-      const app2 = setup(MAP)[0];
-      app2.navStore.getPage().should.equal(MAP);
+      it('returns current page', ()=> {
+        const app = setup(HOME)[0];
+        app.navStore.getPage().should.equal(HOME);
+
+        app.navStore.goto(MAP);
+        app.navStore.getPage().should.equal(MAP);
+      });
+    });
+
+    describe('#isExpanded', () => {
+
+      it('returns expanded state', () => {
+        const app = setup(HOME)[0];
+        app.navStore.isExpanded().should.equal(false);
+
+        app.navStore.toggle();
+        app.navStore.isExpanded().should.equal(true);
+      });
     });
   });
 });

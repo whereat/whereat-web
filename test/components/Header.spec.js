@@ -16,19 +16,18 @@ describe('Header Component', () => {
 
   const setup = () => {
 
-    const spy = sinon.spy();
+    const spies = {
+      goto: sinon.spy(),
+      toggle: sinon.spy()
+    };
 
     const app = createApplication(Application, {
-      stub: {
-        navActions: {
-          goto: spy
-        }
-      }
+      stub: { navActions: spies }
     });
 
     const component = testTree(<Header.InnerComponent />, { context: { app: app }});
 
-    return [app, component, spy];
+    return [app, component, spies];
   };
 
   describe('contents', () => {
@@ -36,7 +35,7 @@ describe('Header Component', () => {
     describe('dropdown menu', () => {
 
       it('contains correctly ordered list of pages', () => {
-        const [app, hdr, goto] = setup();
+        const [_, hdr, __] = setup();
 
         hdr.navItem1.innerText.trim().should.equal(HOME);
         hdr.navItem2.innerText.trim().should.equal(MAP);
@@ -46,22 +45,22 @@ describe('Header Component', () => {
 
   describe('events', () =>{
 
-    describe('clicking on nav bar', () => {
+    describe('selecting nav elements', () => {
 
-      describe('when clicking HOME', () => {
+      describe('HOME', () => {
 
         it('calls navAction#goto(HOME)', () => {
-          const[app, hdr, goto] = setup();
+          const[_, hdr, {goto}] = setup();
           hdr.navItem1.simulate.select();
 
           goto.should.have.been.calledWith(HOME);
         });
       });
 
-      describe('when clicking MAP', () => {
+      describe('MAP', () => {
 
         it('calls navAction#goto(MAP)', () => {
-          const[app, hdr, goto] = setup();
+          const[_, hdr, {goto}] = setup();
           hdr.navItem2.simulate.select();
 
           goto.should.have.been.calledWith(MAP);

@@ -5,8 +5,8 @@ const MapContainer = require('./MapContainer');
 class MapPage extends BaseComponent {
   render(){
     return (
-      <div className="mapPage">
-        <MapContainer />
+      <div className="mapPage" ref="mapPageContents">
+        <MapContainer ref="mapContainer"/>
       </div>
     );
   };
