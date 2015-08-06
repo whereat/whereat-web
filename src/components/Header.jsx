@@ -7,7 +7,8 @@ class Header extends BaseComponent {
 
   constructor(options){
     super(options);
-    this.bindAll('_handleSelect');
+    this.bindAll('_handleSelect', '_handleToggle');
+    this.state = { expanded: false };
   }
 
   render() {
@@ -15,16 +16,17 @@ class Header extends BaseComponent {
 
         <Navbar
           brand={<a href="" className="brand">where@</a>}
+          inverse
           className="navbar"
           fluid={true}
           fixedTop={true}
-          inverse
-          toggleNavKey={0} >
-
-
-            <Nav right eventKey={0} ref="nav">
-              {this._menuItems([HOME, MAP])}
-            </Nav>
+          toggleNavKey={0}
+          navExpanded={this.props.expanded}
+          onToggle={this._handleToggle}
+        >
+          <Nav right eventKey={0} ref="nav">
+            {this._menuItems([HOME, MAP])}
+          </Nav>
 
         </Navbar>
 
@@ -38,8 +40,9 @@ class Header extends BaseComponent {
           eventKey={i+1}
           className="navItem"
           ref={`navItem${i+1}`}
+          key={`navItems${i+1}`}
           onSelect={this._handleSelect(pg)}
-          > {pg}
+        > {pg}
         </NavItem>
       )));
   }
@@ -47,6 +50,18 @@ class Header extends BaseComponent {
   _handleSelect(page){
     return () => this.app.navActions.goto(page);
   }
+
+  _handleToggle(){
+    this.app.navActions.toggle();
+    //this.state.expanded = !this.state.expanded;
+  }
 }
 
-module.exports = Marty.createContainer(Header);
+module.exports = Marty.createContainer(Header, {
+  listenTo: ['navStore'],
+  fetch: {
+    expanded(){
+      return this.app.navStore.isExpanded();
+    }
+  }
+});

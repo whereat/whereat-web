@@ -7,6 +7,11 @@ class NavActions extends Marty.ActionCreators {
   goto(page){
     this.dispatch(NavConstants.PAGE_REQUESTED, page);
   }
-};
+
+  // () -> Unit
+  toggle(){
+    this.dispatch(NavConstants.NAV_TOGGLED);
+  }
+}
 
 module.exports = NavActions;

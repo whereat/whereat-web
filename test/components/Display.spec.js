@@ -5,6 +5,7 @@ const { Map } = require('immutable');
 const Display = require('../../src/components/Display');
 const HomePage = require('../../src/components/HomePage');
 const MapPage = require('../../src/components/MapPage');
+const MockComponent = require('../support/mocks/MockComponent');
 const { HOME, MAP } = require('../../src/constants/Pages');
 
 const sinon = require('sinon');
@@ -23,10 +24,24 @@ describe('Display Component', () => {
     const app = createApplication(Application, {include: ['navStore', 'goButtonStore'] });
     app.navStore.state = Map({page: page});
 
-    const component = testTree(<Display.InnerComponent page={page} />, { context: { app: app }});
+    const component = propTree(app, page);
 
     return [app, component];
   };
+
+  const propTree = (app, page) =>
+          testTree(<Display.InnerComponent page={page} />, settings(app));
+
+  const tree = (app) =>
+          testTree(<Display />, settings(app));
+
+  const settings = (app) => ({
+    context: { app: app },
+    stub: {
+      homePage: <MockComponent />,
+      mapPage: <MockComponent />
+    }
+  });
 
   describe('contents', () => {
 
@@ -35,19 +50,20 @@ describe('Display Component', () => {
       describe('when `page` prop is HOME', () => {
 
         it('renders HomePage component', () => {
-          const [app, d] = setup(MAP);
+          const [app, d] = setup(HOME);
 
-          d.getProp('page').should.equal(MAP);
-          d.page.getClassName().should.equal('mapPage');
+          d.getProp('page').should.equal(HOME);
+          d.homePage.should.exist;
         });
       });
 
       describe('when `page` prop is MAP', () => {
 
         it('renders MapPage component', () => {
-          const [app, d] = setup(HOME);
+          const [app, d] = setup(MAP);
 
-          d.page.getClassName().should.equal('HomePage');
+          d.getProp('page').should.equal(MAP);
+          d.mapPage.should.exist;
         });
       });
     });
@@ -63,7 +79,7 @@ describe('Display Component', () => {
         d.getProp('page').should.equal(HOME);
 
         app.navStore.replaceState(Map({ page: MAP }));
-        const d2 = testTree(<Display />, { context: { app: app }});
+        const d2 = tree(app);
 
         d2.innerComponent.getProp('page').should.equal(MAP);
       });

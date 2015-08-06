@@ -5,7 +5,7 @@ const GoButton = require('./GoButton');
 class HomePage extends BaseComponent {
   render(){
     return (
-      <div className='HomePage'>
+      <div className='homePage' ref='homePage'>
         <GoButton />
       </div>
     );
