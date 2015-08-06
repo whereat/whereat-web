@@ -28,6 +28,7 @@ class MapContainer extends BaseComponent {
     return [loc.lat, loc.lon];
   }
 
+  // (Location) -> Marker
   _markerify(loc){
     return (
       <Marker position={this._positionify(loc)} >
