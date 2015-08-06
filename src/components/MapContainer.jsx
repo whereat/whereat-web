@@ -18,7 +18,7 @@ class MapContainer extends BaseComponent {
       <div id="map" ref="map">
         <Map center={this._positionify(s17)} zoom={15} >
           <TileLayer url={url} attribution={attribution} accessToken={token} id={id}/>
-          {nyse2.map((loc, i) => this._markerify(loc, i))}
+          {this.props.locations.map((loc, i) => this._markerify(loc, i))}
         </Map>
       </div>
       );
@@ -47,4 +47,11 @@ class MapContainer extends BaseComponent {
 
 }
 
-module.exports = Marty.createContainer(MapContainer);
+module.exports = Marty.createContainer(MapContainer, {
+  listenTo: ['locationStore'],
+  fetch: {
+    locations(){
+      return this.app.locationStore.getAll();
+    }
+  }
+});

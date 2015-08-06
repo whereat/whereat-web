@@ -1,4 +1,3 @@
-var React = require('react');
 const Application = require('../../src/application');
 const { Map } = require('immutable');
 

@@ -59,7 +59,7 @@ describe('LocationStore', () => {
       });
     });
 
-    describe.only('#saveMany', () => {
+    describe('#saveMany', () => {
 
       it('adds many locations to the store', () => {
         const [app, _] = setup();
@@ -92,9 +92,7 @@ describe('LocationStore', () => {
         const [app, _] = setup();
         app.locationStore.saveMany(nyse3);
 
-        app.locationStore.getAll()
-          .equals(Seq(nyse3))
-          .should.be.true;
+        app.locationStore.getAll().equals(Seq(nyse3)).should.be.true;
       });
     });
   });
