@@ -2,15 +2,18 @@ const sinon = require('sinon');
 const chai = require('chai');
 const sinonChai = require('sinon-chai');
 const chaiAsPromised = require('chai-as-promised');
-const Application = require('../../src/application');
-const ShareConstants = require('../../src/constants/ShareConstants');
-const { hasDispatched, createApplication } = require('marty/test-utils');
-
 const should = chai.should();
 chai.use(sinonChai);
 chai.use(chaiAsPromised);
 
-describe('ShareActions', () => {
+const Application = require('../../src/application');
+const { hasDispatched, createApplication } = require('marty/test-utils');
+
+const ShareConstants = require('../../src/constants/ShareConstants');
+const ToastConstants = require('../../src/constants/ToastConstants');
+const { PING, POLL } = require('../../src/constants/ToastTypes');
+
+describe.only('ShareActions', () => {
 
   const setup = () => {
     return createApplication(Application, { include: ['shareActions'] });
@@ -18,23 +21,29 @@ describe('ShareActions', () => {
 
   describe('#ping', () => {
 
-    it('dispatches PING_STARTING then PING_DONE', (done) => {
+    it('dispatches PING/TOAST _STARTING then _DONE', (done) => {
       const app = setup();
-      app.shareActions.ping().should.be.fulfilled
+      app.shareActions.ping(.0001, .0001).should.be.fulfilled
         .then(() => {
           hasDispatched(app, ShareConstants.PING_STARTING).should.equal(true);
           hasDispatched(app, ShareConstants.PING_DONE).should.equal(true);
+          hasDispatched(app, ToastConstants.TOAST_STARTING, PING).should.equal(true);
+          hasDispatched(app, ToastConstants.TOAST_DONE).should.equal(true);
         }).should.notify(done);
     });
   });
 
   describe('#poll', () => {
 
-    it('dispatches POLL_TOGGLED', () => {
+    it('dispatches POLL_TOGGLED', (done) => {
       const app = setup();
-      app.shareActions.togglePoll();
+      app.shareActions.togglePoll(.0001).should.be.fulfilled
+        .then(() => {
+          hasDispatched(app, ShareConstants.POLL_TOGGLED).should.equal(true);
+          hasDispatched(app, ToastConstants.TOAST_STARTING, POLL).should.equal(true);
+          hasDispatched(app, ToastConstants.TOAST_DONE).should.equal(true);
+        }).should.notify(done);
 
-      hasDispatched(app, ShareConstants.POLL_TOGGLED).should.equal(true);
     });
   });
 });

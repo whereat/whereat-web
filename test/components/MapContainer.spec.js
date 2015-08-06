@@ -54,7 +54,7 @@ describe('MapContainer Component', () => {
 
     describe('listening to LocationStore', () => {
 
-      it.only('updates props when store state changes', () => {
+      it('updates props when store state changes', () => {
 
         const [app, mc] = setup(s17);
         mc.getProp('locations').equals(Seq(s17)).should.be.true;

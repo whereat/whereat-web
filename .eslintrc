@@ -26,8 +26,10 @@
     "new-cap": [0],
     "no-multi-spaces": [0],
     "no-shadow": [0],
+    "no-underscore-dangle": [0],
     "no-unused-vars": [1],
-    "no-use-before-define": [2, "nofunc"],
+    "no-use-before-define": [0],
+    "no-unused-expressions": [0],
     "curly": [2, "multi-line"],
     "camelcase": [2, {"properties": "never"}]
   }
