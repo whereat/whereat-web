@@ -109,6 +109,20 @@ describe('ToastStore', () => {
 
   describe('accessors', () => {
 
+    describe('#isVisible', () => {
+
+      it('returns current visibility state (Boolean)', ()=> {
+        const [app, _] = setup(defaultState);
+        app.toastStore.isVisible().should.equal(false);
+
+        app.toastStore.state = pingingState;
+        app.toastStore.isVisible().should.equal(true);
+
+        app.toastStore.state = pollingState;
+        app.toastStore.isVisible().should.equal(true);
+      });
+    });
+
     describe('#getType', () => {
 
       it('returns current ToastType', ()=> {
