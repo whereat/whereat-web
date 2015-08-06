@@ -13,7 +13,7 @@ const ShareConstants = require('../../src/constants/ShareConstants');
 const ToastConstants = require('../../src/constants/ToastConstants');
 const { PING, POLL } = require('../../src/constants/ToastTypes');
 
-describe.only('ShareActions', () => {
+describe('ShareActions', () => {
 
   const setup = () => {
     return createApplication(Application, { include: ['shareActions'] });
