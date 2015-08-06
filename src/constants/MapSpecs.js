@@ -1,0 +1,6 @@
+module.exports = {
+  url: 'https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}',
+  attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+  id: 'whereat.n3h4f6im',
+  token: process.env.WHEREAT_MAPBOX_API_KEY
+};
