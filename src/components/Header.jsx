@@ -13,7 +13,7 @@ class Header extends BaseComponent {
 
   render() {
     return (
-
+      <div id="header">
         <Navbar
           brand={<a href="" className="brand">where@</a>}
           inverse
@@ -29,7 +29,7 @@ class Header extends BaseComponent {
           </Nav>
 
         </Navbar>
-
+      </div>
     );
   }
 

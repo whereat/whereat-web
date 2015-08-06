@@ -11,8 +11,13 @@ Root
 |- Header
 |- Display
    |
-   |- GoButton
-   |- Map
+   |- HomePage
+   |  |- GoButton
+   |
+   |- MapPage
+   |  |- MapContainer
+   |
+   |- ToastContainer
 
 */
 
@@ -24,12 +29,8 @@ class Root extends BaseComponent {
   render(){
     return (
       <div className="root">
-        <div className="header">
-          <Header />
-        </div>
-        <div className="display">
-          <Display />
-        </div>
+        <Header />
+        <Display />
       </div>
     );
   };
