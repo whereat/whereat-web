@@ -40,9 +40,36 @@ body {
   text-align: right;
 }
 
+// toasts
+
+.toast {
+
+  //color
+  background: gray;
+  color: white;
+  opacity: .66;
+
+  //position
+  position: fixed;
+  top: calc(100% - 8em);
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+
+  //shape
+  height: 2.5em;
+  width: 80%;
+  padding: .5em 1em .25em 1em;
+  border-radius: 1em;
+
+  //text
+  text-align: center;
+  text-shadow: .05em .05em black;
+}
+
 // display
 
-.display {
+#display {
   //position: fixed;
   position: absolute;
   width: 100%;
