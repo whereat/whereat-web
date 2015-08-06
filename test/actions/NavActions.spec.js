@@ -34,7 +34,15 @@ describe('NavActions', () => {
       });
     });
 
+    describe('toggle', () => {
 
+      it('toggles nav between expanded and collapsed states', () => {
 
+        const app = setup();
+        app.navActions.toggle();
+
+        hasDispatched(app, NavConstants.NAV_TOGGLED).should.equal(true);
+      });
+    });
   });
 });

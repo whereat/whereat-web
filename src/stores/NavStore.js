@@ -8,26 +8,42 @@ class NavStore extends Marty.Store {
   constructor(options){
     super(options);
     this.state = Map({
-      page: HOME
+      page: HOME,
+      expanded: false
     });
 
     this.handlers = {
-      goto: NavConstants.PAGE_REQUESTED
+      goto: NavConstants.PAGE_REQUESTED,
+      toggle: [NavConstants.NAV_TOGGLED, NavConstants.PAGE_REQUESTED]
     };
   }
 
-  //handlers
+  //HANDLERS
 
   // (Page) -> Unit
   goto(page){
-    this.replaceState(Map({ page: page }));
+    this.replaceState(
+      this.state.merge(
+        Map({ page: page })));
   }
 
-  //accessors
+  // () -> Unit
+  toggle(){
+    this.replaceState(
+      this.state.merge(
+        Map({ expanded: !this.state.get('expanded')})));
+  }
+
+  //ACCESSORS
 
   // () -> Page
   getPage(){
     return this.state.get('page');
+  }
+
+  // () -> Boolean
+  isExpanded(){
+    return this.state.get('expanded');
   }
 }
 

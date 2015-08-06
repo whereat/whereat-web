@@ -8,8 +8,8 @@ class Display extends BaseComponent {
   render(){
     return (
       {
-        [HOME]: () => <HomePage ref='page'/>,
-        [MAP]: () => <MapPage ref='page'/>
+        [HOME]: () => <HomePage ref='homePage' />,
+        [MAP]: () => <MapPage ref='mapPage' />
       }[this.props.page]()
 
     );
