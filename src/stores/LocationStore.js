@@ -1,7 +1,7 @@
 const Marty = require('marty');
 const LocationConstants = require('../constants/LocationConstants');
 const { Map, List } = require('immutable');
-const { nyse3 } = require('../../test/support/sampleLocations');
+const { nyse2, nyse3 } = require('../../test/support/sampleLocations');
 
 class LocationStore extends Marty.Store {
 
