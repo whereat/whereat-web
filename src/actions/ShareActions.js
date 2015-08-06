@@ -5,7 +5,7 @@ const { PING, POLL } = require('../constants/ToastTypes');
 const { wait } = require('../modules/async');
 
 const pingInterval = .1;
-const toastInterval = 1;
+const toastInterval = 2;
 
 class ShareActions extends Marty.ActionCreators {
 
