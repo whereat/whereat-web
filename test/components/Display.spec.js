@@ -1,12 +1,3 @@
-const Application = require('../../src/application');
-const { Map } = require('immutable');
-
-const Display = require('../../src/components/Display');
-const HomePage = require('../../src/components/HomePage');
-const MapPage = require('../../src/components/MapPage');
-const MockComponent = require('../support/mocks/MockComponent');
-const { HOME, MAP } = require('../../src/constants/Pages');
-
 const sinon = require('sinon');
 const chai = require('chai');
 const sinonChai = require('sinon-chai');
@@ -15,6 +6,15 @@ const should = chai.should();
 
 const testTree = require('react-test-tree');
 const { createStore, createApplication } = require('marty/test-utils');
+
+const Application = require('../../src/application');
+const { Map } = require('immutable');
+
+const Display = require('../../src/components/Display');
+const HomePage = require('../../src/components/HomePage');
+const MapPage = require('../../src/components/MapPage');
+const MockComponent = require('../support/mocks/MockComponent');
+const { HOME, MAP } = require('../../src/constants/Pages');
 
 describe('Display Component', () => {
 
@@ -69,7 +69,6 @@ describe('Display Component', () => {
   });
 
   describe('events', () =>{
-
     describe('listening to NavStore', () => {
 
       it('changes page when store page changes', () => {

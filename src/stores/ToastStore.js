@@ -31,10 +31,13 @@ class ToastStore extends Marty.Store {
   }
 
   //ACCESSORS
+
+  isVisible(){
+    return this.state.get('visible');
+  }
+
   getType(){
     return this.state.get('type');
   }
-
 }
-
 module.exports = ToastStore;
