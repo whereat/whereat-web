@@ -1,6 +1,7 @@
 const Marty = require('marty');
 const BaseComponent = require('./BaseComponent.jsx');
 const { TileLayer, Map, Marker, Popup } = require('react-leaflet');
+const { url, attribution, id, token } = require('../constants/MapSpecs');
 const { s17 } = require('../../test/support/sampleLocations');
 const pd = require('pretty-date');
 
@@ -11,12 +12,11 @@ class MapContainer extends BaseComponent {
     }
 
   render(){
-    const url = "http://{s}.tile.osm.org/{z}/{x}/{y}.png"
-    const attribution = '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+
     return (
       <div id="map">
-        <Map center={this._positionify(s17)} zoom={13} >
-          <TileLayer url={url} attribution={attribution} />
+        <Map center={this._positionify(s17)} zoom={15} >
+          <TileLayer url={url} attribution={attribution} accessToken={token} id={id}/>
           {this._markerify(s17)}
         </Map>
       </div>
