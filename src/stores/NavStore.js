@@ -22,16 +22,12 @@ class NavStore extends Marty.Store {
 
   // (Page) -> Unit
   goto(page){
-    this.replaceState(
-      this.state.merge(
-        Map({ page: page })));
+    this.replaceState(this.state.set('page', page ));
   }
 
   // () -> Unit
   toggle(){
-    this.replaceState(
-      this.state.merge(
-        Map({ expanded: !this.state.get('expanded')})));
+    this.replaceState(this.state.set('expanded', !this.state.get('expanded')));
   }
 
   //ACCESSORS
