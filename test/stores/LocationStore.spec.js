@@ -14,9 +14,9 @@ const { s17, s17_, nyse3 } = require('../support/sampleLocations');
 
 describe('LocationStore', () => {
 
-  const setup = (locs = Map()) => {
+  const setup = (state = Map()) => {
     const app = createApplication(Application, { include: ['locationStore'] });
-    app.locationStore.state = locs;
+    app.locationStore.state = state;
 
     const listener = sinon.spy();
     app.locationStore.addChangeListener(listener);
