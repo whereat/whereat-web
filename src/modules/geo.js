@@ -1,4 +1,4 @@
-const { USER_LOC_INTERVAL } = require('../constants/Intervals');
+const { USER_LOCATION_INTERVAL } = require('../constants/Intervals');
 
 const geo = {};
 
@@ -13,7 +13,7 @@ geo.get = (nav = navigator) => (
           lon: pos.coords.longitude })))));
 
 // ((LatLon => Unit), (Error => Unit), Number) -> Number [id]
-geo.poll = (publisher, err, sec = USER_LOC_INTERVAL) => (
+geo.poll = (publisher, err, sec = USER_LOCATION_INTERVAL) => (
   navigator.geolocation.watchPosition(
     publisher, err, {
       enableHighAccuracy: true,

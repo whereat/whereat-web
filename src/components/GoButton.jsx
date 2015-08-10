@@ -25,11 +25,11 @@ class GoButton extends BaseComponent {
   };
 
   _handleClick(){
-    this.app.shareActions.ping();
+    this.app.userLocationActions.ping();
   }
 
   _handlePress(){
-    this.app.shareActions.togglePoll();
+    //this.app.userLocationActions.togglePoll();
   }
 
 }
