@@ -12,7 +12,8 @@ class UserLocationActions extends Marty.ActionCreators {
 
   // (NavigatorPosition) -> Promise[Unit]
   publish(pos, ni = NOTIFICATION_INTERVAL){
-    const loc = this._parseLoc(pos);
+    const loc = UserLocationActions._parseLoc(pos);
+    debugger;
     return Promise
       .resolve(this.dispatch(UserLocationConstants.USER_LOCATION_ACQUIRED, loc))
       .then(() => this.app.notificationActions.notify(

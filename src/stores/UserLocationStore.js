@@ -58,7 +58,7 @@ class UserLocationStore extends Marty.Store {
   }
 
   // () -> Number
-  getPollId(){n
+  getPollId(){
     return this.state.get('pollId');
   }
 

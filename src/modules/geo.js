@@ -4,9 +4,10 @@ const geo = {};
 
 // (Navigator) -> Promise[LatLon]
 geo.get = (nav = navigator) => (
-  nav.geolocation ?
-    Promise.resolve(nav.geolocation.getCurrentPosition()) :
-    Promise.reject('Geolocation not available'));
+  new Promise(
+    (resolve, reject) => !nav.geolocation ?
+      reject('Geolocation not available') :
+      nav.geolocation.getCurrentPosition(p => resolve(p))));
 
 // ((LatLon => Unit), (Error => Unit), Number) -> Number [id]
 geo.poll = (publisher, err, sec = USER_LOCATION_INTERVAL) => (
