@@ -1,6 +1,6 @@
 const Marty = require('marty');
-const ShareConstants = require('../constants/ShareConstants');
 const { Map } = require('immutable');
+const GoButtonConstants = require('../../src/constants/GoButtonConstants');
 const { RED, GREEN } = require('../../src/constants/Colors');
 
 class GoButtonStore extends Marty.Store {
@@ -12,9 +12,8 @@ class GoButtonStore extends Marty.Store {
     });
 
     this.handlers = {
-      on: ShareConstants.PING_STARTING,
-      off: ShareConstants.PING_DONE,
-      toggle: ShareConstants.POLL_TOGGLED
+      on: GoButtonConstants.GO_BUTTON_ON,
+      off: GoButtonConstants.GO_BUTTON_OFF
     };
   }
 
@@ -26,12 +25,6 @@ class GoButtonStore extends Marty.Store {
 
   off(){
     this.replaceState(Map({color: RED }));
-  }
-
-  toggle(){
-    this.state.get('color') === RED ?
-      this.replaceState(Map({ color: GREEN })) :
-      this.replaceState(Map({ color: RED }));
   }
 
   //accessors
