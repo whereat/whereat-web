@@ -1,6 +1,6 @@
 const Marty = require('marty');
 
 module.exports = Marty.createConstants([
-  'POLLING_ON',
-  'POLLING_OFF'
+  'GO_BUTTON_ON',
+  'GO_BUTTON_OFF'
 ]);

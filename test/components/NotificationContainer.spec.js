@@ -20,7 +20,7 @@ describe('NotificationContainer Component', () => {
   const pollingState = { visible: true, msg:  POLL_MSG };
 
   const setup = (state) => {
-    const app = createApplication(Application, {include: ['toastStore']}); //TODO: add locationPubStore once it exists!
+    const app = createApplication(Application, {include: ['notificationStore']});
     const component = propTree(app, state.visible, state.msg);
     return [app, component];
   };
