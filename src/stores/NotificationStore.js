@@ -1,9 +1,8 @@
 const Marty = require('marty');
-const ToastConstants = require('../constants/ToastConstants');
-const { EMPTY, PING, POLL } = require('../constants/ToastTypes');
+const NotificationConstants = require('../constants/NotificationConstants');
 const { Map } = require('immutable');
 
-class ToastStore extends Marty.Store {
+class NotificationStore extends Marty.Store {
 
   constructor(options){
     super(options);
@@ -13,8 +12,8 @@ class ToastStore extends Marty.Store {
     });
 
     this.handlers = {
-      show: ToastConstants.TOAST_STARTING,
-      hide: ToastConstants.TOAST_DONE
+      show: NotificationConstants.NOTIFICATION_STARTING,
+      hide: NotificationConstants.NOTIFICATION_DONE
     };
   }
 
@@ -40,4 +39,4 @@ class ToastStore extends Marty.Store {
     return this.state.get('msg');
   }
 }
-module.exports = ToastStore;
+module.exports = NotificationStore;
