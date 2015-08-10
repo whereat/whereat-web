@@ -16,7 +16,7 @@ const GoButtonConstants = require('../../src/constants/GoButtonConstants');
 const geo = require('../../src/modules/geo');
 const { s17 } = require('../support/sampleLocations');
 
-describe('ShareActions', () => {
+describe.only('ShareActions', () => {
 
   const setup = () => {
     return createApplication(Application, { include: ['shareActions', 'notificationActions'] });
@@ -26,7 +26,7 @@ describe('ShareActions', () => {
 
     it('dispatches USER_LOCATION_ACQUIRED and passes loc', done => {
       const app = setup();
-      app.shareActions.publish(s17).should.be.fulfilled
+      app.shareActions.publish(s17, .0001).should.be.fulfilled
         .then(() => {
           hasDispatched(
             app, LocationConstants.USER_LOCATION_ACQUIRED, s17)
