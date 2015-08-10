@@ -13,7 +13,7 @@ class ToastContainer extends BaseComponent {
           hidden: !this.props.visible
         })}
       >
-        {this.props.text}
+        {this.props.msg}
       </div>
     );
   };
@@ -25,13 +25,8 @@ module.exports = Marty.createContainer(ToastContainer, {
     visible(){
       return this.app.toastStore.isVisible();
     },
-    text(){
-      const type = this.app.toastStore.getType();
-      return {
-        [EMPTY]: '',
-        [PING]: 'Location shared.',
-        [POLL]: 'Location sharing toggled.'
-      }[type];
+    msg(){
+      return this.app.toastStore.getMsg();
     }
   }
 });
