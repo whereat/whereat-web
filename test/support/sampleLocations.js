@@ -17,6 +17,23 @@ l.s17_ = {
   time: 1505606400000
 };
 
+l.s17Nav = {
+  coords: {
+    latitude: 40.7092529,
+    longitude: -74.0112551
+  },
+  time: 1505606400000
+};
+
+
+l.s17_Nav = {
+  coords: {
+    latitude: 40.7092528,
+    longitude: -74.0112550
+  },
+  time: 1505606400000
+};
+
 l.nyse2 = [{
   "id": "75782cd4-1a42-4af1-9130-05c63b2aa9fa",
   "lat": 40.704715,

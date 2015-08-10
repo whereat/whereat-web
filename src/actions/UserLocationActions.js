@@ -10,24 +10,34 @@ const { FLASH_INTERVAL, NOTIFICATION_INTERVAL } = require('../constants/Interval
 
 class UserLocationActions extends Marty.ActionCreators {
 
-  // (UserLocation) -> Promise[Unit]
-  publish(loc, ni = NOTIFICATION_INTERVAL){
+  // (NavigatorPosition) -> Promise[Unit]
+  publish(pos, ni = NOTIFICATION_INTERVAL){
+    const loc = this._parseLoc(pos);
     return Promise
       .resolve(this.dispatch(UserLocationConstants.USER_LOCATION_ACQUIRED, loc))
       .then(() => this.app.notificationActions.notify(
         `Location shared: ${JSON.stringify(loc, null, 2)}`, ni));
   }
 
+  // (NavigatorPosition) -> Location
+  _parseLoc(pos){
+    return {
+      lat: pos.coords.latitude,
+      lon: pos.coords.longitude,
+      time: pos.time || new Date()
+    };
+  }
+
   // (Geo, Number, Number) -> Promise[Unit]
   ping(g = geo, pi = FLASH_INTERVAL, ni = NOTIFICATION_INTERVAL){
     return Promise.all([
-      this.flash(pi),
+      this._flash(pi),
       g.get().then(loc => this.publish(loc, ni))
     ]);
   }
 
   // (Number) -> Promise[Unit]
-  flash(interval){
+  _flash(interval){
     return Promise.resolve(this.dispatch(GoButtonConstants.GO_BUTTON_ON))
       .then(() => wait(interval))
       .then(() => Promise.resolve(this.dispatch(GoButtonConstants.GO_BUTTON_OFF)));
