@@ -20,7 +20,7 @@ describe('Display Component', () => {
 
   const setup = (page) => {
 
-    const app = createApplication(Application, {include: ['navStore', 'goButtonStore'] });
+    const app = createApplication(Application, {include: ['navStore', 'goButtonStore', 'notificationStore'] });
     app.navStore.state = Map({page: page});
 
     const component = propTree(app, page);

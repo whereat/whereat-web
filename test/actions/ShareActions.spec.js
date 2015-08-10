@@ -12,10 +12,11 @@ const { hasDispatched, createApplication } = require('marty/test-utils');
 const ShareConstants = require('../../src/constants/ShareConstants');
 const LocationConstants = require('../../src/constants/LocationConstants');
 const NotificationConstants = require('../../src/constants/NotificationConstants');
+const GoButtonConstants = require('../../src/constants/GoButtonConstants');
 const geo = require('../../src/modules/geo');
 const { s17 } = require('../support/sampleLocations');
 
-describe.only('ShareActions', () => {
+describe('ShareActions', () => {
 
   const setup = () => {
     return createApplication(Application, { include: ['shareActions', 'notificationActions'] });
@@ -28,7 +29,8 @@ describe.only('ShareActions', () => {
       app.shareActions.publish(s17).should.be.fulfilled
         .then(() => {
           hasDispatched(
-            app, LocationConstants.USER_LOCATION_ACQUIRED, s17).should.be.true;
+            app, LocationConstants.USER_LOCATION_ACQUIRED, s17)
+            .should.equal(true);
         }).should.notify(done);
     });
   });
@@ -43,12 +45,20 @@ describe.only('ShareActions', () => {
 
       app.shareActions.ping(geoStub, .0001, .0001).should.be.fulfilled
         .then(() => {
-          hasDispatched(app, ShareConstants.PING_STARTING).should.equal(true);
+          hasDispatched(app, GoButtonConstants.GO_BUTTON_ON).should.equal(true);
           getStub.should.have.been.calledOnce;
-          hasDispatched(app, LocationConstants.USER_LOCATION_ACQUIRED, s17).should.equal(true);
-          hasDispatched(app, ShareConstants.PING_DONE).should.equal(true);
-          hasDispatched(app, NotificationConstants.NOTIFICATION_STARTING, `Location shared: ${s17}`).should.equal(true);
-          hasDispatched(app, NotificationConstants.NOTIFICATION_DONE).should.equal(true);
+          hasDispatched(
+            app, LocationConstants.USER_LOCATION_ACQUIRED, s17)
+            .should.equal(true);
+          hasDispatched(
+            app, GoButtonConstants.GO_BUTTON_OFF)
+            .should.equal(true);
+          hasDispatched(
+            app, NotificationConstants.NOTIFICATION_STARTING, `Location shared: ${JSON.stringify(s17, null, 2)}`)
+            .should.equal(true);
+          hasDispatched(
+            app, NotificationConstants.NOTIFICATION_DONE)
+            .should.equal(true);
         }).should.notify(done);
     });
   });
@@ -66,7 +76,11 @@ describe.only('ShareActions', () => {
         .then(() => {
           pollStub.should.have.been.calledOnce;
           hasDispatched(
-            app, ShareConstants.POLLING_TURNED_ON, 1).should.equal(true);
+            app, GoButtonConstants.GO_BUTTON_ON)
+            .should.equal(true);
+          hasDispatched(
+            app, ShareConstants.POLLING_ON, 1)
+            .should.equal(true);
           hasDispatched(
             app, NotificationConstants.NOTIFICATION_STARTING, 'Location sharing on.')
             .should.equal(true);
@@ -89,7 +103,10 @@ describe.only('ShareActions', () => {
         .then(() => {
           stopPollingSpy.should.have.been.calledWith(1);
           hasDispatched(
-            app, ShareConstants.POLLING_TURNED_OFF)
+            app, GoButtonConstants.GO_BUTTON_OFF)
+            .should.equal(true);
+          hasDispatched(
+            app, ShareConstants.POLLING_OFF)
             .should.equal(true);
           hasDispatched(
             app, NotificationConstants.NOTIFICATION_STARTING, 'Location sharing off.')
