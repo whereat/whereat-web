@@ -16,7 +16,7 @@ xdescribe('geo module', () => { //TODO: figure out how to test this!
 
     describe('when browser supports geolocation', () => {
 
-      it.only('returns the current location as Promise[LatLon]', () => {
+      it('returns the current location as Promise[LatLon]', () => {
         geo.getCurrent(fakeNavigator).should.eventually.equal('lalala');
       });
     });
