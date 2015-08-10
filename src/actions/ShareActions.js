@@ -10,27 +10,25 @@ const geo = require('../modules/geo');
 class ShareActions extends Marty.ActionCreators {
 
   // (UserLocation) -> Promise[Unit]
-  publish(loc){
-    return new Promise((resolve) => {
-      this.dispatch(LocationConstants.USER_LOCATION_ACQUIRED, loc);
-      resolve(loc);
-    });
+  publish(loc, ni = NOTIFICATION_INTERVAL){
+    return Promise
+      .resolve(this.dispatch(LocationConstants.USER_LOCATION_ACQUIRED, loc))
+      .then(() => this.app.notificationActions.notify(
+        `Location shared: ${JSON.stringify(loc, null, 2)}`, ni));
   }
 
   // (Geo, Number, Number) -> Promise[Unit]
   ping(g = geo, pi = PING_INTERVAL, ni = NOTIFICATION_INTERVAL){
     return Promise.all([
-      Promise.resolve(this.dispatch(GoButtonConstants.GO_BUTTON_ON))
-        .then(() => wait(pi))
-        .then(() => Promise.resolve(this.dispatch(GoButtonConstants.GO_BUTTON_OFF))),
-      g.get()
-        .then(loc => this.publish(loc))
-        .then(loc => Promise.all([
-          wait(pi).then(() => Promise.resolve()),
-          this.app.notificationActions.notify(
-            `Location shared: ${JSON.stringify(loc, null, 2)}`, ni)
-        ]))
+      this.flash(pi),
+      g.get().then(loc => this.publish(loc, ni))
     ]);
+  }
+
+  flash(interval){
+    return Promise.resolve(this.dispatch(GoButtonConstants.GO_BUTTON_ON))
+      .then(() => wait(interval))
+      .then(() => Promise.resolve(this.dispatch(GoButtonConstants.GO_BUTTON_OFF)));
   }
 
   // (Geo, Number) -> Promise[Unit]
