@@ -11,7 +11,7 @@ const Application = require('../../src/application');
 const ToastContainer = require('../../src/components/ToastContainer');
 const { EMPTY, PING, POLL } = require('../../src/constants/ToastTypes');
 
-describe('ToastContainer Component', () => {
+xdescribe('ToastContainer Component', () => {
 
   const defaultState = { visible: false, text: '' };
   const pingingState = { visible: true, text: 'Location shared.' };
@@ -98,7 +98,7 @@ describe('ToastContainer Component', () => {
       });
     });
 
-    describe.only('when ToastStore type changes', () => {
+    describe('when ToastStore type changes', () => {
 
       describe('from EMPTY to PING', () => {
 

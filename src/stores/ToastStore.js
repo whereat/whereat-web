@@ -9,7 +9,7 @@ class ToastStore extends Marty.Store {
     super(options);
     this.state = Map({
       visible: false,
-      type: EMPTY
+      msg: ''
     });
 
     this.handlers = {
@@ -20,14 +20,14 @@ class ToastStore extends Marty.Store {
 
   //HANDLERS
 
-  // (ToastType) -> Unit
-  show(type){
-    this.replaceState(this.state.set('visible', true).set('type', type));
+  // (String) -> Unit
+  show(msg){
+    this.replaceState(this.state.set('visible', true).set('msg', msg));
   }
 
   // () -> Unit
   hide(){
-    this.replaceState(this.state.set('visible', false).set('type', EMPTY));
+    this.replaceState(this.state.set('visible', false).set('msg', ''));
   }
 
   //ACCESSORS
@@ -36,8 +36,8 @@ class ToastStore extends Marty.Store {
     return this.state.get('visible');
   }
 
-  getType(){
-    return this.state.get('type');
+  getMsg(){
+    return this.state.get('msg');
   }
 }
 module.exports = ToastStore;
