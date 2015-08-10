@@ -12,8 +12,7 @@ class UserLocationActions extends Marty.ActionCreators {
 
   // (NavigatorPosition) -> Promise[Unit]
   publish(pos, ni = NOTIFICATION_INTERVAL){
-    const loc = UserLocationActions._parseLoc(pos);
-    debugger;
+    const loc = this._parseLoc(pos);
     return Promise
       .resolve(this.dispatch(UserLocationConstants.USER_LOCATION_ACQUIRED, loc))
       .then(() => this.app.notificationActions.notify(
@@ -25,15 +24,19 @@ class UserLocationActions extends Marty.ActionCreators {
     return {
       lat: pos.coords.latitude,
       lon: pos.coords.longitude,
-      time: pos.time || new Date()
+      time: pos.timestamp || new Date().getTime()
     };
   }
 
   // (Geo, Number, Number) -> Promise[Unit]
   ping(g = geo, pi = FLASH_INTERVAL, ni = NOTIFICATION_INTERVAL){
     return Promise.all([
-      this._flash(pi),
-      g.get().then(loc => this.publish(loc, ni))
+      g.get().then(
+        pos => {
+          //debugger;
+          return this.publish(pos, ni);
+        }),
+      this._flash(pi)
     ]);
   }
 
@@ -46,7 +49,10 @@ class UserLocationActions extends Marty.ActionCreators {
 
   // (Geo, Number) -> Promise[Unit]
   poll(g = geo, ti = NOTIFICATION_INTERVAL){
-    const id = g.poll(this.publish, this.toast);
+    const id = g.poll(
+      this.app.userLocationActions.publish.bind(this),
+      this.app.notificationActions.notify);
+
     this.dispatch(GoButtonConstants.GO_BUTTON_ON);
     this.dispatch(UserLocationConstants.POLLING_ON, id);
     return this.app.notificationActions.notify('Location sharing on.', ti);
