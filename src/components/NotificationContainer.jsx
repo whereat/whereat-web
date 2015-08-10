@@ -1,9 +1,8 @@
 const Marty = require('marty');
 const BaseComponent = require('./BaseComponent.jsx');
 const cx = require('classname');
-const { EMPTY, PING, POLL } = require('../constants/ToastTypes');
 
-class ToastContainer extends BaseComponent {
+class NotificationContainer extends BaseComponent {
   render(){
     return (
       <div
@@ -19,14 +18,14 @@ class ToastContainer extends BaseComponent {
   };
 }
 
-module.exports = Marty.createContainer(ToastContainer, {
-  listenTo: ['toastStore'],
+module.exports = Marty.createContainer(NotificationContainer, {
+  listenTo: ['notificationStore'],
   fetch: {
     visible(){
-      return this.app.toastStore.isVisible();
+      return this.app.notificationStore.isVisible();
     },
     msg(){
-      return this.app.toastStore.getMsg();
+      return this.app.notificationStore.getMsg();
     }
   }
 });

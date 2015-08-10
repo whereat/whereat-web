@@ -10,38 +10,93 @@ const Application = require('../../src/application');
 const { hasDispatched, createApplication } = require('marty/test-utils');
 
 const ShareConstants = require('../../src/constants/ShareConstants');
-const ToastConstants = require('../../src/constants/ToastConstants');
-const { PING, POLL } = require('../../src/constants/ToastTypes');
+const LocationConstants = require('../../src/constants/LocationConstants');
+const NotificationConstants = require('../../src/constants/NotificationConstants');
+const geo = require('../../src/modules/geo');
+const { s17 } = require('../support/sampleLocations');
 
-describe('ShareActions', () => {
+describe.only('ShareActions', () => {
 
   const setup = () => {
-    return createApplication(Application, { include: ['shareActions'] });
+    return createApplication(Application, { include: ['shareActions', 'notificationActions'] });
   };
+
+  describe('#publish', () => {
+
+    it('dispatches USER_LOCATION_ACQUIRED and passes loc', done => {
+      const app = setup();
+      app.shareActions.publish(s17).should.be.fulfilled
+        .then(() => {
+          hasDispatched(
+            app, LocationConstants.USER_LOCATION_ACQUIRED, s17).should.be.true;
+        }).should.notify(done);
+    });
+  });
 
   describe('#ping', () => {
 
-    it('dispatches PING/TOAST _STARTING then _DONE', (done) => {
+    const getStub = sinon.stub().returns(Promise.resolve(s17));
+    const geoStub = { get: getStub };
+
+    it('acquires user location, dispatches to stores, notifies user', (done) => {
       const app = setup();
-      app.shareActions.ping(.0001, .0001).should.be.fulfilled
+
+      app.shareActions.ping(geoStub, .0001, .0001).should.be.fulfilled
         .then(() => {
           hasDispatched(app, ShareConstants.PING_STARTING).should.equal(true);
+          getStub.should.have.been.calledOnce;
+          hasDispatched(app, LocationConstants.USER_LOCATION_ACQUIRED, s17).should.equal(true);
           hasDispatched(app, ShareConstants.PING_DONE).should.equal(true);
-          hasDispatched(app, ToastConstants.TOAST_STARTING, PING).should.equal(true);
-          hasDispatched(app, ToastConstants.TOAST_DONE).should.equal(true);
+          hasDispatched(app, NotificationConstants.NOTIFICATION_STARTING, `Location shared: ${s17}`).should.equal(true);
+          hasDispatched(app, NotificationConstants.NOTIFICATION_DONE).should.equal(true);
         }).should.notify(done);
     });
   });
 
   describe('#poll', () => {
 
-    it('dispatches POLL_TOGGLED', (done) => {
+
+    it('turns on user location polling, dispatches to stores, and notifies user', (done) => {
+
+      const pollStub = sinon.stub().returns(1);
+      const geoStub = { poll: pollStub };
       const app = setup();
-      app.shareActions.togglePoll(.0001).should.be.fulfilled
+
+      app.shareActions.poll(geoStub, .0001).should.be.fulfilled
         .then(() => {
-          hasDispatched(app, ShareConstants.POLL_TOGGLED).should.equal(true);
-          hasDispatched(app, ToastConstants.TOAST_STARTING, POLL).should.equal(true);
-          hasDispatched(app, ToastConstants.TOAST_DONE).should.equal(true);
+          pollStub.should.have.been.calledOnce;
+          hasDispatched(
+            app, ShareConstants.POLLING_TURNED_ON, 1).should.equal(true);
+          hasDispatched(
+            app, NotificationConstants.NOTIFICATION_STARTING, 'Location sharing on.')
+            .should.equal(true);
+          hasDispatched(
+            app, NotificationConstants.NOTIFICATION_DONE)
+            .should.equal(true);
+        }).should.notify(done);
+    });
+  });
+
+  describe('#stopPolling', () => {
+
+    it('turns off user location polling, dispathces to stores, notifies user', (done) => {
+
+      const stopPollingSpy = sinon.spy();
+      const geoStub = { stopPolling: stopPollingSpy };
+      const app = setup();
+
+      app.shareActions.stopPolling(1, geoStub, .0001).should.be.fulfilled
+        .then(() => {
+          stopPollingSpy.should.have.been.calledWith(1);
+          hasDispatched(
+            app, ShareConstants.POLLING_TURNED_OFF)
+            .should.equal(true);
+          hasDispatched(
+            app, NotificationConstants.NOTIFICATION_STARTING, 'Location sharing off.')
+            .should.equal(true);
+          hasDispatched(
+            app, NotificationConstants.NOTIFICATION_DONE)
+            .should.equal(true);
         }).should.notify(done);
 
     });

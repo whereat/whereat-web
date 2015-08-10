@@ -3,7 +3,7 @@ const BaseComponent = require('./BaseComponent');
 const { HOME, MAP } = require('../constants/Pages');
 const HomePage = require('./HomePage');
 const MapPage = require('./MapPage');
-const ToastContainer = require('./ToastContainer');
+const NotificationContainer = require('./NotificationContainer');
 
 class Display extends BaseComponent {
   render(){
@@ -13,7 +13,7 @@ class Display extends BaseComponent {
           [HOME]: () => <HomePage ref='homePage' />,
           [MAP]: () => <MapPage ref='mapPage' />
          }[this.props.page]()}
-        <ToastContainer />
+        <NotificationContainer />
       </div>
     );
   };
