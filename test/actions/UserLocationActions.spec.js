@@ -14,9 +14,11 @@ const LocationConstants = require('../../src/constants/LocationConstants');
 const NotificationConstants = require('../../src/constants/NotificationConstants');
 const GoButtonConstants = require('../../src/constants/GoButtonConstants');
 const geo = require('../../src/modules/geo');
-const { s17 } = require('../support/sampleLocations');
+const { s17, s17Nav } = require('../support/sampleLocations');
 
-describe('UserLocationActions', () => {
+describe.only('UserLocationActions', () => {
+
+  const locOf = (ul) => ({ lat: ul.lat, lon: ul.lon, time: ul.time });
 
   const setup = () => {
     return createApplication(Application, { include: ['userLocationActions', 'notificationActions'] });
@@ -26,10 +28,10 @@ describe('UserLocationActions', () => {
 
     it('dispatches USER_LOCATION_ACQUIRED and passes loc', done => {
       const app = setup();
-      app.userLocationActions.publish(s17, .0001).should.be.fulfilled
+      app.userLocationActions.publish(s17Nav, .0001).should.be.fulfilled
         .then(() => {
           hasDispatched(
-            app, UserLocationConstants.USER_LOCATION_ACQUIRED, s17)
+            app, UserLocationConstants.USER_LOCATION_ACQUIRED, locOf(s17))
             .should.equal(true);
         }).should.notify(done);
     });
@@ -37,7 +39,7 @@ describe('UserLocationActions', () => {
 
   describe('#ping', () => {
 
-    const getStub = sinon.stub().returns(Promise.resolve(s17));
+    const getStub = sinon.stub().returns(Promise.resolve(s17Nav));
     const geoStub = { get: getStub };
 
     it('acquires user location, dispatches to stores, notifies user', (done) => {
@@ -48,18 +50,32 @@ describe('UserLocationActions', () => {
           hasDispatched(app, GoButtonConstants.GO_BUTTON_ON).should.equal(true);
           getStub.should.have.been.calledOnce;
           hasDispatched(
-            app, UserLocationConstants.USER_LOCATION_ACQUIRED, s17)
+            app, UserLocationConstants.USER_LOCATION_ACQUIRED, locOf(s17))
             .should.equal(true);
           hasDispatched(
             app, GoButtonConstants.GO_BUTTON_OFF)
             .should.equal(true);
           hasDispatched(
-            app, NotificationConstants.NOTIFICATION_STARTING, `Location shared: ${JSON.stringify(s17, null, 2)}`)
-            .should.equal(true);
+            app,
+            NotificationConstants.NOTIFICATION_STARTING,
+            `Location shared: ${JSON.stringify(locOf(s17), null, 2)}`
+          ).should.equal(true);
           hasDispatched(
             app, NotificationConstants.NOTIFICATION_DONE)
             .should.equal(true);
         }).should.notify(done);
+    });
+  });
+
+  describe('#_parseLoc', () => {
+
+    it('parses a Location from a NavigatorPosition', () => {
+      const app = setup();
+      app.userLocationActions._parseLoc(s17Nav).should.eql({
+        lat: s17.lat,
+        lon: s17.lon,
+        time: s17.time
+      });
     });
   });
 
