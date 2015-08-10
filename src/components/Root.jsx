@@ -17,7 +17,7 @@ Root
    |- MapPage
    |  |- MapContainer
    |
-   |- ToastContainer
+   |- NotificationContainer
 
 */
 

@@ -8,9 +8,9 @@ const testTree = require('react-test-tree');
 const { createApplication } = require('marty/test-utils');
 
 const Application = require('../../src/application');
-const ToastContainer = require('../../src/components/ToastContainer');
+const NotificationContainer = require('../../src/components/NotificationContainer');
 
-describe.only('ToastContainer Component', () => {
+describe('NotificationContainer Component', () => {
 
   const PING_MSG = 'Location shared.';
   const POLL_MSG = 'Location sharing toggled.';
@@ -27,10 +27,10 @@ describe.only('ToastContainer Component', () => {
 
   const propTree = (app, visible, msg) => (
     testTree(
-      <ToastContainer.InnerComponent visible={visible} msg={msg}/>,
+      <NotificationContainer.InnerComponent visible={visible} msg={msg}/>,
       settings(app)));
 
-  const tree = (app) => testTree(<ToastContainer />, settings(app));
+  const tree = (app) => testTree(<NotificationContainer />, settings(app));
 
   const settings = (app) => ({context: { app: app }});
 
@@ -73,7 +73,7 @@ describe.only('ToastContainer Component', () => {
 
   describe('events', () =>{
 
-    describe('when ToastStore visibility changes', () => {
+    describe('when NotificationStore visibility changes', () => {
 
       describe('from hidden to visible', () => {
 
@@ -81,7 +81,7 @@ describe.only('ToastContainer Component', () => {
           const[app, t] = setup(defaultState);
           t.getProp('visible').should.equal(false);
 
-          app.toastStore.show(PING_MSG);
+          app.notificationStore.show(PING_MSG);
           const t2 = tree(app);
           t2.innerComponent.getProp('visible').should.equal(true);
         });
@@ -93,14 +93,14 @@ describe.only('ToastContainer Component', () => {
           const[app, t] = setup(pingingState);
           t.getProp('visible').should.equal(true);
 
-          app.toastStore.hide();
+          app.notificationStore.hide();
           const t2 = tree(app);
           t2.innerComponent.getProp('visible').should.equal(false);
         });
       });
     });
 
-    describe('when ToastStore msg changes', () => {
+    describe('when NotificationStore msg changes', () => {
 
       describe('from empty to ping message', () => {
 
@@ -108,7 +108,7 @@ describe.only('ToastContainer Component', () => {
           const[app, t] = setup(defaultState);
           t.getProp('msg').trim().should.equal('');
 
-          app.toastStore.show(PING_MSG);
+          app.notificationStore.show(PING_MSG);
           const t1 = tree(app);
 
           t1.innerComponent.getProp('msg').trim().should.equal(PING_MSG);
@@ -121,7 +121,7 @@ describe.only('ToastContainer Component', () => {
           const[app, t] = setup(pingingState);
           t.getProp('msg').trim().should.equal('Location shared.');
 
-          app.toastStore.hide();
+          app.notificationStore.hide();
           const t1 = tree(app);
 
           t1.innerComponent.getProp('msg').trim().should.equal('');
@@ -134,7 +134,7 @@ describe.only('ToastContainer Component', () => {
           const[app, t] = setup(defaultState);
           t.getProp('msg').trim().should.equal('');
 
-          app.toastStore.show(POLL_MSG);
+          app.notificationStore.show(POLL_MSG);
           const t1 = tree(app);
 
           t1.innerComponent.getProp('msg').trim().should.equal(POLL_MSG);
@@ -147,7 +147,7 @@ describe.only('ToastContainer Component', () => {
           const[app, t] = setup(pollingState);
           t.getProp('msg').trim().should.equal(POLL_MSG);
 
-          app.toastStore.show(PING_MSG);
+          app.notificationStore.show(PING_MSG);
           const t1 = tree(app);
 
           t1.innerComponent.getProp('msg').trim().should.equal(PING_MSG);

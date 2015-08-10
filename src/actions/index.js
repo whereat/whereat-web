@@ -1,4 +1,5 @@
 module.exports = {
   navActions: require('./NavActions'),
-  shareActions: require('./ShareActions')
+  shareActions: require('./ShareActions'),
+  notificationActions: require('./NotificationActions')
 };
