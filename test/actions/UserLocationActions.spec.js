@@ -9,27 +9,27 @@ chai.use(chaiAsPromised);
 const Application = require('../../src/application');
 const { hasDispatched, createApplication } = require('marty/test-utils');
 
-const ShareConstants = require('../../src/constants/ShareConstants');
+const UserLocationConstants = require('../../src/constants/UserLocationConstants');
 const LocationConstants = require('../../src/constants/LocationConstants');
 const NotificationConstants = require('../../src/constants/NotificationConstants');
 const GoButtonConstants = require('../../src/constants/GoButtonConstants');
 const geo = require('../../src/modules/geo');
 const { s17 } = require('../support/sampleLocations');
 
-describe.only('ShareActions', () => {
+describe('UserLocationActions', () => {
 
   const setup = () => {
-    return createApplication(Application, { include: ['shareActions', 'notificationActions'] });
+    return createApplication(Application, { include: ['userLocationActions', 'notificationActions'] });
   };
 
   describe('#publish', () => {
 
     it('dispatches USER_LOCATION_ACQUIRED and passes loc', done => {
       const app = setup();
-      app.shareActions.publish(s17, .0001).should.be.fulfilled
+      app.userLocationActions.publish(s17, .0001).should.be.fulfilled
         .then(() => {
           hasDispatched(
-            app, LocationConstants.USER_LOCATION_ACQUIRED, s17)
+            app, UserLocationConstants.USER_LOCATION_ACQUIRED, s17)
             .should.equal(true);
         }).should.notify(done);
     });
@@ -43,12 +43,12 @@ describe.only('ShareActions', () => {
     it('acquires user location, dispatches to stores, notifies user', (done) => {
       const app = setup();
 
-      app.shareActions.ping(geoStub, .0001, .0001).should.be.fulfilled
+      app.userLocationActions.ping(geoStub, .0001, .0001).should.be.fulfilled
         .then(() => {
           hasDispatched(app, GoButtonConstants.GO_BUTTON_ON).should.equal(true);
           getStub.should.have.been.calledOnce;
           hasDispatched(
-            app, LocationConstants.USER_LOCATION_ACQUIRED, s17)
+            app, UserLocationConstants.USER_LOCATION_ACQUIRED, s17)
             .should.equal(true);
           hasDispatched(
             app, GoButtonConstants.GO_BUTTON_OFF)
@@ -72,14 +72,14 @@ describe.only('ShareActions', () => {
       const geoStub = { poll: pollStub };
       const app = setup();
 
-      app.shareActions.poll(geoStub, .0001).should.be.fulfilled
+      app.userLocationActions.poll(geoStub, .0001).should.be.fulfilled
         .then(() => {
           pollStub.should.have.been.calledOnce;
           hasDispatched(
             app, GoButtonConstants.GO_BUTTON_ON)
             .should.equal(true);
           hasDispatched(
-            app, ShareConstants.POLLING_ON, 1)
+            app, UserLocationConstants.POLLING_ON, 1)
             .should.equal(true);
           hasDispatched(
             app, NotificationConstants.NOTIFICATION_STARTING, 'Location sharing on.')
@@ -99,14 +99,14 @@ describe.only('ShareActions', () => {
       const geoStub = { stopPolling: stopPollingSpy };
       const app = setup();
 
-      app.shareActions.stopPolling(1, geoStub, .0001).should.be.fulfilled
+      app.userLocationActions.stopPolling(1, geoStub, .0001).should.be.fulfilled
         .then(() => {
           stopPollingSpy.should.have.been.calledWith(1);
           hasDispatched(
             app, GoButtonConstants.GO_BUTTON_OFF)
             .should.equal(true);
           hasDispatched(
-            app, ShareConstants.POLLING_OFF)
+            app, UserLocationConstants.POLLING_OFF)
             .should.equal(true);
           hasDispatched(
             app, NotificationConstants.NOTIFICATION_STARTING, 'Location sharing off.')
