@@ -2,12 +2,12 @@ const { USER_LOCATION_INTERVAL } = require('../constants/Intervals');
 
 const geo = {};
 
-// (Navigator) -> Promise[LatLon]
+//(Navigator) -> Promise[LatLon]
 geo.get = (nav = navigator) => (
-  new Promise(
-    (resolve, reject) => !nav.geolocation ?
+  new Promise((resolve, reject) => (
+    !nav.geolocation ?
       reject('Geolocation not available') :
-      nav.geolocation.getCurrentPosition(p => resolve(p))));
+      nav.geolocation.getCurrentPosition(p => resolve(p)))));
 
 // ((LatLon => Unit), (Error => Unit), Number) -> Number [id]
 geo.poll = (publisher, err, sec = USER_LOCATION_INTERVAL) => (

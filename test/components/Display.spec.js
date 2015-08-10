@@ -28,11 +28,10 @@ describe('Display Component', () => {
     return [app, component];
   };
 
-  const propTree = (app, page) =>
-          testTree(<Display.InnerComponent page={page} />, settings(app));
+  const propTree = (app, page) =>(
+    testTree(<Display.InnerComponent page={page} />, settings(app)));
 
-  const tree = (app) =>
-          testTree(<Display />, settings(app));
+  const tree = (app) => testTree(<Display />, settings(app));
 
   const settings = (app) => ({
     context: { app: app },

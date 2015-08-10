@@ -10,6 +10,8 @@ const { Map } = require('immutable');
 const Application = require('../../src/application');
 const { RED, GREEN } = require('../../src/constants/Colors');
 const { GO_RADIUS, GO_DIAMETER } = require('../../src/constants/Dimensions');
+const { s17, s17_, s17Nav, s17_Nav } = require('../support/sampleLocations');
+
 const { createStore, createApplication } = require('marty/test-utils');
 const testTree = require('react-test-tree');
 
@@ -60,38 +62,64 @@ describe('GoButton Component', () => {
 
   describe('events', () =>{
 
-    const setup = (color) => {
+    const emptyState = Map({ polling: false, pollId: -1, uid: s17.id, loc: Map() });
+    const ping1State = Map({ polling: false, pollId: -1, uid: s17.id, loc: Map(s17) });
+    const ping2State = Map({ polling: false, pollId: -1, uid: s17_.id, loc: Map(s17_) });
+    const pollState = Map({ polling: true, pollId: 1, uid: s17.id, loc: Map() });
+
+    const setup = (state) => {
 
       const spies = {
         ping: sinon.spy(),
-        togglePoll: sinon.spy()
+        poll: sinon.spy(),
+        stopPolling: sinon.spy()
       };
 
       const app = createApplication(Application, {
-        include: ['goButtonStore'],
-        stub: {
-          userLocationActions: {
-            ping: spies.ping,
-            togglePoll: spies.togglePoll
-          }
-        }
+        include: ['goButtonStore', 'userLocationStore'],
+        stub: { userLocationActions: spies }
       });
+
+      app.userLocationStore.state = state;
 
       return [app, spies];
     };
 
+    const propTree = (app, color) => (
+      testTree(<GoButton.InnerComponent color={color}/>, settings(app)));
+
+    const tree = (app) => testTree(<GoButton />, settings(app));
+
+    const settings = (app) => ({
+      context: { app: app }
+    });
+
     describe('clicking go button', () => {
 
-      it('calls userLocationActions#ping', () => {
-        const [app, {ping}] = setup(RED);
-        const gb = testTree(<GoButton/>, { context: { app: app }});
-        gb.click();
+      describe('when polling is off', () => {
 
-        ping.should.have.been.calledOnce;
+        it('calls userLocationActions#ping', () => {
+          const [app, {ping}] = setup(emptyState);
+          const gb = tree(app);
+          gb.innerComponent.click();
+
+          ping.should.have.been.calledOnce;
+        });
+      });
+
+      describe('when polling is on', () => {
+
+        it('does nothing', () => {
+          const [app, {ping}] = setup(pollState);
+          const gb = tree(app);
+          gb.innerComponent.click();
+
+          ping.should.not.have.been.called;
+        });
       });
     });
 
-    xdescribe('pressing go button', () => {
+    describe('pressing go button', () => {
 
       const press = (node) => (
         Promise.resolve()
@@ -100,28 +128,65 @@ describe('GoButton Component', () => {
           .then(() => node.simulate.mouseUp())
       );
 
-      it('calls userLocationActions#poll', (done) => {
-        const [app, {togglePoll}] = setup(RED);
-        const gb = testTree(<GoButton />, {context: {app: app}});
+      describe('when polling is off', () => {
 
-        press(gb).should.be.fulfilled
-          .then(() => togglePoll.should.have.been.calledOnce)
-          .should.notify(done);
+        it('calls userLocationActions#poll', done => {
+          const [app, {poll, stopPolling}] = setup(emptyState);
+          const gb = tree(app);
+
+          press(gb).should.be.fulfilled
+            .then(() => {
+              poll.should.have.been.calledOnce;
+              stopPolling.should.not.have.been.called;
+            }).should.notify(done);
+        });
+      });
+
+      describe('when polling is on', () => {
+
+        it('calls userLocationActions#stopPolling', done => {
+          const [app, {poll, stopPolling}] = setup(pollState);
+          const gb = tree(app);
+
+          press(gb).should.be.fulfilled
+            .then(() => {
+              stopPolling.should.have.been.calledWith(1);
+              poll.should.not.have.been.called;
+            }).should.notify(done);
+        });
       });
     });
 
     describe('listening to GoButtonStore', () => {
 
       it('changes color when store color changes', () => {
-        const app = setup(RED)[0];
-        const gb = testTree(<GoButton />, { context: { app: app }});
+        const [app, _] = setup(emptyState);
+        app.goButtonStore.replaceState(Map({ color: RED }));
+        const gb = tree(app);
 
         gb.innerComponent.getProp('color').should.equal(RED);
 
         app.goButtonStore.replaceState(Map({ color: GREEN }));
-        const gb2 = testTree(<GoButton />, { context: { app: app}});
+        const gb2 = tree(app);
 
         gb2.innerComponent.getProp('color').should.equal(GREEN);
+      });
+    });
+
+    describe('listening to UserLocationStore', () => {
+
+      it('changes when polling state changes', () => {
+        const [app, _] = setup(emptyState);
+        const gb = tree(app);
+
+        gb.innerComponent.getProp('polling').should.equal(false);
+        gb.innerComponent.getProp('pollId').should.equal(-1);
+
+        app.userLocationStore.pollingOn(1);
+        const gb2 = tree(app);
+
+        gb.innerComponent.getProp('polling').should.equal(true);
+        gb.innerComponent.getProp('pollId').should.equal(1);
       });
     });
   });
