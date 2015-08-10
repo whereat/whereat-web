@@ -16,7 +16,7 @@ const GoButtonConstants = require('../../src/constants/GoButtonConstants');
 const geo = require('../../src/modules/geo');
 const { s17, s17Nav } = require('../support/sampleLocations');
 
-describe.only('UserLocationActions', () => {
+describe('UserLocationActions', () => {
 
   const locOf = (ul) => ({ lat: ul.lat, lon: ul.lon, time: ul.time });
 

@@ -22,7 +22,7 @@ l.s17Nav = {
     latitude: 40.7092529,
     longitude: -74.0112551
   },
-  time: 1505606400000
+  timestamp: 1505606400000
 };
 
 
@@ -31,7 +31,7 @@ l.s17_Nav = {
     latitude: 40.7092528,
     longitude: -74.0112550
   },
-  time: 1505606400000
+  timestamp: 1505606400000
 };
 
 l.nyse2 = [{
