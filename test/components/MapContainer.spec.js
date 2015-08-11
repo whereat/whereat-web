@@ -16,25 +16,49 @@ const Location = require('../../src/models/Location');
 const UserLocation = require('../../src/models/UserLocation');
 
 const { Map, Seq } = require('immutable');
-const { s17UL, nyse3Seq } = require('../support/sampleLocations');
+const { s17, s17UL, nyse3Seq, nyse3ULSeq } = require('../support/sampleLocations');
 
 describe('MapContainer Component', () => {
 
-  const setup = (locs = Seq.of(Location())) => {
+  const emptyState = Map({
+    center: Location(s17),
+    locs: Map()
+  });
+
+  const ls = nyse3ULSeq;
+
+  const nyse3State = Map({
+    center: Location(s17),
+    locs: Map([
+      [ls.get(0).id, ls.get(0)],
+      [ls.get(1).id, ls.get(1)],
+      [ls.get(2).id, ls.get(2)]
+    ])
+  });
+
+  const setup = (state) => {
 
     const app = createApplication(Application, { include: ['locationStore'] });
-    app.locationStore.saveMany(locs);
+    app.locationStore.state = state;
 
-    const component = propTree(app, locs);
+    const stubs = {
+      getCenter: sinon.stub(),
+      getLocs: sinon.stub()
+    };
+    app.locationStore.getCenter = stubs.getCenter;
+    app.locationStore.getLocs = stubs.getCenter;
 
-    return [app, component];
+    const component = propTree(app, state.get('locs').valueSeq(), state.get('center'));
+
+    return [app, component, stubs];
   };
 
-  const propTree = (app, locs) =>
-          testTree(<MapContainer.InnerComponent locations={locs} />, settings(app));
+  const propTree = (app, locs, ctr) =>(
+    testTree(
+      <MapContainer.InnerComponent locations={locs} center={ctr}/>,
+      settings(app)));
 
-  const tree = (app) =>
-          testTree(<MapContainer />, settings(app));
+  const tree = (app) => testTree(<MapContainer />, settings(app));
 
   const settings = (app) => ({
     context: { app: app },
@@ -46,11 +70,11 @@ describe('MapContainer Component', () => {
   describe('contents', () => {
 
     it('renders a map with correct set of markers', () => {
-      const [app, mc] = setup(nyse3Seq);
+      const [app, mc, _] = setup(nyse3State);
 
       mc.map.should.exist;
-      mc.getProp('locations').size.should.equal(3);
-      shouldHaveObjectEquality(mc.getProp('locations'), nyse3Seq);
+      mc.getProp('locations').count().should.equal(3);
+      shouldHaveObjectEquality(mc.getProp('locations'), nyse3ULSeq);
     });
   });
 
@@ -59,14 +83,13 @@ describe('MapContainer Component', () => {
     describe('listening to LocationStore', () => {
 
       it('updates props when store state changes', () => {
+        const [_, mc, {getLocs}] = setup(emptyState);
 
-        const [app, mc] = setup(Seq.of(UserLocation(s17UL)));
-        shouldHaveObjectEquality(mc.getProp('locations'), Seq.of(UserLocation(s17UL)));
+        getLocs.returns(Seq());
+        shouldHaveObjectEquality(mc.getProp('locations'), Seq());
 
-        app.locationStore.saveMany(nyse3Seq);
-        const mc2 = tree(app);
-
-        shouldHaveObjectEquality(mc2.innerComponent.getProp('locations'), nyse3Seq);
+        getLocs.returns(nyse3Seq);
+        shouldHaveObjectEquality(mc.getProp('locations'), nyse3ULSeq);
       });
     });
   });

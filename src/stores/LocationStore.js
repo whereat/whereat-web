@@ -3,15 +3,18 @@ const Marty = require('marty');
 const LocationConstants = require('../constants/LocationConstants');
 const UserLocationConstants = require('../constants/UserLocationConstants');
 const UserLocation = require('../models/UserLocation');
+const Location = require('../models/Location');
+const { convertPosition } = require('../models/LocationCompanion');
 
 const { Map, List } = require('immutable');
-const { nyse2, nyse3Seq } = require('../../test/support/sampleLocations');
+const geo = require('../modules/geo');
 
 class LocationStore extends Marty.Store {
 
   constructor(options){
     super(options);
-    this.state = Map();
+    this.state = Map({locs: Map()});
+    this.state.set('center', this.getCenter());
 
     this.handlers = {
       save: [
@@ -26,20 +29,41 @@ class LocationStore extends Marty.Store {
   //(UserLocation) -> Unit
   save(loc){
     const l = UserLocation(loc);
-    this.replaceState(this.state.set(l.id, l));
+    this.replaceState(this.state.setIn(['locs', l.id], l));
   }
 
   // (Seq[UserLocation]) -> Unit
   saveMany(locs){
     this.replaceState(
-      locs.reduce((acc, loc) => acc.set(loc.id, loc), this.state, this));
+      locs.reduce(
+        (acc, loc) => acc.setIn(['locs', loc.id], loc),
+        this.state,
+        this));
   }
 
   //ACCESSORS
 
   // () -> UserLocation
-  getAll(){
-    return this.state.valueSeq();
+  getCenter(){
+    return this.fetch({
+      id: 'getCenter',
+      locally(){
+        return this.state.get('center');
+      },
+      remotely(){
+        return geo.get()
+          .then(pos => {
+            const loc = convertPosition(pos);
+            this.replaceState(this.state.set('center', loc));
+            Promise.resolve(loc);
+          });
+      }
+    });
+  }
+
+  // () -> UserLocation
+  getLocs(){
+    return this.state.get('locs').valueSeq();
   }
 
 }
