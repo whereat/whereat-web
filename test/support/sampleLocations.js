@@ -1,3 +1,5 @@
+const Location = require('../../src/models/Location');
+
 const l = {};
 
 //TODO make immutable sample locs...
@@ -9,6 +11,11 @@ l.s17 = {
   time: 1505606400000
 };
 
+l.s17NoId = {
+  lat: 40.7092529,
+  lon: -74.0112551,
+  time: 1505606400000
+};
 
 l.s17_ = {
   id: "75782cd4-1a42-4af1-9130-05c63b2aa9ff",
@@ -25,6 +32,7 @@ l.s17Nav = {
   timestamp: 1505606400000
 };
 
+l.s17Location = Location(l.s17);
 
 l.s17_Nav = {
   coords: {
