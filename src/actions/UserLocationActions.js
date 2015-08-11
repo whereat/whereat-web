@@ -14,10 +14,11 @@ class UserLocationActions extends Marty.ActionCreators {
   // (NavigatorPosition) -> Promise[Unit]
   publish(pos, ni = NOTIFICATION_INTERVAL){
     const loc = this._parseLoc(pos);
+    const trim = (n) => n.toFixed(2);
     return Promise
       .resolve(this.dispatch(UserLocationConstants.USER_LOCATION_ACQUIRED, loc))
       .then(() => this.app.notificationActions.notify(
-        `Location shared: ${loc.lat} / ${loc.lon}`, ni));
+        `Location shared: ${trim(loc.lat)} / ${trim(loc.lon)}`, ni));
   }
 
   // (NavigatorPosition) -> Location
