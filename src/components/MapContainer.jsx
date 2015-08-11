@@ -19,7 +19,7 @@ class MapContainer extends BaseComponent {
     return (
       <div id="map" ref="map">
         <Map
-          center={this._positionify(this.props.locations.first() || Location(s17))}
+          center={this._positionify(this.props.center)}
           zoom={15}
         >
           <TileLayer url={url} attribution={attribution} accessToken={token} id={id}/>
@@ -39,7 +39,7 @@ class MapContainer extends BaseComponent {
     return (
       <Marker position={this._positionify(loc)} key={i} ref={`marker${i}`} >
         <Popup>
-          <span>{this._pretty(loc.get('time'))}</span>
+          <span>{'Hi!'}</span>
         </Popup>
       </Marker>
     );
@@ -55,8 +55,11 @@ class MapContainer extends BaseComponent {
 module.exports = Marty.createContainer(MapContainer, {
   listenTo: ['locationStore'],
   fetch: {
+    center(){
+      return this.app.locationStore.getCenter();
+    },
     locations(){
-      return this.app.locationStore.getAll();
+      return this.app.locationStore.getLocs();
     }
   }
 });
