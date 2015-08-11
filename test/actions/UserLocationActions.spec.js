@@ -59,9 +59,10 @@ describe('UserLocationActions', () => {
                                             UserLocationConstants.USER_LOCATION_ACQUIRED,
                                             Location(s17));
           shouldHaveDispatched(app, GoButtonConstants.GO_BUTTON_OFF);
-          shouldHaveDispatchedWith(app,
-                                   NotificationConstants.NOTIFICATION_STARTING,
-                                   `Location shared: ${s17.lat} / ${s17.lon}`);
+          shouldHaveDispatchedWith(
+            app,
+            NotificationConstants.NOTIFICATION_STARTING,
+            `Location shared: ${s17.lat.toFixed(2)} / ${s17.lon.toFixed(2)}`);
           shouldHaveDispatched(app, NotificationConstants.NOTIFICATION_DONE);
         }).should.notify(done);
     });
