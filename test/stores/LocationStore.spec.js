@@ -10,10 +10,12 @@ const { dispatch, createApplication } = require('marty/test-utils');
 const { shouldHaveObjectEquality } = require('../support/matchers');
 
 const LocationConstants = require('../../src/constants/LocationConstants');
+const Location = require('../../src/models/Location');
+const UserLocationConstants = require('../../src/constants/UserLocationConstants');
 const UserLocation = require('../../src/models/UserLocation');
 
 const { Map, Seq } = require('immutable');
-const { s17UL, s17_UL, nyse3Seq, nyse3ULSeq } = require('../support/sampleLocations');
+const { s17, s17UL, s17_UL, nyse3Seq, nyse3ULSeq } = require('../support/sampleLocations');
 
 describe('LocationStore', () => {
 
@@ -36,7 +38,7 @@ describe('LocationStore', () => {
         app.locationStore.save(UserLocation(s17UL));
 
         shouldHaveObjectEquality(
-          app.locationStore.state.get(s17UL.id),
+          app.locationStore.state.getIn(['locs', s17UL.id]),
           UserLocation(s17UL));
       });
 
@@ -46,7 +48,7 @@ describe('LocationStore', () => {
         app.locationStore.save(UserLocation(s17_UL));
 
         shouldHaveObjectEquality(
-          app.locationStore.state.get(s17UL.id),
+          app.locationStore.state.getIn(['locs', s17UL.id]),
           UserLocation(s17_UL));
 
         app.locationStore.state.valueSeq().size.should.equal(1);
@@ -57,13 +59,17 @@ describe('LocationStore', () => {
         dispatch(app, LocationConstants.LOCATION_RECEIVED, UserLocation(s17UL));
 
         shouldHaveObjectEquality(
-          app.locationStore.state.get(s17UL.id),
+          app.locationStore.state.getIn(['locs', s17UL.id]),
           UserLocation(s17UL));
       });
 
-      it('handles USER_LOCATION_ACQUIRED', () => {
+      it('handles USER_LOCATION_ACQUIRED', () => { // TODO: delete once LocationApi implemented
         const [app, _] = setup();
+        dispatch(app, UserLocationConstants.USER_LOCATION_ACQUIRED, UserLocation(s17UL));
 
+        shouldHaveObjectEquality(
+          app.locationStore.state.getIn(['locs', s17UL.id]),
+          UserLocation(s17UL));
       });
 
       it('notifies listeners of a state change', () => {
@@ -77,18 +83,21 @@ describe('LocationStore', () => {
     describe('#saveMany', () => {
 
       const ls = nyse3ULSeq;
-      const nyse3State = Map([
-        [ls.get(0).id, ls.get(0)],
-        [ls.get(1).id, ls.get(1)],
-        [ls.get(2).id, ls.get(2)]
-      ]);
+      const nyse3State = Map({
+        center: Location(s17),
+        locs: Map([
+          [ls.get(0).id, ls.get(0)],
+          [ls.get(1).id, ls.get(1)],
+          [ls.get(2).id, ls.get(2)]
+        ])
+      });
 
       it('adds many external user locations to the store', () => {
         const [app, _] = setup();
         nyse3Seq.size.should.equal(3);
         app.locationStore.saveMany(nyse3ULSeq);
 
-        app.locationStore.state.valueSeq().size.should.equal(3);
+        app.locationStore.state.get('locs').valueSeq().size.should.equal(3);
         shouldHaveObjectEquality( app.locationStore.state, nyse3State );
       });
 
@@ -96,7 +105,7 @@ describe('LocationStore', () => {
         const [app, _] = setup();
         dispatch(app, LocationConstants.LOCATIONS_RECEIVED, nyse3ULSeq);
 
-        app.locationStore.state.valueSeq().size.should.eql(3);
+        app.locationStore.state.get('locs').valueSeq().size.should.eql(3);
         shouldHaveObjectEquality( app.locationStore.state, nyse3State );
       });
 
@@ -120,7 +129,7 @@ describe('LocationStore', () => {
         app.locationStore.saveMany(nyse3ULSeq);
 
         shouldHaveObjectEquality(
-          app.locationStore.getAll(),
+          app.locationStore.getLocs(),
           nyse3ULSeq);
       });
     });
