@@ -31,11 +31,7 @@ class UserLocationActions extends Marty.ActionCreators {
   // (Geo, Number, Number) -> Promise[Unit]
   ping(g = geo, pi = FLASH_INTERVAL, ni = NOTIFICATION_INTERVAL){
     return Promise.all([
-      g.get().then(
-        pos => {
-          //debugger;
-          return this.publish(pos, ni);
-        }),
+      g.get().then(pos => this.publish(pos, ni)),
       this._flash(pi)
     ]);
   }

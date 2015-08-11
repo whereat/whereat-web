@@ -1,6 +1,6 @@
 const Marty = require('marty');
 const uuid = require('node-uuid');
-const { Map, Record } = require('immutable');
+const { Map, Record, fromJS } = require('immutable');
 
 const UserLocationConstants = require('../constants/UserLocationConstants');
 const UserLocation = require('../models/UserLocation');
@@ -30,7 +30,13 @@ class UserLocationStore extends Marty.Store {
   // TODO: make this more typesafe with a Location record?
   setLoc(loc){
     this.replaceState(
-      this.state.mergeDeep( Map({ loc: Map(loc) })));
+      this.state.set('loc', Map({
+        lat: loc.lat,
+        lon: loc.lon,
+        time: loc.time,
+        uid: this.state.get('uid')
+      })));
+      //this.state.mergeDeep( Map({ loc: fromJS(loc) })));
   }
 
   // (Number) -> Unit
