@@ -18,7 +18,10 @@ class MapContainer extends BaseComponent {
 
     return (
       <div id="map" ref="map">
-        <Map center={this._positionify(Location(s17))} zoom={15} >
+        <Map
+          center={this._positionify(this.props.locations.first() || Location(s17))}
+          zoom={15}
+        >
           <TileLayer url={url} attribution={attribution} accessToken={token} id={id}/>
           {this.props.locations.map((loc, i) => this._markerify(loc, i))}
         </Map>
