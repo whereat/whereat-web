@@ -11,14 +11,15 @@ const { dispatch, hasDispatched, createApplication } = require('marty/test-utils
 
 const UserLocationConstants = require('../../src/constants/UserLocationConstants');
 const UserLocation = require('../../src/models/UserLocation');
+const Location = require('../../src/models/Location');
 const { s17, s17_, s17Nav, s17_Nav } = require('../support/sampleLocations');
 
 describe('UserLocationStore', () => {
 
-  const emptyState = Map({ polling: false, pollId: -1, uid: s17.id, loc: Map() });
-  const ping1State = Map({ polling: false, pollId: -1, uid: s17.id, loc: Map(s17) });
-  const ping2State = Map({ polling: false, pollId: -1, uid: s17_.id, loc: Map(s17_) });
-  const pollState = Map({ polling: true, pollId: 1, uid: s17.id, loc: Map() });
+  const emptyState = Map({  polling: false, pollId: -1, loc: UserLocation()     });
+  const ping1State = Map({  polling: false, pollId: -1, loc: UserLocation(s17)  });
+  const ping2State = Map({  polling: false, pollId: -1, loc: UserLocation(s17_) });
+  const pollState =  Map({  polling: true,  pollId: 1,  loc: UserLocation()     });
 
   const setup = (state) => {
     const app = createApplication(Application, { include: ['userLocationStore'] });
@@ -30,26 +31,24 @@ describe('UserLocationStore', () => {
     return [app, listener];
   };
 
-  const locOf = (ul) => ({ lat: ul.lat, lon: ul.lon, time: ul.time });
-
   describe('handlers', () => {
 
     describe('#setLoc', () => {
 
       it('sets location', () => {
         const [app, _] = setup(emptyState);
-        app.userLocationStore.state.get('loc').equals(Map()).should.equal(true);
+        app.userLocationStore.state.get('loc').equals(UserLocation()).should.equal(true);
 
-        app.userLocationStore.setLoc(s17);
-        app.userLocationStore.state.get('loc').equals(Map(s17)).should.equal(true);
+        app.userLocationStore.setLoc(Location(s17));
+        app.userLocationStore.state.get('loc').equals(UserLocation(s17)).should.equal(true);
       });
 
       it('handles USER_LOCATION_ACQUIRED', () => {
         const [app, _] = setup(emptyState);
-        app.userLocationStore.state.get('loc').equals(Map()).should.equal(true);
+        app.userLocationStore.state.get('loc').equals(UserLocation()).should.equal(true);
 
-        dispatch(app, UserLocationConstants.USER_LOCATION_ACQUIRED, s17);
-        app.userLocationStore.state.get('loc').equals(Map(s17)).should.equal(true);
+        dispatch(app, UserLocationConstants.USER_LOCATION_ACQUIRED, Location(s17));
+        app.userLocationStore.state.get('loc').equals(UserLocation(s17)).should.equal(true);
       });
 
       it('notifies listeners of state change', () => {
@@ -134,10 +133,10 @@ describe('UserLocationStore', () => {
 
       it('returns current user location', () => {
         const [app, _] = setup(ping1State);
-        app.userLocationStore.getLoc().equals(Map(s17)).should.equal(true);
+        app.userLocationStore.getLoc().equals(UserLocation(s17)).should.equal(true);
 
-        app.userLocationStore.setLoc(locOf(s17_));
-        app.userLocationStore.getLoc().equals(Map(s17_)).should.equal(true);
+        app.userLocationStore.setLoc(Location(s17_));
+        app.userLocationStore.getLoc().equals(UserLocation(s17_)).should.equal(true);
       });
     });
 

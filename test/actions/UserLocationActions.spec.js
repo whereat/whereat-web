@@ -7,21 +7,29 @@ chai.use(sinonChai);
 chai.use(chaiAsPromised);
 
 const Application = require('../../src/application');
-const { hasDispatched, createApplication } = require('marty/test-utils');
+const { createApplication } = require('marty/test-utils');
+const {
+  shouldHaveDispatched,
+  shouldHaveDispatchedWith,
+  shouldHaveDispatchedWithImmutable
+} = require('../support/matchers');
 
 const UserLocationConstants = require('../../src/constants/UserLocationConstants');
 const LocationConstants = require('../../src/constants/LocationConstants');
 const NotificationConstants = require('../../src/constants/NotificationConstants');
 const GoButtonConstants = require('../../src/constants/GoButtonConstants');
+const Location = require('../../src/models/Location');
+const UserLocation = require('../../src/models/UserLocation');
+
 const geo = require('../../src/modules/geo');
 const { s17, s17Nav } = require('../support/sampleLocations');
+const { toJS } = require('immutable');
 
 describe('UserLocationActions', () => {
 
-  const locOf = (ul) => ({ lat: ul.lat, lon: ul.lon, time: ul.time });
-
   const setup = () => {
-    return createApplication(Application, { include: ['userLocationActions', 'notificationActions'] });
+    return createApplication(Application, {
+      include: ['userLocationActions', 'notificationActions'] });
   };
 
   describe('#publish', () => {
@@ -30,9 +38,7 @@ describe('UserLocationActions', () => {
       const app = setup();
       app.userLocationActions.publish(s17Nav, .0001).should.be.fulfilled
         .then(() => {
-          hasDispatched(
-            app, UserLocationConstants.USER_LOCATION_ACQUIRED, locOf(s17))
-            .should.equal(true);
+          shouldHaveDispatchedWithImmutable(app, UserLocationConstants.USER_LOCATION_ACQUIRED, Location(s17));
         }).should.notify(done);
     });
   });
@@ -47,22 +53,16 @@ describe('UserLocationActions', () => {
 
       app.userLocationActions.ping(geoStub, .0001, .0001).should.be.fulfilled
         .then(() => {
-          hasDispatched(app, GoButtonConstants.GO_BUTTON_ON).should.equal(true);
+          shouldHaveDispatched(app, GoButtonConstants.GO_BUTTON_ON);
           getStub.should.have.been.calledOnce;
-          hasDispatched(
-            app, UserLocationConstants.USER_LOCATION_ACQUIRED, locOf(s17))
-            .should.equal(true);
-          hasDispatched(
-            app, GoButtonConstants.GO_BUTTON_OFF)
-            .should.equal(true);
-          hasDispatched(
-            app,
-            NotificationConstants.NOTIFICATION_STARTING,
-            `Location shared: ${JSON.stringify(locOf(s17), null, 2)}`
-          ).should.equal(true);
-          hasDispatched(
-            app, NotificationConstants.NOTIFICATION_DONE)
-            .should.equal(true);
+          shouldHaveDispatchedWithImmutable(app,
+                                            UserLocationConstants.USER_LOCATION_ACQUIRED,
+                                            Location(s17));
+          shouldHaveDispatched(app, GoButtonConstants.GO_BUTTON_OFF);
+          shouldHaveDispatchedWith(app,
+                                   NotificationConstants.NOTIFICATION_STARTING,
+                                   `Location shared: ${s17.lat} / ${s17.lon}`);
+          shouldHaveDispatched(app, NotificationConstants.NOTIFICATION_DONE);
         }).should.notify(done);
     });
   });
@@ -71,11 +71,12 @@ describe('UserLocationActions', () => {
 
     it('parses a Location from a NavigatorPosition', () => {
       const app = setup();
-      app.userLocationActions._parseLoc(s17Nav).should.eql({
-        lat: s17.lat,
-        lon: s17.lon,
-        time: s17.time
-      });
+      app.userLocationActions._parseLoc(s17Nav)
+        .equals(Location({
+          lat: s17.lat,
+          lon: s17.lon,
+          time: s17.time
+        })).should.equal(true);
     });
   });
 
@@ -91,18 +92,12 @@ describe('UserLocationActions', () => {
       app.userLocationActions.poll(geoStub, .0001).should.be.fulfilled
         .then(() => {
           pollStub.should.have.been.calledOnce;
-          hasDispatched(
-            app, GoButtonConstants.GO_BUTTON_ON)
-            .should.equal(true);
-          hasDispatched(
-            app, UserLocationConstants.POLLING_ON, 1)
-            .should.equal(true);
-          hasDispatched(
-            app, NotificationConstants.NOTIFICATION_STARTING, 'Location sharing on.')
-            .should.equal(true);
-          hasDispatched(
-            app, NotificationConstants.NOTIFICATION_DONE)
-            .should.equal(true);
+          shouldHaveDispatched(app, GoButtonConstants.GO_BUTTON_ON);
+          shouldHaveDispatchedWith(app, UserLocationConstants.POLLING_ON, 1);
+          shouldHaveDispatchedWith(app,
+                                   NotificationConstants.NOTIFICATION_STARTING,
+                                   'Location sharing on.');
+          shouldHaveDispatched(app, NotificationConstants.NOTIFICATION_DONE);
         }).should.notify(done);
     });
   });
@@ -118,18 +113,12 @@ describe('UserLocationActions', () => {
       app.userLocationActions.stopPolling(1, geoStub, .0001).should.be.fulfilled
         .then(() => {
           stopPollingSpy.should.have.been.calledWith(1);
-          hasDispatched(
-            app, GoButtonConstants.GO_BUTTON_OFF)
-            .should.equal(true);
-          hasDispatched(
-            app, UserLocationConstants.POLLING_OFF)
-            .should.equal(true);
-          hasDispatched(
-            app, NotificationConstants.NOTIFICATION_STARTING, 'Location sharing off.')
-            .should.equal(true);
-          hasDispatched(
-            app, NotificationConstants.NOTIFICATION_DONE)
-            .should.equal(true);
+          shouldHaveDispatched(app, GoButtonConstants.GO_BUTTON_OFF);
+          shouldHaveDispatched(app, UserLocationConstants.POLLING_OFF);
+          shouldHaveDispatchedWith(app,
+                                   NotificationConstants.NOTIFICATION_STARTING,
+                                   'Location sharing off.');
+          shouldHaveDispatched(app, NotificationConstants.NOTIFICATION_DONE);
         }).should.notify(done);
 
     });

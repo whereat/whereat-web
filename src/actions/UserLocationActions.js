@@ -7,6 +7,7 @@ const NotificationConstants = require('../constants/NotificationConstants');
 const UserLocationConstants = require('../constants/UserLocationConstants');
 const GoButtonConstants = require('../constants/GoButtonConstants');
 const { FLASH_INTERVAL, NOTIFICATION_INTERVAL } = require('../constants/Intervals');
+const Location = require('../models/Location');
 
 class UserLocationActions extends Marty.ActionCreators {
 
@@ -16,16 +17,16 @@ class UserLocationActions extends Marty.ActionCreators {
     return Promise
       .resolve(this.dispatch(UserLocationConstants.USER_LOCATION_ACQUIRED, loc))
       .then(() => this.app.notificationActions.notify(
-        `Location shared: ${JSON.stringify(loc, null, 2)}`, ni));
+        `Location shared: ${loc.lat} / ${loc.lon}`, ni));
   }
 
   // (NavigatorPosition) -> Location
   _parseLoc(pos){
-    return {
+    return Location({
       lat: pos.coords.latitude,
       lon: pos.coords.longitude,
       time: pos.timestamp || new Date().getTime()
-    };
+    });
   }
 
   // (Geo, Number, Number) -> Promise[Unit]
