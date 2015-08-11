@@ -42,14 +42,14 @@ describe('NotificationContainer Component', () => {
         const [_, t] = setup(defaultState);
 
         t.getProp('visible').should.equal(false);
-        t.getClassName().should.equal('toast hidden');
+        t.getClassName().should.equal('notification hidden');
       });
 
       it('is visible when `visible` prop is true', () => {
         const [_, t] = setup(pingingState);
 
         t.getProp('visible').should.equal(true);
-        t.getClassName().should.equal('toast visible');
+        t.getClassName().should.equal('notification visible');
       });
     });
 
