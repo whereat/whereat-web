@@ -1,34 +1,43 @@
 const Marty = require('marty');
+
 const LocationConstants = require('../constants/LocationConstants');
+const UserLocationConstants = require('../constants/UserLocationConstants');
+const UserLocation = require('../models/UserLocation');
+
 const { Map, List } = require('immutable');
-const { nyse2, nyse3 } = require('../../test/support/sampleLocations');
+const { nyse2, nyse3Seq } = require('../../test/support/sampleLocations');
 
 class LocationStore extends Marty.Store {
 
   constructor(options){
     super(options);
     this.state = Map();
-    this.saveMany(nyse3);
 
     this.handlers = {
-      save: LocationConstants.LOCATION_RECEIVED,
+      save: [
+        LocationConstants.LOCATION_RECEIVED, // TODO: remove once LocationApi implemented
+        UserLocationConstants.USER_LOCATION_ACQUIRED],
       saveMany: LocationConstants.LOCATIONS_RECEIVED
     };
   }
 
   //HANDLERS
 
-  //(Location) -> Unit
+  //(UserLocation) -> Unit
   save(loc){
-    this.replaceState(this.state.set(loc.id, loc));
+    const l = UserLocation(loc);
+    this.replaceState(this.state.set(l.id, l));
   }
 
-  // (List[Location]) -> Unit
+  // (Seq[UserLocation]) -> Unit
   saveMany(locs){
-    locs.map(this.save.bind(this));
+    this.replaceState(
+      locs.reduce((acc, loc) => acc.set(loc.id, loc), this.state, this));
   }
 
   //ACCESSORS
+
+  // () -> UserLocation
   getAll(){
     return this.state.valueSeq();
   }

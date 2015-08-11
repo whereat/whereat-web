@@ -2,7 +2,7 @@ const chai = require('chai');
 const should = chai.should();
 
 const Location = require('../../src/models/Location');
-const { s17, s17_} = require('../support/sampleLocations');
+const { s17, s17UL } = require('../support/sampleLocations');
 
 describe('Location Record', () => {
 
@@ -13,8 +13,8 @@ describe('Location Record', () => {
   });
 
   it('drops extraneous fields from the record', () => {
-    should.exist(s17.id);
-    should.not.exist(Location(s17).get('id'));
+    should.exist(s17UL.id);
+    should.not.exist(Location(s17UL).get('id'));
   });
 
   it('allows access to fields via dot accessors', () => {

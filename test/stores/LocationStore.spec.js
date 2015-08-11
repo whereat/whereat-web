@@ -7,10 +7,13 @@ chai.use(sinonChai);
 const Marty = require('marty');
 const Application = require('../../src/application');
 const { dispatch, createApplication } = require('marty/test-utils');
+const { shouldHaveObjectEquality } = require('../support/matchers');
 
 const LocationConstants = require('../../src/constants/LocationConstants');
+const UserLocation = require('../../src/models/UserLocation');
+
 const { Map, Seq } = require('immutable');
-const { s17, s17_, nyse3 } = require('../support/sampleLocations');
+const { s17UL, s17_UL, nyse3Seq, nyse3ULSeq } = require('../support/sampleLocations');
 
 describe('LocationStore', () => {
 
@@ -30,30 +33,42 @@ describe('LocationStore', () => {
 
       it('adds a location to the store', () => {
         const [app, _] = setup();
-        app.locationStore.save(s17);
+        app.locationStore.save(UserLocation(s17UL));
 
-        app.locationStore.state.get(s17.id).should.eql(s17);
+        shouldHaveObjectEquality(
+          app.locationStore.state.get(s17UL.id),
+          UserLocation(s17UL));
       });
 
       it('updates a location already in the store', () => {
         const [app, _] = setup();
-        app.locationStore.save(s17);
-        app.locationStore.save(s17_);
+        app.locationStore.save(UserLocation(s17UL));
+        app.locationStore.save(UserLocation(s17_UL));
 
-        app.locationStore.state.get(s17.id).should.eql(s17_);
+        shouldHaveObjectEquality(
+          app.locationStore.state.get(s17UL.id),
+          UserLocation(s17_UL));
+
         app.locationStore.state.valueSeq().size.should.equal(1);
       });
 
-      it('responds to LOCATION_RECEIVED', () => {
+      it('handles LOCATION_RECEIVED', () => {
         const [app, _] = setup();
-        dispatch(app, LocationConstants.LOCATION_RECEIVED, s17);
+        dispatch(app, LocationConstants.LOCATION_RECEIVED, UserLocation(s17UL));
 
-        app.locationStore.state.get(s17.id).should.eql(s17);
+        shouldHaveObjectEquality(
+          app.locationStore.state.get(s17UL.id),
+          UserLocation(s17UL));
+      });
+
+      it('handles USER_LOCATION_ACQUIRED', () => {
+        const [app, _] = setup();
+
       });
 
       it('notifies listeners of a state change', () => {
         const [app, listener] = setup();
-        app.locationStore.save(s17);
+        app.locationStore.save(UserLocation(s17UL));
 
         listener.should.have.been.calledOnce;
       });
@@ -61,25 +76,37 @@ describe('LocationStore', () => {
 
     describe('#saveMany', () => {
 
-      it('adds many locations to the store', () => {
+      const ls = nyse3ULSeq;
+      const nyse3State = Map([
+        [ls.get(0).id, ls.get(0)],
+        [ls.get(1).id, ls.get(1)],
+        [ls.get(2).id, ls.get(2)]
+      ]);
+
+      it('adds many external user locations to the store', () => {
         const [app, _] = setup();
-        app.locationStore.saveMany(nyse3);
+        nyse3Seq.size.should.equal(3);
+        app.locationStore.saveMany(nyse3ULSeq);
 
         app.locationStore.state.valueSeq().size.should.equal(3);
+        shouldHaveObjectEquality( app.locationStore.state, nyse3State );
       });
 
       it('responds to LOCATIONS_RECEIVED', () => {
         const [app, _] = setup();
-        dispatch(app, LocationConstants.LOCATIONS_RECEIVED, nyse3);
+        dispatch(app, LocationConstants.LOCATIONS_RECEIVED, nyse3ULSeq);
 
         app.locationStore.state.valueSeq().size.should.eql(3);
+        shouldHaveObjectEquality( app.locationStore.state, nyse3State );
       });
 
       it('notifies listeners of state changes', () => {
         const [app, listener] = setup();
-        app.locationStore.saveMany(nyse3);
+        const ls = nyse3ULSeq;
+        app.locationStore.saveMany(ls);
 
-        listener.should.have.been.calledThrice;
+        listener.should.have.been.calledOnce;
+        shouldHaveObjectEquality( listener.getCall(0).args[0], nyse3State );
       });
     });
   });
@@ -90,9 +117,11 @@ describe('LocationStore', () => {
 
       it('returns all locations in store', ()=> {
         const [app, _] = setup();
-        app.locationStore.saveMany(nyse3);
+        app.locationStore.saveMany(nyse3ULSeq);
 
-        app.locationStore.getAll().equals(Seq(nyse3)).should.be.true;
+        shouldHaveObjectEquality(
+          app.locationStore.getAll(),
+          nyse3ULSeq);
       });
     });
   });
