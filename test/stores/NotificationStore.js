@@ -21,7 +21,7 @@ describe('NotificationStore', () => {
   const pollingState = Map({ visible: true, msg: POLL_MSG });
 
   const setup = (state = defaultState) => {
-    const app = createApplication(Application, { include: ['toastStore'] });
+    const app = createApplication(Application, { include: ['notificationStore'] });
     app.notificationStore.state = state;
 
     const listener = sinon.spy();

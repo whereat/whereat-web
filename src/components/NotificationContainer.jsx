@@ -6,8 +6,8 @@ class NotificationContainer extends BaseComponent {
   render(){
     return (
       <div
-        ref="toast"
-        className={ cx( ['toast'], {
+        ref="notification"
+        className={ cx( ['notification'], {
           visible: this.props.visible,
           hidden: !this.props.visible
         })}
