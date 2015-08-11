@@ -4,6 +4,7 @@ const { TileLayer, Map, Marker, Popup } = require('react-leaflet');
 const { Seq } = require('immutable');
 const { url, attribution, id, token } = require('../constants/MapSpecs');
 const { s17, nyse2, nyse3 } = require('../../test/support/sampleLocations');
+const Location = require('../models/Location');
 const pd = require('pretty-date');
 
 class MapContainer extends BaseComponent {
@@ -17,7 +18,7 @@ class MapContainer extends BaseComponent {
 
     return (
       <div id="map" ref="map">
-        <Map center={this._positionify(s17)} zoom={15} >
+        <Map center={this._positionify(Location(s17))} zoom={15} >
           <TileLayer url={url} attribution={attribution} accessToken={token} id={id}/>
           {this.props.locations.map((loc, i) => this._markerify(loc, i))}
         </Map>
@@ -27,13 +28,11 @@ class MapContainer extends BaseComponent {
 
   // (Location) -> Array[Number]
   _positionify(loc) {
-    debugger;
     return [loc.get('lat'), loc.get('lon')];
   }
 
   // (Location) -> Marker
   _markerify(loc, i){
-    debugger;
     return (
       <Marker position={this._positionify(loc)} key={i} ref={`marker${i}`} >
         <Popup>
@@ -51,11 +50,10 @@ class MapContainer extends BaseComponent {
 }
 
 module.exports = Marty.createContainer(MapContainer, {
-  listenTo: ['userLocationStore'],
+  listenTo: ['locationStore'],
   fetch: {
     locations(){
-      const loc = this.app.userLocationStore.getLoc();
-      return loc ? Seq.of(loc) : Seq();
+      return this.app.locationStore.getAll();
     }
   }
 });
