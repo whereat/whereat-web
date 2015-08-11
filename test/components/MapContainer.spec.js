@@ -20,12 +20,12 @@ const { s17UL, nyse3Seq } = require('../support/sampleLocations');
 
 describe('MapContainer Component', () => {
 
-  const setup = (locs = Seq(Location())) => {
+  const setup = (locs = Seq.of(Location())) => {
 
     const app = createApplication(Application, { include: ['locationStore'] });
-    app.locationStore.saveMany(Seq(locs));
+    app.locationStore.saveMany(locs);
 
-    const component = propTree(app, Seq(locs));
+    const component = propTree(app, locs);
 
     return [app, component];
   };
@@ -60,8 +60,8 @@ describe('MapContainer Component', () => {
 
       it('updates props when store state changes', () => {
 
-        const [app, mc] = setup(UserLocation(s17UL));
-        shouldHaveObjectEquality(mc.getProp('locations'), Seq(UserLocation(s17UL)));
+        const [app, mc] = setup(Seq.of(UserLocation(s17UL)));
+        shouldHaveObjectEquality(mc.getProp('locations'), Seq.of(UserLocation(s17UL)));
 
         app.locationStore.saveMany(nyse3Seq);
         const mc2 = tree(app);
