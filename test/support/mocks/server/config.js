@@ -1,13 +1,17 @@
 const {  keys, isEqual, isNumber, isString } = require('lodash');
 const { s17UL } = require('../../../support/sampleLocations');
-const { correctFormat } = require('./helpers');
+const { isUserLocation, isUserLocationRefresh } = require('./helpers');
+const UserLocation = require('../../../../src/models/UserLocation');
+const cb = (match, data) => ({ body: data });
 
 module.exports = [{
   pattern: "https://whereat-server.herokuapp.com/locations/init",
-  fixtures: (match, data) => correctFormat(data) ? [data] : new Error(404),
-  callback: (match, data) => ({ body: data })
+  fixtures: (match, data) => isUserLocation(data) ? [data] : new Error('Bad Request'),
+  callback: cb
 }, {
   pattern: "https://whereat-server.herokuapp.com/locations/refresh",
-  fixtures: (match, data) => correctFormat(data) ? [s17UL, data] : new Error(404),
-  callback: (match, data) => ({ body: data })
+  fixtures: (match, data) => isUserLocationRefresh(data) ?
+    [s17UL, UserLocation(data.location).toJS()] :
+    new Error('Bad Request'),
+  callback: cb
 }];
