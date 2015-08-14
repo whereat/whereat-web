@@ -15,4 +15,7 @@ matchers.shouldHaveDispatchedWithImmutable = (app, type, arg) => (
 matchers.shouldHaveObjectEquality = (obj1, obj2) => (
   obj1.equals(obj1).should.equal(true));
 
+matchers.shouldHaveNotifiedWith = (listener, state) => (
+  listener.getCall(0).args[0].equals(state).should.equal(true));
+
 module.exports = matchers;

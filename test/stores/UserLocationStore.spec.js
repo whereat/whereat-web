@@ -8,18 +8,39 @@ const Marty = require('marty');
 const Application = require('../../src/application');
 const { Map } = require('immutable');
 const { dispatch, hasDispatched, createApplication } = require('marty/test-utils');
+const { shouldHaveObjectEquality, shouldHaveNotifiedWith } = require('../support/matchers');
 
 const UserLocationConstants = require('../../src/constants/UserLocationConstants');
 const UserLocation = require('../../src/models/UserLocation');
 const Location = require('../../src/models/Location');
 const { s17, s17_, s17Nav, s17_Nav } = require('../support/sampleLocations');
 
-describe('UserLocationStore', () => {
+describe.only('UserLocationStore', () => {
 
-  const emptyState = Map({  polling: false, pollId: -1, loc: UserLocation()     });
-  const ping1State = Map({  polling: false, pollId: -1, loc: UserLocation(s17)  });
-  const ping2State = Map({  polling: false, pollId: -1, loc: UserLocation(s17_) });
-  const pollState =  Map({  polling: true,  pollId: 1,  loc: UserLocation()     });
+  const emptyState = Map({
+    loc: UserLocation(),
+    polling: false,
+    pollId: -1,
+    lastPing: -1
+  });
+  const ping1State = Map({
+    loc: UserLocation(s17),
+    polling: false,
+    pollId: -1,
+    lastPing: s17.time
+  });
+  const ping2State = Map({
+    loc: UserLocation(s17_),
+    polling: false,
+    pollId: -1,
+    lastPing: s17_.time
+  });
+  const pollState =  Map({
+    loc: UserLocation(),
+    polling: true,
+    pollId: 1,
+    lastPing: -1
+  });
 
   const setup = (state) => {
     const app = createApplication(Application, { include: ['userLocationStore'] });
@@ -31,32 +52,41 @@ describe('UserLocationStore', () => {
     return [app, listener];
   };
 
+  const restore = (fn) => fn.restore();
+
   describe('handlers', () => {
 
     describe('#setLoc', () => {
 
-      it('sets location', () => {
+      it('sets location and lastPing', () => {
         const [app, _] = setup(emptyState);
         app.userLocationStore.state.get('loc').equals(UserLocation()).should.equal(true);
 
         app.userLocationStore.setLoc(Location(s17));
-        app.userLocationStore.state.get('loc').equals(UserLocation(s17)).should.equal(true);
+
+        app.userLocationStore.state.get('lastPing').should.equal(s17.time);
+        shouldHaveObjectEquality(
+          app.userLocationStore.state.get('loc'),
+          UserLocation(s17));
       });
 
       it('handles USER_LOCATION_ACQUIRED', () => {
         const [app, _] = setup(emptyState);
         app.userLocationStore.state.get('loc').equals(UserLocation()).should.equal(true);
+        sinon.spy(app.userLocationStore, 'setLoc');
 
         dispatch(app, UserLocationConstants.USER_LOCATION_ACQUIRED, Location(s17));
-        app.userLocationStore.state.get('loc').equals(UserLocation(s17)).should.equal(true);
+
+        app.userLocationStore.setLoc.should.have.been.calledWith(Location(s17));
+        app.userLocationStore.setLoc.restore();
       });
 
       it('notifies listeners of state change', () => {
         const [app, listener] = setup(emptyState);
-        dispatch(app, UserLocationConstants.USER_LOCATION_ACQUIRED, s17);
+        dispatch(app, UserLocationConstants.USER_LOCATION_ACQUIRED, Location(s17));
 
         listener.should.have.been.calledOnce;
-        listener.getCall(0).args[0].equals(ping1State).should.equal(true);
+        shouldHaveNotifiedWith(listener, ping1State);
       });
     });
 
@@ -77,11 +107,12 @@ describe('UserLocationStore', () => {
         const [app, _] = setup(emptyState);
         app.userLocationStore.state.get('polling').should.equal(false);
         app.userLocationStore.state.get('pollId').should.equal(-1);
+        sinon.spy(app.userLocationStore, 'pollingOn');
 
         dispatch(app, UserLocationConstants.POLLING_ON, 1);
 
-        app.userLocationStore.state.get('polling').should.equal(true);
-        app.userLocationStore.state.get('pollId').should.equal(1);
+        app.userLocationStore.pollingOn.should.have.been.calledWith(1);
+        app.userLocationStore.pollingOn.restore();
       });
 
       it('notifies listeners of state changes', () => {
@@ -89,7 +120,7 @@ describe('UserLocationStore', () => {
         app.userLocationStore.pollingOn(1);
 
         listener.should.have.been.calledOnce;
-        listener.getCall(0).args[0].equals(pollState).should.equal(true);
+        shouldHaveNotifiedWith(listener, pollState);
       });
     });
 
@@ -110,11 +141,12 @@ describe('UserLocationStore', () => {
         const [app, _] = setup(pollState);
         app.userLocationStore.state.get('polling').should.equal(true);
         app.userLocationStore.state.get('pollId').should.equal(1);
+        sinon.spy(app.userLocationStore, 'pollingOff');
 
         dispatch(app, UserLocationConstants.POLLING_OFF);
 
-        app.userLocationStore.state.get('polling').should.equal(false);
-        app.userLocationStore.state.get('pollId').should.equal(-1);
+        app.userLocationStore.pollingOff.should.have.been.calledOnce;
+        app.userLocationStore.pollingOff.restore();
       });
 
       it('notifies listeners of state changes', () => {
@@ -122,7 +154,8 @@ describe('UserLocationStore', () => {
         app.userLocationStore.pollingOff();
 
         listener.should.have.been.calledOnce;
-        listener.getCall(0).args[0].equals(emptyState).should.equal(true);
+        shouldHaveNotifiedWith(listener, emptyState);
+
       });
     });
   });
@@ -159,6 +192,17 @@ describe('UserLocationStore', () => {
 
         app.userLocationStore.pollingOn(1);
         app.userLocationStore.getPollId().should.equal(1);
+      });
+    });
+
+    describe('#getLastPing', () => {
+
+      it('returns time of last location update', () => {
+        const [app, _] = setup(ping1State);
+        app.userLocationStore.getLastPing().should.equal(s17.time);
+
+        app.userLocationStore.setLoc(s17_);
+        app.userLocationStore.getLastPing().should.equal(s17_.time);
       });
     });
   });
