@@ -5,20 +5,18 @@ const api = {};
 api.URL = "https://whereat-server.herokuapp.com";
 
 // (UserLocation) -> Promise[Array[UserLocation]]
-api.init = (req) => api.post(req, 'init');
+api.init = (req) => post(req, 'init');
 
 // (UserLocationTimed) -> Promise[Array[UserLocation]]
-api.refresh = (req) => api.post(req, 'refresh');
+api.refresh = (req) => post(req, 'refresh');
 
 // (UserLocation) -> Promise[String]
-api.remove = (req) => api.post(req, 'remove');
+api.remove = (req) => post(req, 'remove');
 
-// (LocationRequest, String) -> Primise[Array[LocationResponse]]
-const post = (req, endpoint) => new Promise(
+const post = (req, endpoint) => (new Promise(
   (rslv, rej) => http
     .post(`${api.URL}/locations/${endpoint}`)
-    .send(req.toJS)
-    .end((err, res) => err ? rej(err) : rslv(res))
-);
+    .send(req.toJS())
+    .end((err, res) => err ? rej(err) : rslv(res.body))));
 
 module.exports = api;

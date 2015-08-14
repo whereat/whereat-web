@@ -1,45 +1,38 @@
-const sinon = require('sinon');
 const chai = require('chai');
-const sinonChai = require('sinon-chai');
 const chaiAsPromised = require('chai-as-promised');
 const should = chai.should();
-chai.use(sinonChai);
 chai.use(chaiAsPromised);
 
+const http = require('superagent');
+const config = require('../support/mocks/server/config');
+require('superagent-mock')(http, config);
+
 const api = require('../../src/modules/api');
-const wait = require('../../src/modules/async');
-const { s17, initResponseJSON, initResponseJS } = require('../support/sampleLocations');
-const Location = require('../../src/models/Location');
+const { initRequest, initResponse } = require('../support/sampleLocations');
+
 const UserLocation = require('../../src/models/UserLocation');
+const Location = require('../../src/models/Location');
 
-describe('Location API', () => {
-
-  const setup1 = () => {
-    const server = sinon.fakeServer.create();
-    server.respondWith(
-      'POST', '/locations/init/', // where to put body of request?
-      [ 200, { 'Content-Type': 'application/json'}, initResponseJSON ]
-    );
-    return server;
-  };
-
-  const setup2 = (endpoint) => {
-    const server = sinon.fakeServer.create();
-    const req = server.requests[0];
-    if (JSON.parse(req).equals(s17)){
-      req.respond(200, '...');
-    } else {
-      req.respond(404, '...');
-    }
-  };
-
+describe.only('Location API', () => {
 
   describe('#init', () => {
 
-    //TODO: make sample data, figure out where to put body
+    describe('when passed a well-formatted UserLocation', () => {
 
-    it('consumes a UserLocation, produces a Promise[Array[UserLocation]]', () =>{
-      api.init(s17).should.eventually.equal(initResponseJS);
+      it('returns a Promise[Array[UserLocation]]', done => {
+        api.init(UserLocation(initRequest))
+          .should.eventually.eql(initResponse)
+          .and.notify(done);
+      });
+    });
+
+    describe('when passed an incorrectly formatted UserLocation', () => {
+
+      it('returns a 404 Error', done => {
+        api.init(Location(initRequest))
+          .should.eventually.eql(new Error(404))
+          .and.notify(done);
+      });
     });
   });
 });
