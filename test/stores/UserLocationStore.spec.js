@@ -11,11 +11,12 @@ const { dispatch, hasDispatched, createApplication } = require('marty/test-utils
 const { shouldHaveObjectEquality, shouldHaveNotifiedWith } = require('../support/matchers');
 
 const UserLocationConstants = require('../../src/constants/UserLocationConstants');
-const UserLocation = require('../../src/models/UserLocation');
 const Location = require('../../src/models/Location');
+const UserLocation = require('../../src/models/UserLocation');
+const UserLocationRefresh = require('../../src/models/UserLocationRefresh');
 const { s17, s17_, s17Nav, s17_Nav } = require('../support/sampleLocations');
 
-describe('UserLocationStore', () => {
+describe.only('UserLocationStore', () => {
 
   const emptyState = Map({
     loc: UserLocation(),
@@ -43,13 +44,22 @@ describe('UserLocationStore', () => {
   });
 
   const setup = (state) => {
-    const app = createApplication(Application, { include: ['userLocationStore'] });
+
+    const actions = {
+      init: sinon.spy(),
+      refresh: sinon.spy()
+    };
+
+    const app = createApplication(Application, {
+      include: ['userLocationStore'],
+      stub: { locationSubscriptionActions: actions }
+    });
     app.userLocationStore.state = state;
 
     const listener = sinon.spy();
     app.userLocationStore.addChangeListener(listener);
 
-    return [app, listener];
+    return [app, listener, actions];
   };
 
   const restore = (fn) => fn.restore();
@@ -59,7 +69,7 @@ describe('UserLocationStore', () => {
     describe('#setLoc', () => {
 
       it('sets location and lastPing', () => {
-        const [app, _] = setup(emptyState);
+        const [app] = setup(emptyState);
         app.userLocationStore.state.get('loc').equals(UserLocation()).should.equal(true);
 
         app.userLocationStore.setLoc(Location(s17));
@@ -71,7 +81,7 @@ describe('UserLocationStore', () => {
       });
 
       it('handles USER_LOCATION_ACQUIRED', () => {
-        const [app, _] = setup(emptyState);
+        const [app] = setup(emptyState);
         app.userLocationStore.state.get('loc').equals(UserLocation()).should.equal(true);
         sinon.spy(app.userLocationStore, 'setLoc');
 
@@ -87,6 +97,33 @@ describe('UserLocationStore', () => {
 
         listener.should.have.been.calledOnce;
         shouldHaveNotifiedWith(listener, ping1State);
+      });
+
+      describe('when first ping', () => {
+
+        it('initializes location subscription', () => {
+          const [app, _, {init, refresh}] = setup(emptyState);
+          app.userLocationStore.setLoc(s17);
+
+          shouldHaveNotifiedWith(init, UserLocation(s17));
+          refresh.should.not.have.been.called;
+        });
+      });
+
+      describe('when not first ping', () => {
+
+        it('refreshes the location subscription', () => {
+          const [app, _, {init, refresh}] = setup(ping1State);
+          app.userLocationStore.setLoc(s17_);
+
+          shouldHaveNotifiedWith(
+            refresh,
+            UserLocationRefresh({
+              lastPing: s17.time,
+              location: UserLocation(s17_)
+            }));
+          init.should.not.have.been.called;
+        });
       });
     });
 
@@ -155,7 +192,6 @@ describe('UserLocationStore', () => {
 
         listener.should.have.been.calledOnce;
         shouldHaveNotifiedWith(listener, emptyState);
-
       });
     });
   });
