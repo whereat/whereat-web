@@ -10,9 +10,10 @@ class UserLocationStore extends Marty.Store {
   constructor(options){
     super(options);
     this.state = Map({
+      loc: UserLocation(), // UserLocation
       polling: false, // Boolean
       pollId: -1, // Number
-      loc: UserLocation() // UserLocation
+      lastPing: -1 // Number
     });
 
     this.handlers = {
@@ -24,12 +25,10 @@ class UserLocationStore extends Marty.Store {
 
   //HANDLERS
 
-  // (Location) -> Unit
-  // where location has form: { lat: Number, lon: Number, time: Number}
-  // TODO: make this more typesafe with a Location record?
+  // (UserLocation, Number) -> Unit
   setLoc(loc){
     this.replaceState(
-      this.state.set('loc', UserLocation(loc)));
+      this.state.mergeDeep( Map({ loc: UserLocation(loc), lastPing: loc.time })));
   }
 
   // (Number) -> Unit
@@ -61,6 +60,10 @@ class UserLocationStore extends Marty.Store {
     return this.state.get('pollId');
   }
 
+  // () -> Number
+  getLastPing(){
+    return this.state.get('lastPing');
+  }
 }
 
 module.exports = UserLocationStore;

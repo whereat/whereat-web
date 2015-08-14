@@ -57,7 +57,4 @@ describe.only('Location API', () => {
       });
     });
   });
-
-
-
 });
