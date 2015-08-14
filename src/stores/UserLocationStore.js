@@ -4,6 +4,8 @@ const { Map, Record, fromJS } = require('immutable');
 
 const UserLocationConstants = require('../constants/UserLocationConstants');
 const UserLocation = require('../models/UserLocation');
+const UserLocationRefresh = require('../models/UserLocationRefresh');
+
 
 class UserLocationStore extends Marty.Store {
 
@@ -27,8 +29,23 @@ class UserLocationStore extends Marty.Store {
 
   // (UserLocation, Number) -> Unit
   setLoc(loc){
+    this._relay(loc);
     this.replaceState(
       this.state.mergeDeep( Map({ loc: UserLocation(loc), lastPing: loc.time })));
+  }
+
+  // (UserLocation) -> Unit
+  _relay(loc){
+    this._firstPing() ?
+      this.app.locationSubscriptionActions.init(
+        UserLocation(loc)) :
+      this.app.locationSubscriptionActions.refresh(
+        UserLocationRefresh({lastPing: this.state.get('lastPing'), location: UserLocation(loc)}));
+  }
+
+  // () -> Boolean
+  _firstPing(){
+    return this.state.get('lastPing') === -1;
   }
 
   // (Number) -> Unit
