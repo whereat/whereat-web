@@ -15,7 +15,7 @@ const UserLocation = require('../../src/models/UserLocation');
 const Location = require('../../src/models/Location');
 const { s17, s17_, s17Nav, s17_Nav } = require('../support/sampleLocations');
 
-describe.only('UserLocationStore', () => {
+describe('UserLocationStore', () => {
 
   const emptyState = Map({
     loc: UserLocation(),

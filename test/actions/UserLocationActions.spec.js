@@ -56,13 +56,11 @@ describe('UserLocationActions', () => {
           shouldHaveDispatched(app, GoButtonConstants.GO_BUTTON_ON);
           getStub.should.have.been.calledOnce;
           shouldHaveDispatchedWithImmutable(app,
-                                            UserLocationConstants.USER_LOCATION_ACQUIRED,
-                                            Location(s17));
+            UserLocationConstants.USER_LOCATION_ACQUIRED,
+            Location(s17));
           shouldHaveDispatched(app, GoButtonConstants.GO_BUTTON_OFF);
-          shouldHaveDispatchedWith(
-            app,
-            NotificationConstants.NOTIFICATION_STARTING,
-            `Location shared: ${s17.lat.toFixed(2)} / ${s17.lon.toFixed(2)}`);
+          shouldHaveDispatchedWith(app,
+            NotificationConstants.NOTIFICATION_STARTING, 'Location shared.');
           shouldHaveDispatched(app, NotificationConstants.NOTIFICATION_DONE);
         }).should.notify(done);
     });
