@@ -17,9 +17,7 @@ class LocationStore extends Marty.Store {
     this.state.set('center', this.getCenter());
 
     this.handlers = {
-      save: [
-        LocSubConstants.LOCATION_RECEIVED, // TODO: remove once LocationApi implemented
-        UserLocationConstants.USER_LOCATION_ACQUIRED],
+      save: LocSubConstants.LOCATION_RECEIVED,
       saveMany: LocSubConstants.LOCATIONS_RECEIVED
     };
   }
