@@ -5,7 +5,7 @@ const geo = require('../modules/geo');
 
 const NotificationConstants = require('../constants/NotificationConstants');
 const UserLocationConstants = require('../constants/UserLocationConstants');
-const LocationConstants = require('../constants/LocationConstants');
+const LocSubConstants = require('../constants/LocSubConstants');
 const GoButtonConstants = require('../constants/GoButtonConstants');
 const { FLASH_INTERVAL, NOTIFICATION_INTERVAL } = require('../constants/Intervals');
 const Location = require('../models/Location');

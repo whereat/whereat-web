@@ -9,7 +9,7 @@ const Application = require('../../src/application');
 const { dispatch, createApplication } = require('marty/test-utils');
 const { shouldHaveObjectEquality } = require('../support/matchers');
 
-const LocationConstants = require('../../src/constants/LocationConstants');
+const LocSubConstants = require('../../src/constants/LocSubConstants');
 const Location = require('../../src/models/Location');
 const UserLocationConstants = require('../../src/constants/UserLocationConstants');
 const UserLocation = require('../../src/models/UserLocation');
@@ -56,7 +56,7 @@ describe('LocationStore', () => {
 
       it('handles LOCATION_RECEIVED', () => {
         const [app, _] = setup();
-        dispatch(app, LocationConstants.LOCATION_RECEIVED, UserLocation(s17UL));
+        dispatch(app, LocSubConstants.LOCATION_RECEIVED, UserLocation(s17UL));
 
         shouldHaveObjectEquality(
           app.locationStore.state.getIn(['locs', s17UL.id]),
@@ -103,7 +103,7 @@ describe('LocationStore', () => {
 
       it('responds to LOCATIONS_RECEIVED', () => {
         const [app, _] = setup();
-        dispatch(app, LocationConstants.LOCATIONS_RECEIVED, nyse3ULSeq);
+        dispatch(app, LocSubConstants.LOCATIONS_RECEIVED, nyse3ULSeq);
 
         app.locationStore.state.get('locs').valueSeq().size.should.eql(3);
         shouldHaveObjectEquality( app.locationStore.state, nyse3State );

@@ -14,7 +14,7 @@ const Location = require('../../src/models/Location');
 const UserLocation = require('../../src/models/UserLocation');
 const UserLocationRefresh = require('../../src/models/UserLocationRefresh');
 
-describe.only('Location API', () => {
+describe('Location API', () => {
 
   describe('#init', () => {
 
@@ -41,7 +41,7 @@ describe.only('Location API', () => {
 
     describe('when passed a well-formatted UserLocationRefresh', () => {
 
-      it.only('returns a Promise[Array[UserLocation]]', done => {
+      it('returns a Promise[Array[UserLocation]]', done => {
         api.refresh(UserLocationRefresh({ lastPing: 0, location: s17_UL }))
           .should.eventually.eql([s17UL, s17_UL])
           .and.notify(done);
