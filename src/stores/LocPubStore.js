@@ -37,9 +37,9 @@ class LocPubStore extends Marty.Store {
   // (UserLocation) -> Unit
   _relay(loc){
     this._firstPing() ?
-      this.app.locationSubscriptionActions.init(
+      this.app.locSubActions.init(
         UserLocation(loc)) :
-      this.app.locationSubscriptionActions.refresh(
+      this.app.locSubActions.refresh(
         UserLocationRefresh({lastPing: this.state.get('lastPing'), location: UserLocation(loc)}));
   }
 
