@@ -63,15 +63,6 @@ describe('LocationStore', () => {
           UserLocation(s17UL));
       });
 
-      it('handles USER_LOCATION_ACQUIRED', () => { // TODO: delete once LocationApi implemented
-        const [app, _] = setup();
-        dispatch(app, UserLocationConstants.USER_LOCATION_ACQUIRED, UserLocation(s17UL));
-
-        shouldHaveObjectEquality(
-          app.locationStore.state.getIn(['locs', s17UL.id]),
-          UserLocation(s17UL));
-      });
-
       it('notifies listeners of a state change', () => {
         const [app, listener] = setup();
         app.locationStore.save(UserLocation(s17UL));
