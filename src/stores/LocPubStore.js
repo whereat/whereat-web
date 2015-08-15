@@ -2,12 +2,12 @@ const Marty = require('marty');
 const uuid = require('node-uuid');
 const { Map, Record, fromJS } = require('immutable');
 
-const UserLocationConstants = require('../constants/UserLocationConstants');
+const LocPubConstants = require('../constants/LocPubConstants');
 const UserLocation = require('../models/UserLocation');
 const UserLocationRefresh = require('../models/UserLocationRefresh');
 
 
-class UserLocationStore extends Marty.Store {
+class LocPubStore extends Marty.Store {
 
   constructor(options){
     super(options);
@@ -19,9 +19,9 @@ class UserLocationStore extends Marty.Store {
     });
 
     this.handlers = {
-      setLoc: UserLocationConstants.USER_LOCATION_ACQUIRED,
-      pollingOn: UserLocationConstants.POLLING_ON,
-      pollingOff: UserLocationConstants.POLLING_OFF
+      setLoc: LocPubConstants.USER_LOCATION_ACQUIRED,
+      pollingOn: LocPubConstants.POLLING_ON,
+      pollingOff: LocPubConstants.POLLING_OFF
     };
   }
 
@@ -83,4 +83,4 @@ class UserLocationStore extends Marty.Store {
   }
 }
 
-module.exports = UserLocationStore;
+module.exports = LocPubStore;

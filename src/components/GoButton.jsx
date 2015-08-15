@@ -26,29 +26,29 @@ class GoButton extends BaseComponent {
 
   _handleClick(){
     if (!this.props.polling) {
-      this.app.userLocationActions.ping();
+      this.app.locPubActions.ping();
     }
   }
 
   _handlePress(){
     this.props.polling ?
-      this.app.userLocationActions.stopPolling(this.props.pollId) :
-      this.app.userLocationActions.poll();
+      this.app.locPubActions.stopPolling(this.props.pollId) :
+      this.app.locPubActions.poll();
   }
 
 }
 
 module.exports = Marty.createContainer(GoButton, {
-  listenTo: ['goButtonStore', 'userLocationStore'],
+  listenTo: ['goButtonStore', 'locPubStore'],
   fetch: {
     color() {
       return this.app.goButtonStore.getColor();
     },
     polling(){
-      return this.app.userLocationStore.isPolling();
+      return this.app.locPubStore.isPolling();
     },
     pollId(){
-      return this.app.userLocationStore.getPollId();
+      return this.app.locPubStore.getPollId();
     }
   }
 });
