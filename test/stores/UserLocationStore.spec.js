@@ -8,7 +8,7 @@ const Marty = require('marty');
 const Application = require('../../src/application');
 const { Map } = require('immutable');
 const { dispatch, hasDispatched, createApplication } = require('marty/test-utils');
-const { shouldHaveObjectEquality, shouldHaveNotifiedWith } = require('../support/matchers');
+const { shouldHaveObjectEquality, shouldHaveBeenCalledWithImmutable } = require('../support/matchers');
 
 const UserLocationConstants = require('../../src/constants/UserLocationConstants');
 const Location = require('../../src/models/Location');
@@ -16,7 +16,7 @@ const UserLocation = require('../../src/models/UserLocation');
 const UserLocationRefresh = require('../../src/models/UserLocationRefresh');
 const { s17, s17_, s17Nav, s17_Nav } = require('../support/sampleLocations');
 
-describe.only('UserLocationStore', () => {
+describe('UserLocationStore', () => {
 
   const emptyState = Map({
     loc: UserLocation(),
@@ -96,7 +96,7 @@ describe.only('UserLocationStore', () => {
         dispatch(app, UserLocationConstants.USER_LOCATION_ACQUIRED, Location(s17));
 
         listener.should.have.been.calledOnce;
-        shouldHaveNotifiedWith(listener, ping1State);
+        shouldHaveBeenCalledWithImmutable(listener, ping1State);
       });
 
       describe('when first ping', () => {
@@ -105,7 +105,7 @@ describe.only('UserLocationStore', () => {
           const [app, _, {init, refresh}] = setup(emptyState);
           app.userLocationStore.setLoc(s17);
 
-          shouldHaveNotifiedWith(init, UserLocation(s17));
+          shouldHaveBeenCalledWithImmutable(init, UserLocation(s17));
           refresh.should.not.have.been.called;
         });
       });
@@ -116,7 +116,7 @@ describe.only('UserLocationStore', () => {
           const [app, _, {init, refresh}] = setup(ping1State);
           app.userLocationStore.setLoc(s17_);
 
-          shouldHaveNotifiedWith(
+          shouldHaveBeenCalledWithImmutable(
             refresh,
             UserLocationRefresh({
               lastPing: s17.time,
@@ -157,7 +157,7 @@ describe.only('UserLocationStore', () => {
         app.userLocationStore.pollingOn(1);
 
         listener.should.have.been.calledOnce;
-        shouldHaveNotifiedWith(listener, pollState);
+        shouldHaveBeenCalledWithImmutable(listener, pollState);
       });
     });
 
@@ -191,7 +191,7 @@ describe.only('UserLocationStore', () => {
         app.userLocationStore.pollingOff();
 
         listener.should.have.been.calledOnce;
-        shouldHaveNotifiedWith(listener, emptyState);
+        shouldHaveBeenCalledWithImmutable(listener, emptyState);
       });
     });
   });

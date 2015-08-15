@@ -1,6 +1,6 @@
 const Marty = require('marty');
 
-const LocationConstants = require('../constants/LocationConstants');
+const LocSubConstants = require('../constants/LocSubConstants');
 const UserLocationConstants = require('../constants/UserLocationConstants');
 const UserLocation = require('../models/UserLocation');
 const Location = require('../models/Location');
@@ -18,9 +18,9 @@ class LocationStore extends Marty.Store {
 
     this.handlers = {
       save: [
-        LocationConstants.LOCATION_RECEIVED, // TODO: remove once LocationApi implemented
+        LocSubConstants.LOCATION_RECEIVED, // TODO: remove once LocationApi implemented
         UserLocationConstants.USER_LOCATION_ACQUIRED],
-      saveMany: LocationConstants.LOCATIONS_RECEIVED
+      saveMany: LocSubConstants.LOCATIONS_RECEIVED
     };
   }
 
