@@ -14,7 +14,7 @@ const {
   shouldHaveDispatchedWithImmutable
 } = require('../support/matchers');
 
-const UserLocationConstants = require('../../src/constants/UserLocationConstants');
+const LocPubConstants = require('../../src/constants/LocPubConstants');
 const LocSubConstants = require('../../src/constants/LocSubConstants');
 const NotificationConstants = require('../../src/constants/NotificationConstants');
 const GoButtonConstants = require('../../src/constants/GoButtonConstants');
@@ -25,20 +25,20 @@ const geo = require('../../src/modules/geo');
 const { s17, s17Nav } = require('../support/sampleLocations');
 const { toJS } = require('immutable');
 
-describe('UserLocationActions', () => {
+describe('LocPubActions', () => {
 
   const setup = () => {
     return createApplication(Application, {
-      include: ['userLocationActions', 'notificationActions'] });
+      include: ['locPubActions', 'notificationActions'] });
   };
 
   describe('#publish', () => {
 
     it('dispatches USER_LOCATION_ACQUIRED and passes loc', done => {
       const app = setup();
-      app.userLocationActions.publish(s17Nav, .0001).should.be.fulfilled
+      app.locPubActions.publish(s17Nav, .0001).should.be.fulfilled
         .then(() => {
-          shouldHaveDispatchedWithImmutable(app, UserLocationConstants.USER_LOCATION_ACQUIRED, Location(s17));
+          shouldHaveDispatchedWithImmutable(app, LocPubConstants.USER_LOCATION_ACQUIRED, Location(s17));
         }).should.notify(done);
     });
   });
@@ -51,12 +51,12 @@ describe('UserLocationActions', () => {
     it('acquires user location, dispatches to stores, notifies user', (done) => {
       const app = setup();
 
-      app.userLocationActions.ping(geoStub, .0001, .0001).should.be.fulfilled
+      app.locPubActions.ping(geoStub, .0001, .0001).should.be.fulfilled
         .then(() => {
           shouldHaveDispatched(app, GoButtonConstants.GO_BUTTON_ON);
           getStub.should.have.been.calledOnce;
           shouldHaveDispatchedWithImmutable(app,
-            UserLocationConstants.USER_LOCATION_ACQUIRED,
+            LocPubConstants.USER_LOCATION_ACQUIRED,
             Location(s17));
           shouldHaveDispatched(app, GoButtonConstants.GO_BUTTON_OFF);
           shouldHaveDispatchedWith(app,
@@ -70,7 +70,7 @@ describe('UserLocationActions', () => {
 
     it('parses a Location from a NavigatorPosition', () => {
       const app = setup();
-      app.userLocationActions._parseLoc(s17Nav)
+      app.locPubActions._parseLoc(s17Nav)
         .equals(Location({
           lat: s17.lat,
           lon: s17.lon,
@@ -88,11 +88,11 @@ describe('UserLocationActions', () => {
       const geoStub = { poll: pollStub };
       const app = setup();
 
-      app.userLocationActions.poll(geoStub, .0001).should.be.fulfilled
+      app.locPubActions.poll(geoStub, .0001).should.be.fulfilled
         .then(() => {
           pollStub.should.have.been.calledOnce;
           shouldHaveDispatched(app, GoButtonConstants.GO_BUTTON_ON);
-          shouldHaveDispatchedWith(app, UserLocationConstants.POLLING_ON, 1);
+          shouldHaveDispatchedWith(app, LocPubConstants.POLLING_ON, 1);
           shouldHaveDispatchedWith(app,
                                    NotificationConstants.NOTIFICATION_STARTING,
                                    'Location sharing on.');
@@ -109,11 +109,11 @@ describe('UserLocationActions', () => {
       const geoStub = { stopPolling: stopPollingSpy };
       const app = setup();
 
-      app.userLocationActions.stopPolling(1, geoStub, .0001).should.be.fulfilled
+      app.locPubActions.stopPolling(1, geoStub, .0001).should.be.fulfilled
         .then(() => {
           stopPollingSpy.should.have.been.calledWith(1);
           shouldHaveDispatched(app, GoButtonConstants.GO_BUTTON_OFF);
-          shouldHaveDispatched(app, UserLocationConstants.POLLING_OFF);
+          shouldHaveDispatched(app, LocPubConstants.POLLING_OFF);
           shouldHaveDispatchedWith(app,
                                    NotificationConstants.NOTIFICATION_STARTING,
                                    'Location sharing off.');

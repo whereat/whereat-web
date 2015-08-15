@@ -38,15 +38,15 @@ describe('MapContainer Component', () => {
 
   const setup = (state) => {
 
-    const app = createApplication(Application, { include: ['locationStore'] });
-    app.locationStore.state = state;
+    const app = createApplication(Application, { include: ['locSubStore'] });
+    app.locSubStore.state = state;
 
     const stubs = {
       getCenter: sinon.stub(),
       getLocs: sinon.stub()
     };
-    app.locationStore.getCenter = stubs.getCenter;
-    app.locationStore.getLocs = stubs.getCenter;
+    app.locSubStore.getCenter = stubs.getCenter;
+    app.locSubStore.getLocs = stubs.getCenter;
 
     const component = propTree(app, state.get('locs').valueSeq(), state.get('center'));
 
@@ -80,7 +80,7 @@ describe('MapContainer Component', () => {
 
   describe('events', () =>{
 
-    describe('listening to LocationStore', () => {
+    describe('listening to LocSubStore', () => {
 
       it('updates props when store state changes', () => {
         const [_, mc, {getLocs}] = setup(emptyState);
