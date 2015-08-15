@@ -15,7 +15,7 @@ const {
 } = require('../support/matchers');
 
 const UserLocationConstants = require('../../src/constants/UserLocationConstants');
-const LocationConstants = require('../../src/constants/LocationConstants');
+const LocSubConstants = require('../../src/constants/LocSubConstants');
 const NotificationConstants = require('../../src/constants/NotificationConstants');
 const GoButtonConstants = require('../../src/constants/GoButtonConstants');
 const Location = require('../../src/models/Location');
