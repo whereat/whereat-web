@@ -76,11 +76,11 @@ describe('GoButton Component', () => {
       };
 
       const app = createApplication(Application, {
-        include: ['goButtonStore', 'userLocationStore'],
-        stub: { userLocationActions: spies }
+        include: ['goButtonStore', 'locPubStore'],
+        stub: { locPubActions: spies }
       });
 
-      app.userLocationStore.state = state;
+      app.locPubStore.state = state;
 
       return [app, spies];
     };
@@ -98,7 +98,7 @@ describe('GoButton Component', () => {
 
       describe('when polling is off', () => {
 
-        it('calls userLocationActions#ping', () => {
+        it('calls locPubActions#ping', () => {
           const [app, {ping}] = setup(emptyState);
           const gb = tree(app);
           gb.innerComponent.click();
@@ -130,7 +130,7 @@ describe('GoButton Component', () => {
 
       describe('when polling is off', () => {
 
-        it('calls userLocationActions#poll', done => {
+        it('calls locPubActions#poll', done => {
           const [app, {poll, stopPolling}] = setup(emptyState);
           const gb = tree(app);
 
@@ -144,7 +144,7 @@ describe('GoButton Component', () => {
 
       describe('when polling is on', () => {
 
-        it('calls userLocationActions#stopPolling', done => {
+        it('calls locPubActions#stopPolling', done => {
           const [app, {poll, stopPolling}] = setup(pollState);
           const gb = tree(app);
 
@@ -173,7 +173,7 @@ describe('GoButton Component', () => {
       });
     });
 
-    describe('listening to UserLocationStore', () => {
+    describe('listening to LocPubStore', () => {
 
       it('changes when polling state changes', () => {
         const [app, _] = setup(emptyState);
@@ -182,7 +182,7 @@ describe('GoButton Component', () => {
         gb.innerComponent.getProp('polling').should.equal(false);
         gb.innerComponent.getProp('pollId').should.equal(-1);
 
-        app.userLocationStore.pollingOn(1);
+        app.locPubStore.pollingOn(1);
         const gb2 = tree(app);
 
         gb.innerComponent.getProp('polling').should.equal(true);

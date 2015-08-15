@@ -1,7 +1,7 @@
 module.exports = {
   goButtonStore: require('./GoButtonStore'),
-  locationStore: require('./LocationStore'),
+  locPubStore: require('./LocPubStore'),
+  locSubStore: require('./LocSubStore'),
   navStore: require('./NavStore'),
   notificationStore: require('./NotificationStore'),
-  userLocationStore: require('./UserLocationStore')
 };

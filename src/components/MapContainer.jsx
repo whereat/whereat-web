@@ -53,13 +53,13 @@ class MapContainer extends BaseComponent {
 }
 
 module.exports = Marty.createContainer(MapContainer, {
-  listenTo: ['locationStore'],
+  listenTo: ['locSubStore'],
   fetch: {
     center(){
-      return this.app.locationStore.getCenter();
+      return this.app.locSubStore.getCenter();
     },
     locations(){
-      return this.app.locationStore.getLocs();
+      return this.app.locSubStore.getLocs();
     }
   }
 });

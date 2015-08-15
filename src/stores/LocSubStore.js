@@ -1,7 +1,7 @@
 const Marty = require('marty');
 
 const LocSubConstants = require('../constants/LocSubConstants');
-const UserLocationConstants = require('../constants/UserLocationConstants');
+const LocPubConstants = require('../constants/LocPubConstants');
 const UserLocation = require('../models/UserLocation');
 const Location = require('../models/Location');
 const { convertPosition } = require('../models/LocationCompanion');
@@ -9,7 +9,7 @@ const { convertPosition } = require('../models/LocationCompanion');
 const { Map, List } = require('immutable');
 const geo = require('../modules/geo');
 
-class LocationStore extends Marty.Store {
+class LocSubStore extends Marty.Store {
 
   constructor(options){
     super(options);
@@ -66,4 +66,4 @@ class LocationStore extends Marty.Store {
 
 }
 
-module.exports = LocationStore;
+module.exports = LocSubStore;
