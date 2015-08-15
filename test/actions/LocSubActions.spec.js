@@ -27,7 +27,7 @@ const UserLocationRefresh = require('../../src/models/UserLocationRefresh');
 const api = require('../../src/modules/api');
 const { s17, s17_, s17UL } = require('../support/sampleLocations');
 
-describe.only('LocSubActions', () => {
+describe('LocSubActions', () => {
 
   const setup = () => {
     return createApplication(Application, {include: ['locSubActions'] });
