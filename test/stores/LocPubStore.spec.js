@@ -17,33 +17,9 @@ const Location = require('../../src/models/Location');
 const UserLocation = require('../../src/models/UserLocation');
 const UserLocationRefresh = require('../../src/models/UserLocationRefresh');
 const { s17, s17_, s17Nav, s17_Nav } = require('../support/sampleLocations');
+const { emptyState, ping1State, ping2State, pollState } = require('../support/samplePingStates');
 
 describe('LocPubStore', () => {
-
-  const emptyState = Map({
-    loc: UserLocation(),
-    polling: false,
-    pollId: -1,
-    lastPing: -1
-  });
-  const ping1State = Map({
-    loc: UserLocation(s17),
-    polling: false,
-    pollId: -1,
-    lastPing: -1
-  });
-  const ping2State = Map({
-    loc: UserLocation(s17_),
-    polling: false,
-    pollId: -1,
-    lastPing: s17.time
-  });
-  const pollState =  Map({
-    loc: UserLocation(),
-    polling: true,
-    pollId: 1,
-    lastPing: -1
-  });
 
   const setup = (state) => {
 
@@ -76,7 +52,7 @@ describe('LocPubStore', () => {
 
         app.locPubStore.setLoc(Location(s17));
 
-        app.locPubStore.state.get('lastPing').should.equal(s17.time);
+        shouldHaveObjectEquality(app.locPubStore.state.get('loc'), UserLocation(s17));
       });
 
       it('handles USER_LOCATION_ACQUIRED', () => {
@@ -98,7 +74,7 @@ describe('LocPubStore', () => {
       });
     });
 
-    describe.only('#setLastPing', () => {
+    describe('#setLastPing', () => {
 
       it('stores lastPing', () => {
         const [app] = setup(emptyState);
@@ -203,6 +179,18 @@ describe('LocPubStore', () => {
 
   describe('accessors', () => {
 
+
+    describe('#hasLoc', () => {
+
+      it('returns false when `loc` is empty, true otherwise', () => {
+        const [app] = setup(emptyState);
+        app.locPubStore.hasLoc().should.equal(false);
+
+        app.locPubStore.setLoc(UserLocation(s17));
+        app.locPubStore.hasLoc().should.equal(true);
+      });
+    });
+
     describe('#getLoc', () => {
 
       it('returns current user location', () => {
@@ -257,10 +245,10 @@ describe('LocPubStore', () => {
 
       it('returns time of last location update', () => {
         const [app, _] = setup(ping1State);
-        app.locPubStore.getLastPing().should.equal(s17.time);
+        app.locPubStore.getLastPing().should.equal(-1);
 
-        app.locPubStore.setLoc(s17_);
-        app.locPubStore.getLastPing().should.equal(s17_.time);
+        app.locPubStore.setLastPing(1);
+        app.locPubStore.getLastPing().should.equal(1);
       });
     });
   });

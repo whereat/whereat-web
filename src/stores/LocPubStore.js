@@ -54,6 +54,11 @@ class LocPubStore extends Marty.Store {
 
   //ACCESSORS
 
+  // () -> Boolean
+  hasLoc(){
+    return !this.state.get('loc').equals(UserLocation());
+  }
+
   // () -> UserLocation
   getLoc(){
     return this.state.get('loc');
