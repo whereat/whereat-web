@@ -40,15 +40,6 @@ class LocPubStore extends Marty.Store {
     this.replaceState(this.state.set('lastPing', millis));
   }
 
-  // (UserLocation, Number) -> Unit
-  _relay(loc, lastPing){
-    lastPing === -1 ?
-      this.app.locSubActions.init(
-        UserLocation(loc)) :
-      this.app.locSubActions.refresh(
-        UserLocationRefresh({lastPing: lastPing, location: UserLocation(loc)}));
-  }
-
   // (Number) -> Unit
   pollingOn(id){
     this.replaceState(
@@ -66,6 +57,14 @@ class LocPubStore extends Marty.Store {
   // () -> UserLocation
   getLoc(){
     return this.state.get('loc');
+  }
+
+  // () -> UserLocationRefresh
+  getLocRefresh(){
+    return UserLocationRefresh({
+      lastPing: this.state.get('lastPing'),
+      location: this.state.get('loc')
+    });
   }
 
   // () -> Boolean
