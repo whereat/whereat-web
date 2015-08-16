@@ -41,7 +41,7 @@ describe('LocSubActions', () => {
 
       app.locSubActions.init(UserLocation(s17)).should.be.fulfilled
         .then(() => {
-          shouldHaveDispatched(app, LocSubConstants.LOC_SUB_INIT_STARTING);
+          shouldHaveDispatched(app, LocSubConstants.INIT_STARTING);
           shouldHaveBeenCalledWithImmutable(
             app.locSubActions.init, UserLocation(s17));
           shouldHaveDispatchedWith(

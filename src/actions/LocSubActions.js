@@ -1,6 +1,7 @@
 const Marty = require('marty');
 
 const api = require('../modules/api');
+const { now } = require('../modules/time');
 
 const LocSubConstants = require('../constants/LocSubConstants');
 const Location = require('../models/Location');
@@ -10,7 +11,7 @@ class LocSubActions extends Marty.ActionCreators {
   // (UserLocation) -> Promise[Unit]
   init(userLocation){
     return Promise
-      .resolve(this.dispatch(LocSubConstants.LOC_SUB_INIT_STARTING))
+      .resolve(this.dispatch(LocSubConstants.INIT_STARTING, now()))
       .then(() => api.init(userLocation))
       .then(locs => this.dispatch(LocSubConstants.LOCATIONS_RECEIVED, locs));
   }
@@ -18,7 +19,7 @@ class LocSubActions extends Marty.ActionCreators {
   // (UserLocationRefresh -> Promise[Unit]
   refresh(userLocationRefresh){
     return Promise
-      .resolve(this.dispatch(LocSubConstants.LOC_SUB_REFRESH_STARTING))
+      .resolve(this.dispatch(LocSubConstants.REFRESH_STARTING, now()))
       .then(() => api.refresh(userLocationRefresh))
       .then(locs => this.dispatch(LocSubConstants.LOCATIONS_RECEIVED, locs));
   }

@@ -9,15 +9,22 @@ const LocSubConstants = require('../constants/LocSubConstants');
 const GoButtonConstants = require('../constants/GoButtonConstants');
 const { FLASH_INTERVAL, NOTIFICATION_INTERVAL } = require('../constants/Intervals');
 const Location = require('../models/Location');
+const UserLocation = require('../models/UserLocation');
+const { partial } = require('lodash');
 
 class LocPubActions extends Marty.ActionCreators {
 
-  // (NavigatorPosition) -> Promise[Unit]
+  // (NavigatorPosition, UserLocation => Unit, Number) -> Promise[Unit]
   publish(pos, ni = NOTIFICATION_INTERVAL){
     const loc = this._parseLoc(pos);
+    const lastPing = this.app.locPubStore.getLastPing();
+    const sub = this._getLocSubAction();
+    console.log('LAST PING:', lastPing);
+    console.log('SUB:', sub);
     return Promise
       .resolve(this.dispatch(LocPubConstants.USER_LOCATION_ACQUIRED, loc))
-      .then(() => this.app.notificationActions.notify('Location shared.', ni));
+      .then(() => this.app.notificationActions.notify('Location shared.', ni))
+      .then(() => sub(UserLocation(loc)));
   }
 
   // (NavigatorPosition) -> Location
@@ -27,6 +34,13 @@ class LocPubActions extends Marty.ActionCreators {
       lon: pos.coords.longitude,
       time: pos.timestamp || new Date().getTime()
     });
+  }
+
+  // () -> UserLocation => Unit
+  _getLocSubAction(){
+    return this.app.locPubStore.firstPing() ?
+      this.app.locSubActions.init.bind(this.app.locSubActions) :
+      this.app.locSubActions.refresh.bind(this.app.locSubActions);
   }
 
   // (Geo, Number, Number) -> Promise[Unit]
