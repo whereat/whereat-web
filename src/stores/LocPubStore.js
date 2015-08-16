@@ -3,6 +3,7 @@ const uuid = require('node-uuid');
 const { Map, Record, fromJS } = require('immutable');
 
 const LocPubConstants = require('../constants/LocPubConstants');
+const LocSubConstants = require('../constants/LocSubConstants');
 const UserLocation = require('../models/UserLocation');
 const UserLocationRefresh = require('../models/UserLocationRefresh');
 
@@ -20,6 +21,8 @@ class LocPubStore extends Marty.Store {
 
     this.handlers = {
       setLoc: LocPubConstants.USER_LOCATION_ACQUIRED,
+      setLastPing:[
+        LocSubConstants.INIT_STARTING, LocSubConstants.REFRESH_STARTING],
       pollingOn: LocPubConstants.POLLING_ON,
       pollingOff: LocPubConstants.POLLING_OFF
     };
@@ -27,25 +30,23 @@ class LocPubStore extends Marty.Store {
 
   //HANDLERS
 
-  // (UserLocation, Number) -> Unit
+  // (UserLocation) -> Unit
   setLoc(loc){
-    this._relay(loc);
-    this.replaceState(
-      this.state.mergeDeep( Map({ loc: UserLocation(loc), lastPing: loc.time })));
+    this.replaceState(this.state.set('loc', UserLocation(loc)));
   }
 
-  // (UserLocation) -> Unit
-  _relay(loc){
-    this._firstPing() ?
+  // (Number) -> Unit
+  setLastPing(millis){
+    this.replaceState(this.state.set('lastPing', millis));
+  }
+
+  // (UserLocation, Number) -> Unit
+  _relay(loc, lastPing){
+    lastPing === -1 ?
       this.app.locSubActions.init(
         UserLocation(loc)) :
       this.app.locSubActions.refresh(
-        UserLocationRefresh({lastPing: this.state.get('lastPing'), location: UserLocation(loc)}));
-  }
-
-  // () -> Boolean
-  _firstPing(){
-    return this.state.get('lastPing') === -1;
+        UserLocationRefresh({lastPing: lastPing, location: UserLocation(loc)}));
   }
 
   // (Number) -> Unit
@@ -80,6 +81,11 @@ class LocPubStore extends Marty.Store {
   // () -> Number
   getLastPing(){
     return this.state.get('lastPing');
+  }
+
+  // () -> Boolean
+  firstPing(){
+    return this.state.get('lastPing') === -1;
   }
 }
 
