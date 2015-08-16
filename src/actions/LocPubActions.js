@@ -17,14 +17,9 @@ class LocPubActions extends Marty.ActionCreators {
   // (NavigatorPosition, UserLocation => Unit, Number) -> Promise[Unit]
   publish(pos, ni = NOTIFICATION_INTERVAL){
     const loc = this._parseLoc(pos);
-    const lastPing = this.app.locPubStore.getLastPing();
-    const sub = this._getLocSubAction();
-    console.log('LAST PING:', lastPing);
-    console.log('SUB:', sub);
     return Promise
       .resolve(this.dispatch(LocPubConstants.USER_LOCATION_ACQUIRED, loc))
-      .then(() => this.app.notificationActions.notify('Location shared.', ni))
-      .then(() => sub(UserLocation(loc)));
+      .then(() => this.app.notificationActions.notify('Location shared.', ni));
   }
 
   // (NavigatorPosition) -> Location
@@ -34,13 +29,6 @@ class LocPubActions extends Marty.ActionCreators {
       lon: pos.coords.longitude,
       time: pos.timestamp || new Date().getTime()
     });
-  }
-
-  // () -> UserLocation => Unit
-  _getLocSubAction(){
-    return this.app.locPubStore.firstPing() ?
-      this.app.locSubActions.init.bind(this.app.locSubActions) :
-      this.app.locSubActions.refresh.bind(this.app.locSubActions);
   }
 
   // (Geo, Number, Number) -> Promise[Unit]

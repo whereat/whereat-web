@@ -11,6 +11,8 @@ const { dispatch, hasDispatched, createApplication } = require('marty/test-utils
 const { shouldHaveObjectEquality, shouldHaveBeenCalledWithImmutable } = require('../support/matchers');
 
 const LocPubConstants = require('../../src/constants/LocPubConstants');
+const LocSubConstants = require('../../src/constants/LocSubConstants');
+
 const Location = require('../../src/models/Location');
 const UserLocation = require('../../src/models/UserLocation');
 const UserLocationRefresh = require('../../src/models/UserLocationRefresh');
@@ -28,13 +30,13 @@ describe('LocPubStore', () => {
     loc: UserLocation(s17),
     polling: false,
     pollId: -1,
-    lastPing: s17.time
+    lastPing: -1
   });
   const ping2State = Map({
     loc: UserLocation(s17_),
     polling: false,
     pollId: -1,
-    lastPing: s17_.time
+    lastPing: s17.time
   });
   const pollState =  Map({
     loc: UserLocation(),
@@ -68,21 +70,17 @@ describe('LocPubStore', () => {
 
     describe('#setLoc', () => {
 
-      it('sets location and lastPing', () => {
+      it('stores UserLocation value', () => {
         const [app] = setup(emptyState);
         app.locPubStore.state.get('loc').equals(UserLocation()).should.equal(true);
 
         app.locPubStore.setLoc(Location(s17));
 
         app.locPubStore.state.get('lastPing').should.equal(s17.time);
-        shouldHaveObjectEquality(
-          app.locPubStore.state.get('loc'),
-          UserLocation(s17));
       });
 
       it('handles USER_LOCATION_ACQUIRED', () => {
         const [app] = setup(emptyState);
-        app.locPubStore.state.get('loc').equals(UserLocation()).should.equal(true);
         sinon.spy(app.locPubStore, 'setLoc');
 
         dispatch(app, LocPubConstants.USER_LOCATION_ACQUIRED, Location(s17));
@@ -98,33 +96,40 @@ describe('LocPubStore', () => {
         listener.should.have.been.calledOnce;
         shouldHaveBeenCalledWithImmutable(listener, ping1State);
       });
+    });
 
-      describe('when first ping', () => {
+    describe.only('#setLastPing', () => {
 
-        it('initializes location subscription', () => {
-          const [app, _, {init, refresh}] = setup(emptyState);
-          app.locPubStore.setLoc(s17);
+      it('stores lastPing', () => {
+        const [app] = setup(emptyState);
+        app.locPubStore.state.get('lastPing').should.equal(-1);
 
-          shouldHaveBeenCalledWithImmutable(init, UserLocation(s17));
-          refresh.should.not.have.been.called;
-        });
+        app.locPubStore.setLastPing(1);
+
+        app.locPubStore.state.get('lastPing').should.equal(1);
+
       });
 
-      describe('when not first ping', () => {
+      it('handles INIT_STARTING and REFRESH_STARTING', () => {
+        const [app] = setup(emptyState);
+        sinon.spy(app.locPubStore, 'setLastPing');
 
-        it('refreshes the location subscription', () => {
-          const [app, _, {init, refresh}] = setup(ping1State);
-          app.locPubStore.setLoc(s17_);
+        dispatch(app, LocSubConstants.INIT_STARTING, 1);
+        app.locPubStore.setLastPing.should.have.been.calledWith(1);
 
-          shouldHaveBeenCalledWithImmutable(
-            refresh,
-            UserLocationRefresh({
-              lastPing: s17.time,
-              location: UserLocation(s17_)
-            }));
-          init.should.not.have.been.called;
-        });
+        dispatch(app, LocSubConstants.REFRESH_STARTING, 2);
+        app.locPubStore.setLastPing.should.have.been.calledWith(2);
+
+        app.locPubStore.setLastPing.restore();
       });
+
+      it('notifies listerns of state change', () => {
+        const [app, listener] = setup(ping1State);
+        app.locPubStore.setLastPing(1);
+
+        shouldHaveBeenCalledWithImmutable(listener, ping1State.set('lastPing', 1));
+      });
+
     });
 
     describe('#pollingOn', () => {
@@ -206,6 +211,23 @@ describe('LocPubStore', () => {
 
         app.locPubStore.setLoc(Location(s17_));
         app.locPubStore.getLoc().equals(UserLocation(s17_)).should.equal(true);
+      });
+    });
+
+    describe('#getLocRefresh', () => {
+
+      it('returns current user location wrapped with `lastPing` value', () => {
+        const [app, _] = setup(ping1State);
+        shouldHaveObjectEquality(
+          app.locPubStore.getLocRefresh(),
+          UserLocationRefresh({ lastPing: -1, location: UserLocation(s17) })
+        );
+
+        app.locPubStore.setLastPing(s17.time);
+        shouldHaveObjectEquality(
+          app.locPubStore.getLocRefresh(),
+          UserLocationRefresh({ lastPing: -1, location: UserLocation(s17) })
+        );
       });
     });
 
