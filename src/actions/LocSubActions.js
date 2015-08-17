@@ -20,6 +20,16 @@ class LocSubActions extends Marty.ActionCreators {
       }));
   }
 
+  // update(userLocation){
+  //   const store = this.app.locPubStore;
+  //   return store.firstPing() ?
+  //     this.init(userLocation) :
+  //     this.refresh(UserLocationRefresh({
+  //       lastPing: store.getLastPing(),
+  //       location: userLocation
+  //     }));
+  // }
+
   // (UserLocation, () => Number) -> Promise[Unit]
   init(userLocation, now = time.now){
     return Promise
