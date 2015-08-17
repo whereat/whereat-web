@@ -96,51 +96,5 @@ describe('LocSubActions', () => {
           }).should.notify(done);
       });
     });
-
-  });
-
-  describe('#init', () => {
-
-    it('POSTS location to server and dispatches returned locations', done => {
-      const app = setup(emptyState);
-      const init = sinon.spy(api, 'init');
-
-      app.locSubActions.init(UserLocation(s17), () => s17.time).should.be.fulfilled
-        .then(() => {
-
-          shouldHaveDispatchedWith(
-            app, LocSubConstants.INIT_STARTING, s17.time);
-          shouldHaveBeenCalledWithImmutable(
-            init, UserLocation(s17));
-          shouldHaveDispatchedWith(
-            app, LocSubConstants.LOCATIONS_RECEIVED, [UserLocation(s17).toJS()]);
-
-          init.restore();
-        }).should.notify(done);
-    });
-  });
-
-  describe('#refresh', () => {
-
-    it('POSTS location and lastPing to server and dispatches returned locations', done => {
-      const app = setup(emptyState);
-      const req = UserLocationRefresh({
-        lastPing: s17.time,
-        location: UserLocation(s17_)
-      });
-      const refresh = sinon.spy(api, 'refresh');
-
-      app.locSubActions.refresh(req, () => s17_.time).should.be.fulfilled
-        .then(() => {
-          shouldHaveDispatchedWith(
-            app, LocSubConstants.REFRESH_STARTING, s17_.time);
-          shouldHaveBeenCalledWithImmutable(
-            refresh, UserLocationRefresh(req));
-          shouldHaveDispatchedWith(
-            app, LocSubConstants.LOCATIONS_RECEIVED, [s17UL, UserLocation(s17_).toJS()]);
-
-          refresh.restore();
-        }).should.notify(done);
-    });
   });
 });

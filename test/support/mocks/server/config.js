@@ -11,8 +11,10 @@ module.exports = [{
     new Error('Bad Request'),
   callback: cb
 }, {
-  pattern: "https://whereat-server.herokuapp.com/locations/init",
-  fixtures: (match, data) => isUserLocation(data) ? [data] : new Error('Bad Request'),
+  pattern: "https://whereat-server.herokuapp.com/locations/remove",
+  fixtures: (match, data) => isUserLocationRefresh(data) ?
+    '1 record(s) deleted.' :
+    new Error('Bad Request'),
   callback: cb
 }, {
   pattern: "https://whereat-server.herokuapp.com/locations/refresh",
