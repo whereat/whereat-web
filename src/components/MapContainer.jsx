@@ -31,6 +31,7 @@ class MapContainer extends BaseComponent {
 
   // (Location) -> Array[Number]
   _positionify(loc) {
+    //return [loc.lat, loc.lon];
     return [loc.get('lat'), loc.get('lon')];
   }
 

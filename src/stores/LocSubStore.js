@@ -26,15 +26,15 @@ class LocSubStore extends Marty.Store {
 
   //(UserLocation) -> Unit
   save(loc){
-    const l = UserLocation(loc);
-    this.replaceState(this.state.setIn(['locs', l.id], l));
+    const ul = UserLocation(loc);
+    this.replaceState(this.state.setIn(['locs', ul.id], ul));
   }
 
   // (Seq[UserLocation]) -> Unit
   saveMany(locs){
     this.replaceState(
       locs.reduce(
-        (acc, loc) => acc.setIn(['locs', loc.id], loc),
+        (acc, loc) => acc.setIn(['locs', loc.id], UserLocation(loc)),
         this.state,
         this));
   }
