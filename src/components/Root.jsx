@@ -8,7 +8,6 @@ const Display = require('./Display.jsx');
 Root
 |
 |- Header
-|- LocPubWatcher
 |- Display
    |
    |- HomePage
