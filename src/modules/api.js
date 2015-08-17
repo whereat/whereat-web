@@ -4,6 +4,9 @@ const api = {};
 
 api.URL = "https://whereat-server.herokuapp.com";
 
+// (UserLocationRefresh) -> Promise[Array[UserLocation]]
+api.update = (req) => post(req, 'update')
+
 // (UserLocation) -> Promise[Array[UserLocation]]
 api.init = (req) => post(req, 'init');
 
