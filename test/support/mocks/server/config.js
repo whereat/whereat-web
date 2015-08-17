@@ -5,9 +5,9 @@ const UserLocation = require('../../../../src/models/UserLocation');
 const cb = (match, data) => ({ body: data });
 
 module.exports = [{
-  pattern: "https//whereat-server.herokuapp.com/locations/update",
+  pattern: "https://whereat-server.herokuapp.com/locations/update",
   fixtures: (match, data) => isUserLocationRefresh(data) ?
-    [s17UL, UserLocation(data.location.toJS())] :
+    [s17UL, UserLocation(data.location).toJS()] :
     new Error('Bad Request'),
   callback: cb
 }, {
