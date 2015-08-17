@@ -9,6 +9,7 @@ chai.use(chaiAsPromised);
 const http = require('superagent');
 const config = require('../support/mocks/server/config');
 require('superagent-mock')(http, config);
+const api = require('../../src/modules/api');
 
 const Application = require('../../src/application');
 const { createApplication, getDispatchedActionsWithType } = require('marty/test-utils');
@@ -24,29 +25,73 @@ const Location = require('../../src/models/Location');
 const UserLocation = require('../../src/models/UserLocation');
 const UserLocationRefresh = require('../../src/models/UserLocationRefresh');
 
-const api = require('../../src/modules/api');
+const time = require('../../src/modules/time');
 const { s17, s17_, s17UL } = require('../support/sampleLocations');
+const { emptyState, ping1State, ping2State, pollState } = require('../support/samplePingStates');
 
-describe('LocSubActions', () => {
+describe.only('LocSubActions', () => {
 
-  const setup = () => {
-    return createApplication(Application, {include: ['locSubActions'] });
+  const setup = (state) => {
+    const app = createApplication(Application, {
+      include: ['locSubActions', 'locPubStore']
+    });
+    app.locPubStore.state = state;
+    return app;
   };
+
+
+  describe('#update', () =>{
+
+    describe('on first ping', () => {
+
+      it('delegates to #init', () => {
+        const app = setup(ping1State);
+        const init = sinon.spy(app.locSubActions, 'init');
+        app.locSubActions.update(UserLocation(s17));
+
+        shouldHaveBeenCalledWithImmutable(init, UserLocation(s17));
+
+        init.restore();
+      });
+    });
+
+    describe('on subsequent pings', () => {
+
+      it('delegates to #refresh', () => {
+
+        const app = setup(ping2State);
+        const refresh = sinon.spy(app.locSubActions, 'refresh');
+        app.locSubActions.update(UserLocation(s17_));
+
+        shouldHaveBeenCalledWithImmutable(
+          refresh,
+          UserLocationRefresh({
+            lastPing: s17.time,
+            location: UserLocation(s17_)
+          }));
+
+        refresh.restore();
+      });
+    });
+  });
 
   describe('#init', () => {
 
     it('POSTS location to server and dispatches returned locations', done => {
-      const app = setup();
-      sinon.spy(app.locSubActions, 'init');
+      const app = setup(emptyState);
+      const init = sinon.spy(api, 'init');
 
-      app.locSubActions.init(UserLocation(s17)).should.be.fulfilled
+      app.locSubActions.init(UserLocation(s17), () => s17.time).should.be.fulfilled
         .then(() => {
-          shouldHaveDispatched(app, LocSubConstants.INIT_STARTING);
+
+          shouldHaveDispatchedWith(
+            app, LocSubConstants.INIT_STARTING, s17.time);
           shouldHaveBeenCalledWithImmutable(
-            app.locSubActions.init, UserLocation(s17));
+            init, UserLocation(s17));
           shouldHaveDispatchedWith(
             app, LocSubConstants.LOCATIONS_RECEIVED, [UserLocation(s17).toJS()]);
-          app.locSubActions.init.restore();
+
+          init.restore();
         }).should.notify(done);
     });
   });
@@ -54,21 +99,23 @@ describe('LocSubActions', () => {
   describe('#refresh', () => {
 
     it('POSTS location and lastPing to server and dispatches returned locations', done => {
-      const app = setup();
+      const app = setup(emptyState);
       const req = UserLocationRefresh({
         lastPing: s17.time,
         location: UserLocation(s17_)
       });
-      sinon.spy(app.locSubActions, 'refresh');
+      const refresh = sinon.spy(api, 'refresh');
 
-      app.locSubActions.refresh(req).should.be.fulfilled
+      app.locSubActions.refresh(req, () => s17_.time).should.be.fulfilled
         .then(() => {
-          shouldHaveDispatched(app, LocSubConstants.LOC_SUB_REFRESH_STARTING);
+          shouldHaveDispatchedWith(
+            app, LocSubConstants.REFRESH_STARTING, s17_.time);
           shouldHaveBeenCalledWithImmutable(
-            app.locSubActions.refresh, UserLocationRefresh(req));
+            refresh, UserLocationRefresh(req));
           shouldHaveDispatchedWith(
             app, LocSubConstants.LOCATIONS_RECEIVED, [s17UL, UserLocation(s17_).toJS()]);
-          app.locSubActions.refresh.restore();
+
+          refresh.restore();
         }).should.notify(done);
     });
   });
