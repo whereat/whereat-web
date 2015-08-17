@@ -7,12 +7,6 @@ api.URL = "https://whereat-server.herokuapp.com";
 // (UserLocationRefresh) -> Promise[Array[UserLocation]]
 api.update = (req) => post(req, 'update');
 
-// (UserLocation) -> Promise[Array[UserLocation]]
-api.init = (req) => post(req, 'init');
-
-// (UserLocationTimed) -> Promise[Array[UserLocation]]
-api.refresh = (req) => post(req, 'refresh');
-
 // (UserLocation) -> Promise[String]
 api.remove = (req) => post(req, 'remove');
 
