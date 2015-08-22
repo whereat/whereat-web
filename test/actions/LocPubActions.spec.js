@@ -157,7 +157,7 @@ describe('LocPubActions', () => {
           stopPollingSpy.should.have.been.calledWith(1);
           shouldHaveDispatched(app, GoButtonConstants.GO_BUTTON_OFF);
           shouldHaveDispatched(app, LocPubConstants.POLLING_OFF);
-          notify.should.have.been.calledWith('Location sharing off.')
+          notify.should.have.been.calledWith('Location sharing off.');
         }).should.notify(done);
 
     });

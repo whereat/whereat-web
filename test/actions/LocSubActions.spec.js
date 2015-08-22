@@ -24,6 +24,8 @@ const LocSubConstants = require('../../src/constants/LocSubConstants');
 const Location = require('../../src/models/Location');
 const UserLocation = require('../../src/models/UserLocation');
 const UserLocationRefresh = require('../../src/models/UserLocationRefresh');
+const User = require('../../src/models/User');
+const USER_ID = require('../../src/constants/Keys');
 
 const time = require('../../src/modules/time');
 const { s17, s17_, s17UL } = require('../support/sampleLocations');
@@ -32,11 +34,17 @@ const { emptyState, ping1State, ping2State, pollState } = require('../support/sa
 describe('LocSubActions', () => {
 
   const setup = (state) => {
+
+    const notifySpies = {
+      notify: sinon.spy()
+    };
+
     const app = createApplication(Application, {
-      include: ['locSubActions', 'locPubStore']
+      include: ['locSubActions', 'locPubStore'],
+      stub: { notificationActions: notifySpies  }
     });
     app.locPubStore.state = state;
-    return app;
+    return [app, notifySpies];
   };
 
 
@@ -45,7 +53,7 @@ describe('LocSubActions', () => {
     describe('on first ping', () => {
 
       it('POSTS lastPing/location, sets new `lastPing`, dispatches new locations', done => {
-        const app = setup(ping1State);
+        const [app] = setup(ping1State);
         const update = sinon.spy(api, 'update');
 
         app.locSubActions.update(UserLocation(s17), () => s17.time).should.be.fulfilled
@@ -73,7 +81,7 @@ describe('LocSubActions', () => {
 
       it('POSTS lastPing/location, sets new `lastPing`, dispatches new locations', done => {
 
-        const app = setup(ping2State);
+        const [app] = setup(ping2State);
         const update = sinon.spy(api, 'update');
 
         app.locSubActions.update(UserLocation(s17_), () => s17_.time).should.be.fulfilled
@@ -95,6 +103,26 @@ describe('LocSubActions', () => {
             update.restore();
           }).should.notify(done);
       });
+    });
+  });
+
+  describe('#remove', () => {
+
+    it.only('sends remove request to server, dispatches results, notfies user', done => {
+
+      const [app, {notify}] = setup(ping2State);
+      const remove = sinon.spy(api, 'remove');
+
+      app.locSubActions.remove(User(USER_ID), () => s17_.time).should.be.fulfilled
+        .then(() => {
+
+          shouldHaveDispatchedWith( app, LocSubConstants.REMOVE_STARTING, s17_.time );
+          shouldHaveBeenCalledWithImmutable( remove, User(USER_ID) );
+          shouldHaveDispatched( app, LocSubConstants.USER_REMOVED );
+          notify.should.have.been.calledWith('User data removed from server.');
+
+          remove.restore();
+        }).should.notify(done);
     });
   });
 });
