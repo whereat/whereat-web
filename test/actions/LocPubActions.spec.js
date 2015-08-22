@@ -8,6 +8,7 @@ chai.use(chaiAsPromised);
 
 const Application = require('../../src/application');
 const { createApplication } = require('marty/test-utils');
+
 const {
   shouldHaveDispatched,
   shouldHaveDispatchedWith,
@@ -30,7 +31,7 @@ const { toJS } = require('immutable');
 
 describe('LocPubActions', () => {
 
-  const setup = (state) => {
+  const setup = () => {
 
     const locSubSpies = {
       update: sinon.spy(),
@@ -56,7 +57,7 @@ describe('LocPubActions', () => {
   describe('#publish', () => {
 
     it('dispatches USER_LOCATION_ACQUIRED and passes loc to Notification and LocSub actions', done => {
-      const [app, {update}, {notify}] = setup();
+      const [app, {update}, {notify} ] = setup();
       const _parseUserLoc = sinon.spy(app.locPubActions, '_parseUserLoc');
 
       app.locPubActions.publish(s17Nav, .0001).should.be.fulfilled

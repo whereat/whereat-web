@@ -14,4 +14,6 @@ h.isUserLocationRefresh = (data) =>
   isNumber(data.lastPing) &&
   h.isUserLocation(data.location);
 
+h.isUser = (data) => isEqual(keys(data), ['id']) && isString(data.id);
+
 module.exports = h;
