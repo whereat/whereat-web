@@ -21,8 +21,7 @@ class LocPubStore extends Marty.Store {
 
     this.handlers = {
       setLoc: LocPubConstants.USER_LOCATION_ACQUIRED,
-      setLastPing:[
-        LocSubConstants.INIT_STARTING, LocSubConstants.REFRESH_STARTING],
+      setLastPing:[LocSubConstants.UPDATE_STARTING, LocSubConstants.REMOVE_STARTING],
       pollingOn: LocPubConstants.POLLING_ON,
       pollingOff: LocPubConstants.POLLING_OFF
     };
