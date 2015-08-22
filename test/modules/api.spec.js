@@ -13,6 +13,8 @@ const { s17, s17UL, s17_, s17_UL } = require('../support/sampleLocations');
 const Location = require('../../src/models/Location');
 const UserLocation = require('../../src/models/UserLocation');
 const UserLocationRefresh = require('../../src/models/UserLocationRefresh');
+const User = require('../../src/models/User');
+const { USER_ID } = require('../../src/constants/Keys');
 
 describe('Location API', () => {
 
@@ -39,19 +41,19 @@ describe('Location API', () => {
 
   describe('#remove', () => {
 
-    describe('when passed a well-formatted UserLocationRefresh', () => {
+    describe('when passed a well-formatted User', () => {
 
-      it('returns a Promise[Array[UserLocation]]', done => {
-        api.remove(UserLocationRefresh({ lastPing: s17.time, location: s17_UL }))
+      it('returns a notification of deletion', done => {
+        api.remove(User({ id: USER_ID }))
           .should.eventually.eql('1 record(s) deleted.')
           .and.notify(done);
       });
     });
 
-    describe('when passed an incorrectly formatted UserLocationRefresh', () => {
+    describe('when passed an incorrectly formatted User', () => {
 
       it('returns a Bad Request Error', done => {
-        api.update(Location(s17))
+        api.remove(Location(s17))
           .should.eventually.eql(new Error ('Bad Request'))
           .and.notify(done);
       });
