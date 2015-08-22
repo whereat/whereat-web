@@ -1,6 +1,6 @@
 const {  keys, isEqual, isNumber, isString } = require('lodash');
 const { s17UL } = require('../../../support/sampleLocations');
-const { isUserLocation, isUserLocationRefresh } = require('./helpers');
+const { isUserLocation, isUserLocationRefresh, isUser } = require('./helpers');
 const UserLocation = require('../../../../src/models/UserLocation');
 const cb = (match, data) => ({ body: data });
 
@@ -12,7 +12,7 @@ module.exports = [{
   callback: cb
 }, {
   pattern: "https://whereat-server.herokuapp.com/locations/remove",
-  fixtures: (match, data) => isUserLocationRefresh(data) ?
+  fixtures: (match, data) => isUser(data) ?
     '1 record(s) deleted.' :
     new Error('Bad Request'),
   callback: cb
