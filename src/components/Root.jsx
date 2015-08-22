@@ -15,6 +15,7 @@ Root
    |
    |- MapPage
    |  |- MapContainer
+   |  |- ClearButton
    |
    |- NotificationContainer
 
