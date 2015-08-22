@@ -68,6 +68,7 @@ class LocPubActions extends Marty.ActionCreators {
       .then(() => Promise.resolve(this.dispatch(LocPubConstants.POLLING_OFF)))
       .then(() => this.app.notificationActions.notify('Location sharing off.', ni));
   }
+
 }
 
 module.exports = LocPubActions;
