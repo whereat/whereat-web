@@ -18,7 +18,8 @@ class LocSubStore extends Marty.Store {
 
     this.handlers = {
       save: LocSubConstants.LOCATION_RECEIVED,
-      saveMany: LocSubConstants.LOCATIONS_RECEIVED
+      saveMany: LocSubConstants.LOCATIONS_RECEIVED,
+      clear: LocSubConstants.USER_REMOVED
     };
   }
 
@@ -37,6 +38,11 @@ class LocSubStore extends Marty.Store {
         (acc, loc) => acc.setIn(['locs', loc.id], UserLocation(loc)),
         this.state,
         this));
+  }
+
+  // () -> Unit
+  clear(){
+    this.replaceState(this.state.set('locs', Map()));
   }
 
   //ACCESSORS

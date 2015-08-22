@@ -108,7 +108,7 @@ describe('LocSubActions', () => {
 
   describe('#remove', () => {
 
-    it.only('sends remove request to server, dispatches results, notfies user', done => {
+    it('sends remove request to server, dispatches results, notfies user', done => {
 
       const [app, {notify}] = setup(ping2State);
       const remove = sinon.spy(api, 'remove');
