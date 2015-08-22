@@ -88,24 +88,50 @@ describe('LocPubActions', () => {
 
   describe('#ping', () => {
 
-    const getStub = sinon.stub().returns(Promise.resolve(s17Nav));
-    const geoStub = { get: getStub };
+    describe('when location services enabled', () => {
+      const getStub = sinon.stub().returns(Promise.resolve(s17Nav));
+      const geoStub = { get: getStub };
 
-    it('acquires user location, dispatches to stores, notifies user', done => {
-      const [app] = setup();
-      const publish = sinon.spy(app.locPubActions, 'publish');
-      const _flash = sinon.spy(app.locPubActions, '_flash');
+      it('acquires user location, dispatches to stores, notifies user', done => {
+        const [app, _, {notify}] = setup();
+        const publish = sinon.spy(app.locPubActions, 'publish');
+        const _flash = sinon.spy(app.locPubActions, '_flash');
 
-      app.locPubActions.ping(geoStub, .0001, .0001).should.be.fulfilled
-        .then(() => {
+        app.locPubActions.ping(geoStub, .0001, .0001).should.be.fulfilled
+          .then(() => {
 
-          getStub.should.have.been.calledOnce;
-          publish.should.have.been.calledWith(s17Nav, .0001);
-          _flash.should.have.been.calledWith(.0001);
+            getStub.should.have.been.calledOnce;
+            publish.should.have.been.calledWith(s17Nav, .0001);
+            _flash.should.have.been.calledWith(.0001);
+            notify.should.have.been.calledWith('Press and hold to keep on.');
 
-          publish.restore();
-          _flash.restore();
-        }).should.notify(done);
+            publish.restore();
+            _flash.restore();
+          }).should.notify(done);
+      });
+    });
+
+    describe('when location services disabled', () => {
+
+      const getStub = sinon.stub().returns(Promise.reject('Phone not providing location.'));
+      const geoStub = { get: getStub };
+
+      it('notifies user', done => {
+
+        const [app, _, {notify}] = setup();
+        const publish = sinon.spy(app.locPubActions, 'publish');
+        const _flash = sinon.spy(app.locPubActions, '_flash');
+
+        app.locPubActions.ping(geoStub, .0001, .0001).should.be.rejected
+          .then(() => {
+
+            _flash.should.have.been.calledOnce;
+            getStub.should.have.been.calledOnce;
+            notify.should.have.been.calledWith('Phone not providing location.');
+            publish.should.have.not.been.called;
+
+          }).should.notify(done);
+      });
     });
   });
 

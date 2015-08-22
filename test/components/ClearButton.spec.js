@@ -48,7 +48,7 @@ describe('ClearButton Component', () => {
 
     describe('clicking clear button', () => {
 
-      it.only('calls locPubActions#remove', () => {
+      it('calls locPubActions#remove', () => {
         const [app, {remove}] = setup();
         const cb = tree(app);
         cb.innerComponent.click();
