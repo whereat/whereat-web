@@ -86,14 +86,14 @@ describe('LocPubStore', () => {
 
       });
 
-      it('handles INIT_STARTING and REFRESH_STARTING', () => {
+      it('handles UPDATE_STARTING, and REMOVE_STARTING', () => {
         const [app] = setup(emptyState);
         sinon.spy(app.locPubStore, 'setLastPing');
 
-        dispatch(app, LocSubConstants.INIT_STARTING, 1);
+        dispatch(app, LocSubConstants.UPDATE_STARTING, 1);
         app.locPubStore.setLastPing.should.have.been.calledWith(1);
 
-        dispatch(app, LocSubConstants.REFRESH_STARTING, 2);
+        dispatch(app, LocSubConstants.REMOVE_STARTING, 2);
         app.locPubStore.setLastPing.should.have.been.calledWith(2);
 
         app.locPubStore.setLastPing.restore();
