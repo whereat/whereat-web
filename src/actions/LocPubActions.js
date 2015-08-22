@@ -35,7 +35,10 @@ class LocPubActions extends Marty.ActionCreators {
   // (Geo, Number, Number) -> Promise[Unit]
   ping(g = geo, pi = FLASH_INTERVAL, ni = NOTIFICATION_INTERVAL){
     return Promise.all([
-      g.get().then(pos => this.publish(pos, ni)),
+      g.get()
+        .catch(err => Promise.reject(this.app.notificationActions.notify(err)))
+        .then(pos => this.publish(pos, ni))
+        .then(() => this.app.notificationActions.notify('Press and hold to keep on.')),
       this._flash(pi)
     ]);
   }
@@ -52,7 +55,7 @@ class LocPubActions extends Marty.ActionCreators {
   poll(g = geo, ni = NOTIFICATION_INTERVAL){
     const id = g.poll(
       this.app.locPubActions.publish.bind(this),
-      this.app.notificationActions.notify
+      () => this.app.notificationActions.notify('Phone not providing location.')
     );
     return Promise
       .resolve(this.dispatch(GoButtonConstants.GO_BUTTON_ON))

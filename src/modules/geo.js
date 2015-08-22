@@ -6,7 +6,7 @@ const geo = {};
 geo.get = (nav = navigator) => (
   new Promise((resolve, reject) => (
     !nav.geolocation ?
-      reject('Geolocation not available') :
+      reject('Phone not providing location.') :
       nav.geolocation.getCurrentPosition(p => resolve(p)))));
 
 // ((LatLon => Unit), (Error => Unit), Number) -> Number [id]
