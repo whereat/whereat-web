@@ -11,9 +11,10 @@
     "dev": "npm run dev-serve | npm run dev-build",
     "dev-build": "webpack-dev-server --devtool eval --progress --colors --hot --content-base build --port 8090 --config webpack_dev_config",
     "dev-serve": "http-server -p 8080 ./build/dev",
-    "prod-build": "NODE_ENV=production webpack -p --config webpack_prod_config.js",
-    "test": "NODE_ENV=test mocha test/**/*.spec.js --compilers js:babel/register",
-    "debug-test": "node-inspector --web-port=9000 & mocha --recursive --compilers js:babel/register --debug-brk"
+    "build": "NODE_ENV=production webpack -p --config webpack_prod_config.js",
+    "test": "NODE_ENV=test mocha test/**/*.spec.js --compilers js:babel/register --require=test/support/dom.js",
+    "test-coverage": "istanbul cover _mocha test/**/*.spec.js --ui -R  -t=5000 -- --compilers=js:babel-core/register --require=test/support/dom.js",
+    "test-debug": "node-inspector --web-port=9000 & mocha --recursive --compilers js:babel/register --debug-brk"
   },
   "repository": {
     "type": "git",
@@ -47,6 +48,7 @@
     "imagemin": "^3.2.0",
     "immutable": "^3.7.3",
     "imports-loader": "^0.6.3",
+    "istanbul": "^0.3.18",
     "jsx-loader": "^0.13.2",
     "leaflet": "^0.7.3",
     "less": "^2.5.1",
@@ -78,6 +80,7 @@
     "jsdom": "^3.1.2",
     "mocha": "^2.2.5",
     "mocha-babel": "^3.0.0",
+    "mocha-istanbul": "^0.2.0",
     "react-test-tree": "^0.2.2",
     "sinon": "^1.15.4",
     "sinon-chai": "^2.8.0",

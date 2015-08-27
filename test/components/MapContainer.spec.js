@@ -45,6 +45,7 @@ describe('MapContainer Component', () => {
       getCenter: sinon.stub(),
       getLocs: sinon.stub()
     };
+
     app.locSubStore.getCenter = stubs.getCenter;
     app.locSubStore.getLocs = stubs.getCenter;
 
