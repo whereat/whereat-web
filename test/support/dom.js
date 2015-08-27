@@ -1,5 +1,4 @@
 var jsdom = require('jsdom');
-var React = require('react');
 
 var doc = jsdom.jsdom('<!doctype html><html><body></body></html>');
 var win = doc.defaultView;
@@ -7,7 +6,6 @@ global.document = doc;
 global.window = win;
 propagateToGlobal(win);
 
-// from mocha-jsdom https://github.com/rstacruz/mocha-jsdom/blob/master/index.js#L80
 function propagateToGlobal (window) {
   for (let key in window) {
     if (!window.hasOwnProperty(key)) continue;
@@ -15,5 +13,5 @@ function propagateToGlobal (window) {
 
     global[key] = window[key];
   }
-  global.React = React;
+  global.React = require('react');
 }
