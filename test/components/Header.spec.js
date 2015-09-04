@@ -32,6 +32,7 @@ describe('Header Component', () => {
   describe('contents', () => {
 
     describe('dropdown menu', () => {
+
       it('contains correctly ordered list of pages', () => {
         const [_, hdr, __] = setup();
 
@@ -41,7 +42,7 @@ describe('Header Component', () => {
     });
   });
 
-  describe('events', () =>{
+  describe('events', () =>{y
 
     describe('selecting nav elements', () => {
 
