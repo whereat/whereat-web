@@ -80,14 +80,83 @@ body {
   text-align: right;
 }
 
-.goButton {
-  margin: 0;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  margin-right: -50%;
-  transform: translate(-50%, -50%);
+.goButtonBase {
+  //border-radius: 50%;
+  height: 220px;
+  width: 220px;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
 }
+
+.goButton {
+  .goButtonBase;
+  margin-top: 50%;
+  translateY: (-50%);
+}
+
+// iPhone 4
+@media only screen
+  and (min-device-width: 320px)
+  and (max-device-width: 480px)
+  and (-webkit-min-device-pixel-ratio: 2)
+  and (device-aspect-ratio: 2/3) {
+    .goButtonSafari {
+      .goButtonBase;
+      margin-top: 20%;
+    }
+}
+
+
+// iPhone 5/5s
+@media only screen
+  and (min-device-width: 320px)
+  and (max-device-width: 568px)
+  and (-webkit-min-device-pixel-ratio: 2) {
+  .goButtonSafari {
+    .goButtonBase;
+    margin-top: 30%;
+  }
+}
+
+// iPhone 6
+@media only screen
+  and (min-device-width: 375px)
+  and (max-device-width: 667px)
+  and (-webkit-min-device-pixel-ratio: 2) {
+  .goButtonSafari {
+    .goButtonBase;
+    margin-top: 40%;
+  }
+}
+
+// iPhone 6+
+@media only screen
+  and (min-device-width: 414px)
+  and (max-device-width: 736px)
+  and (-webkit-min-device-pixel-ratio: 3) {
+  .goButtonSafari {
+    .goButtonBase;
+    margin-top: 48%;
+  }
+}
+
+
+
+// // Android & Desktop
+// .goButtonSafari {
+//   margin: 0;
+//   display: block;
+//   position: fixed;
+//   border-radius: 50%;
+//   height: 220px;
+//   width: 220px;
+//   top: 50%;
+//   left: 50%;
+//   margin-right: -50%;
+//   transform: translate(-50%, -50%);
+// }
+
 
 // map
 
