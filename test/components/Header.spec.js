@@ -42,7 +42,7 @@ describe('Header Component', () => {
     });
   });
 
-  describe('events', () =>{y
+  describe('events', () =>{
 
     describe('selecting nav elements', () => {
 
@@ -61,7 +61,6 @@ describe('Header Component', () => {
         it('calls navAction#goto(MAP)', () => {
           const[_, hdr, {goto}] = setup();
           hdr.navItem2.simulate.select();
-
           goto.should.have.been.calledWith(MAP);
         });
       });
