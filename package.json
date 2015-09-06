@@ -12,9 +12,9 @@
     "dev-build": "webpack-dev-server --devtool eval --progress --colors --hot --content-base build --port 8090 --config webpack_dev_config",
     "dev-serve": "http-server -p 8080 ./build/dev",
     "build": "NODE_ENV=production webpack -p --config webpack_prod_config.js",
-    "test": "NODE_ENV=test mocha test/**/*.spec.js --compilers js:babel/register --require=test/support/dom.js",
-    "test-coverage": "istanbul cover _mocha test/**/*.spec.js --ui -R  -t=5000 -- --compilers=js:babel-core/register --require=test/support/dom.js",
-    "test-debug": "node-inspector --web-port=9000 & mocha --recursive --compilers js:babel/register --debug-brk"
+    "test": "NODE_ENV=test mocha src/test/**/*.spec.js --compilers js:babel/register --require=src/test/support/dom.js",
+    "test-coverage": "istanbul cover _mocha src/test/**/*.spec.js --ui -R  -t=5000 -- --compilers=js:babel-core/register --require=src/test/support/dom.js",
+    "test-debug": "node-inspector --web-port=9000 & mocha src/test/**/*.spec.js --compilers js:babel/register --debug-brk"
   },
   "repository": {
     "type": "git",
