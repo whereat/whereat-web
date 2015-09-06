@@ -27,15 +27,9 @@ class GoButton extends BaseComponent {
   render(){
     return (
       <Tappable ref="tappable" {...this.events} >
-        <svg
-         ref="svg"
-         className={ isSafari() ? 'goButtonSafari' : 'goButton' }
-         width={GO_DIAMETER}
-         height={GO_DIAMETER}
-        >
+        <svg ref="svg" className="goButton" width={GO_DIAMETER} height={GO_DIAMETER} >
           <circle ref="circle" cx={GO_RADIUS} cy={GO_RADIUS} r={GO_RADIUS} fill={this.props.color} />
         </svg>
-
       </Tappable>
     );
   };
