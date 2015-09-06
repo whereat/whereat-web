@@ -1,5 +1,6 @@
 @import "./bootstrap/bootstrap.less";
 
+
 // there appears to be a bootstrap bug here
 .glyphicon-plus:before {
   content: "+";
@@ -68,95 +69,32 @@ body {
 
 // display
 
+@DISPLAY_OFFSET: 2.8em;
+
 #display {
-  //position: fixed;
   position: absolute;
   width: 100%;
-  height: calc(100% - 10em);
-  top: 2.8em;
+  height: calc(100% - 3*@DISPLAY_OFFSET);
+  top: @DISPLAY_OFFSET;
 }
 
 .menuItem {
   text-align: right;
 }
 
-.goButtonBase {
-  //border-radius: 50%;
-  height: 220px;
-  width: 220px;
-  margin-left: auto;
-  margin-right: auto;
-  display: block;
-}
+// go button
+
+@GO_RADIUS: 110px;
+@GO_DIAMETER: 220px;
 
 .goButton {
-  .goButtonBase;
-  margin-top: 50%;
-  translateY: (-50%);
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: -@GO_RADIUS;
+  margin-left: -@GO_RADIUS;
 }
-
-// iPhone 4
-@media only screen
-  and (min-device-width: 320px)
-  and (max-device-width: 480px)
-  and (-webkit-min-device-pixel-ratio: 2)
-  and (device-aspect-ratio: 2/3) {
-    .goButtonSafari {
-      .goButtonBase;
-      margin-top: 20%;
-    }
-}
-
-
-// iPhone 5/5s
-@media only screen
-  and (min-device-width: 320px)
-  and (max-device-width: 568px)
-  and (-webkit-min-device-pixel-ratio: 2) {
-  .goButtonSafari {
-    .goButtonBase;
-    margin-top: 30%;
-  }
-}
-
-// iPhone 6
-@media only screen
-  and (min-device-width: 375px)
-  and (max-device-width: 667px)
-  and (-webkit-min-device-pixel-ratio: 2) {
-  .goButtonSafari {
-    .goButtonBase;
-    margin-top: 40%;
-  }
-}
-
-// iPhone 6+
-@media only screen
-  and (min-device-width: 414px)
-  and (max-device-width: 736px)
-  and (-webkit-min-device-pixel-ratio: 3) {
-  .goButtonSafari {
-    .goButtonBase;
-    margin-top: 48%;
-  }
-}
-
-
-
-// // Android & Desktop
-// .goButtonSafari {
-//   margin: 0;
-//   display: block;
-//   position: fixed;
-//   border-radius: 50%;
-//   height: 220px;
-//   width: 220px;
-//   top: 50%;
-//   left: 50%;
-//   margin-right: -50%;
-//   transform: translate(-50%, -50%);
-// }
-
 
 // map
 
