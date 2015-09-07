@@ -6,14 +6,13 @@ var deps = [
   'react/dist/react-with-addons.js',
   'marty/dist/marty.min.js',
   'immutable/dist/immutable.min.js',
-  //'lodash/index.js'
 ];
 
 var config = {
   entry: {
     app: [
     'webpack/hot/dev-server',
-      path.resolve(__dirname, 'src/main.jsx')
+      path.resolve(__dirname, 'src/app/main.jsx')
     ],
     vendors: [
       'react',
@@ -31,6 +30,12 @@ var config = {
     new webpack.optimize.CommonsChunkPlugin('vendors', 'vendors.js'),
     new webpack.DefinePlugin({ "process.env": JSON.stringify(process.env)})
   ],
+  devServer: {
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Credentials": false
+    }
+  },
   module: {
     loaders: [
       { test: path.resolve(node_modules, deps[0]),
