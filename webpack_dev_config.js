@@ -6,6 +6,7 @@ var deps = [
   'react/dist/react-with-addons.js',
   'marty/dist/marty.min.js',
   'immutable/dist/immutable.min.js',
+  'libsodium-wrappers/dist/modules/libsodium-wrappers.js'
 ];
 
 var config = {
