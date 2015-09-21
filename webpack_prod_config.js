@@ -4,7 +4,7 @@ var webpack = require('webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 var config = {
-  entry: path.resolve(__dirname, 'src/main.jsx'),
+  entry: path.resolve(__dirname, 'src/app/main.jsx'),
   output: {
     path: 'build/prod',
     filename: './app.js'
