@@ -6,7 +6,6 @@ var deps = [
   'react/dist/react-with-addons.js',
   'marty/dist/marty.min.js',
   'immutable/dist/immutable.min.js',
-  'libsodium-wrappers/dist/modules/libsodium-wrappers.js'
 ];
 
 var config = {
@@ -40,7 +39,9 @@ var config = {
   module: {
     loaders: [
       { test: path.resolve(node_modules, deps[0]),
-        loader: "expose?React" },// get rid of this?
+        loader: "expose?React" },
+      { test: path.resolve(node_modules, 'libsodium-wrappers/dist/modules/libsodium-wrappers.js'),
+        loader: 'imports'},
       { test: /\.jsx?$/,
         exclude: [node_modules],
         loaders: ['react-hot', 'babel'] },
