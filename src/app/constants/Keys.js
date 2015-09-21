@@ -1,7 +1,7 @@
-// const uuid = require('node-uuid');
-const sodium = require('libsodium-wrappers');
+const nacl = require('../modules/nacl').instance;
+
 const keys = {};
 
-// keys.USER_ID = uuid.v4();
-keys.USER_ID = sodium.to_hex(sodium.randombytes_buf(sodium.crypto_shorthash_KEYBYTES));
+keys.USER_ID = nacl.to_hex(nacl.random_bytes(32));
+
 module.exports = keys;
