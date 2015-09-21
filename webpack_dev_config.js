@@ -40,8 +40,6 @@ var config = {
     loaders: [
       { test: path.resolve(node_modules, deps[0]),
         loader: "expose?React" },
-      { test: path.resolve(node_modules, 'libsodium-wrappers/dist/modules/libsodium-wrappers.js'),
-        loader: 'imports'},
       { test: /\.jsx?$/,
         exclude: [node_modules],
         loaders: ['react-hot', 'babel'] },
