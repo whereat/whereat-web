@@ -53,7 +53,6 @@ class Header extends BaseComponent {
 
   _handleToggle(){
     this.app.navActions.toggle();
-    //this.state.expanded = !this.state.expanded;
   }
 }
 
