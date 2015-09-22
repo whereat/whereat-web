@@ -1,9 +1,11 @@
-const sinon = require('sinon');
 const chai = require('chai');
-const sinonChai = require('sinon-chai');
-const chaiAsPromised = require('chai-as-promised');
 const should = chai.should();
+
+const sinon = require('sinon');
+const sinonChai = require('sinon-chai');
 chai.use(sinonChai);
+
+const chaiAsPromised = require('chai-as-promised');
 chai.use(chaiAsPromised);
 
 const geo = require('../../app/modules/geo');
