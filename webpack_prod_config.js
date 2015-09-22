@@ -4,7 +4,7 @@ var webpack = require('webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 var config = {
-  entry: path.resolve(__dirname, 'src/main.jsx'),
+  entry: path.resolve(__dirname, 'src/app/main.jsx'),
   output: {
     path: 'build/prod',
     filename: './app.js'
@@ -14,29 +14,29 @@ var config = {
     new HtmlWebpackPlugin({
       inject: true,
       template: path.resolve(__dirname, 'build/prod/index-template.html')
-    })
+    }),
   ],
   module: {
     loaders: [
       { test: /\.jsx?$/,
         exclude: [node_modules],
         loader: 'babel' },
+      {
+        test: /\.css$/,
+        loader: 'style-loader!css-loader!postcss-loader'
+      },
       { test: /\.less$/,
-        loader: 'style-loader!css-loader!less-loader' },
-      { test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,
-        loader: "url?limit=10000&minetype=application/font-woff" },
-      { test: /\.woff2(\?v=\d+\.\d+\.\d+)?$/,
-        loader: "url?limit=10000&minetype=application/font-woff" },
-      { test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
-        loader: "url?limit=10000&minetype=application/octet-stream" },
-      { test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
-        loader: "file" },
+        loader: 'style-loader!css-loader!postcss-loader!less-loader' },
+      {
+        test: /\.(eot|ttf|woff|woff2|svg|svgz)($|\?)/,
+        loader: 'file'
+      },
       { test: /\.xml$/,
         loader: 'xml-loader' },
       { test: /\.(jpe?g|png|gif)$/i,
         loaders: [
-            'file?hash=sha512&digest=hex&name=[hash].[ext]',
-            'image-webpack?bypassOnDebug&optimizationLevel=7&interlaced=false']},
+          'file?hash=sha512&digest=hex&name=[hash].[ext]',
+          'image-webpack?bypassOnDebug&optimizationLevel=7&interlaced=false']},
       { test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
         loader: "url?limit=10000&minetype=image/svg+xml" }
     ]
