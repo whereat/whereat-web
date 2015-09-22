@@ -30,6 +30,13 @@ class LocSubActions extends Marty.ActionCreators {
       .then(() => this.dispatch(LocSubConstants.USER_REMOVED))
       .then(() => this.app.notificationActions.notify('User data removed from server.'));
   }
+
+  // (Number) => Unit
+  clear(now = time.now){
+    return Promise
+      .resolve(this.dispatch(LocSubConstants.LOCATION_STORE_CLEARED, now()))
+      .then(() => this.app.notificationActions.notify('Erasing all pins older than 1 hour.'));
+  }
 }
 
 module.exports = LocSubActions;

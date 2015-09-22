@@ -27,7 +27,7 @@ describe('schedule module', () =>{
 
   describe('#cancel', () =>{
 
-    it.only('cancels a scheduled function', done => {
+    it('cancels a scheduled function', done => {
 
       const fn = sinon.spy();
       const [ms, s, wait] = [1000, 1, 10];

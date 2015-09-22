@@ -5,5 +5,6 @@ module.exports = Marty.createConstants([
   'LOCATION_RECEIVED',
   'LOCATIONS_RECEIVED',
   'REMOVE_STARTING',
+  'LOCATION_STORE_CLEARED',
   'USER_REMOVED'
 ]);
