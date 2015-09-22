@@ -126,7 +126,7 @@ describe('LocSubActions', () => {
     });
   });
 
-  describe('#clear', () => {
+  describe('#forget', () => {
 
     it('initates erasure of  LocationStore and notifies user', done => {
 
