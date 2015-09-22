@@ -39,7 +39,7 @@ var config = {
   module: {
     loaders: [
       { test: path.resolve(node_modules, deps[0]),
-        loader: "expose?React" },// get rid of this?
+        loader: "expose?React" },
       { test: /\.jsx?$/,
         exclude: [node_modules],
         loaders: ['react-hot', 'babel'] },
