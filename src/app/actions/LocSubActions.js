@@ -34,7 +34,7 @@ class LocSubActions extends Marty.ActionCreators {
   // (Number) => Unit
   forget(now = time.now){
     return Promise
-      .resolve(this.dispatch(LocSubConstants.LOCATION_STORE_CLEARED, now()))
+      .resolve(this.dispatch(LocSubConstants.LOCATION_FORGET_TRIGGERED, now()))
       .then(() => this.app.notificationActions.notify('Erasing all pins older than 1 hour.'));
   }
 }
