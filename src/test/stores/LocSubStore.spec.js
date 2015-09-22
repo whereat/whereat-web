@@ -33,6 +33,9 @@ describe('LocSubStore', () => {
     ])
   });
 
+  const nyse3ModTimeState =
+          nyse3State.setIn(['locs', ls.get(2).id], ls.get(2).time + 20);
+
   const clearState = Map({
     center: Location(s17),
     locs: Map()
@@ -150,6 +153,51 @@ describe('LocSubStore', () => {
 
         shouldHaveBeenCalledWithImmutable(listener, clearState);
       });
+    });
+  });
+
+  describe('#forget', () =>{
+
+    const hourLater = s17.time + (60 * 60 * 1000);
+
+    it('clears all locations from store older than an hour ago', () => {
+
+      const [app] = setup(nyse3State);
+      app.locSubStore.state.get('locs').valueSeq().size.should.equal(3);
+      shouldHaveObjectEquality(app.locSubStore.state.get('locs'), nyse3State.get('locs'));
+
+      app.locSubStore.forget(hourLater);
+
+      shouldHaveObjectEquality(app.locSubStore.state.get('locs'), Map());
+      app.locSubStore.state.get('locs').valueSeq().size.should.equal(0);
+    });
+
+    it("doesn't clear locations less than an hour old", () => {
+
+      const [app] = setup(nyse3ModTimeState);
+      app.locSubStore.state.get('locs').valueSeq().size.should.equal(3);
+
+      app.locSubStore.forget(hourLater);
+
+      app.locSubStore.state.get('locs').valueSeq().size.should.equal(1);
+    });
+
+    it('handles LOCATION_FORGET_TRIGGERED', () => {
+
+      const [app] = setup(nyse3State);
+      const forget = sinon.spy(app.locSubStore, 'forget');
+
+      dispatch(app, LocSubConstants.LOCATION_FORGET_TRIGGERED, s17.time);
+
+      forget.should.have.been.calledWith(s17.time);
+      forget.restore();
+    });
+
+    it.only('notifies listeners of state change', () => {
+      const [app, listener] = setup(nyse3State);
+      app.locSubStore.forget(hourLater);
+
+      shouldHaveBeenCalledWithImmutable(listener, clearState);
     });
   });
 
