@@ -8,11 +8,6 @@ class NavActions extends Marty.ActionCreators {
     this.dispatch(NavConstants.PAGE_REQUESTED, page);
   }
 
-  //() -> Unit
-  alert(){
-    this.dispatch(NavConstants.SECURITY_ALERT_TRIGGERED);
-  }
-
   // () -> Unit
   toggle(){
     this.dispatch(NavConstants.NAV_TOGGLED);

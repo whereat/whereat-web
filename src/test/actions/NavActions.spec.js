@@ -1,8 +1,8 @@
 const chai = require('chai');
 const Application = require('../../app/application');
 const NavConstants = require('../../app/constants/NavConstants');
-const { HOME, MAP } = require('../../app/constants/Pages');
 const { hasDispatched, createApplication } = require('marty/test-utils');
+import { HOME, MAP, SEC } from '../../app/constants/Pages';
 
 const should = chai.should();
 
@@ -34,13 +34,13 @@ describe('NavActions', () => {
       });
     });
 
-    describe('#alert', () => {
+    describe('sec', () => {
 
-      it.only('dispatches SECURITY_ALERT_TRIGGERED', () => {
+      it.only("dispatched PAGE_REQUESTED 'sec'", () => {
         const app = setup();
-        app.navActions.alert();
+        app.navActions.goto(SEC);
 
-        hasDispatched(app, NavConstants.SECURITY_ALERT_TRIGGERED).should.equal(true);
+        hasDispatched(app, NavConstants.PAGE_REQUESTED, SEC).should.equal(true);
       });
     });
 
