@@ -1,6 +1,6 @@
 const Marty = require('marty');
 const NavConstants = require('../constants/NavConstants');
-const { HOME, MAP } = require('../constants/Pages');
+const { HOME, MAP, SEC } = require('../constants/Pages');
 const { Map } = require('immutable');
 
 class NavStore extends Marty.Store {
