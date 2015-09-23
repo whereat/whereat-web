@@ -3,7 +3,6 @@ const chai = require('chai');
 const sinonChai = require('sinon-chai');
 chai.use(sinonChai);
 const should = chai.should();
-
 const testTree = require('react-test-tree');
 const { createApplication } = require('marty/test-utils');
 
