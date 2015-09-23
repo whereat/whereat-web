@@ -125,4 +125,19 @@ describe('LocSubActions', () => {
         }).should.notify(done);
     });
   });
+
+  describe('#forget', () => {
+
+    it('initates erasure of  LocationStore and notifies user', done => {
+
+      const [app, {notify}] = setup(ping1State);
+
+      app.locSubActions.forget(() => s17.time).should.be.fulfilled
+        .then(() => {
+          shouldHaveDispatchedWith(
+            app, LocSubConstants.LOCATION_FORGET_TRIGGERED, s17.time);
+          notify.should.have.been.calledWith('Erasing all pins older than 1 hour.');
+        }).should.notify(done);
+    });
+  });
 });

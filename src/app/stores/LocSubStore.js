@@ -19,7 +19,8 @@ class LocSubStore extends Marty.Store {
     this.handlers = {
       save: LocSubConstants.LOCATION_RECEIVED,
       saveMany: LocSubConstants.LOCATIONS_RECEIVED,
-      clear: LocSubConstants.USER_REMOVED
+      clear: LocSubConstants.USER_REMOVED,
+      forget: LocSubConstants.LOCATION_FORGET_TRIGGERED
     };
   }
 
@@ -43,6 +44,17 @@ class LocSubStore extends Marty.Store {
   // () -> Unit
   clear(){
     this.replaceState(this.state.set('locs', Map()));
+  }
+
+  // (Number) -> Unit
+  forget(now){
+    const hourAgo = now - (60 * 60 * 1000);
+    const expiredLocs = this.state.get('locs').valueSeq().filter(l => l.time <= hourAgo);
+    this.replaceState(
+      expiredLocs.reduce(
+        (acc, loc) => acc.deleteIn(['locs', loc.id]),
+        this.state,
+        this));
   }
 
   //ACCESSORS

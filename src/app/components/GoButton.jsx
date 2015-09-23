@@ -15,15 +15,6 @@ class GoButton extends BaseComponent {
     this.events = { onClick: this._handleClick, onPress: this._handlePress };
   }
 
-  /* <div className={
-     cn(
-     'funGoButton', {
-     red: this.props.color === RED,
-     green: this.props.color === GREEN
-     })
-     }>
-     </div> */
-
   render(){
     return (
       <Tappable ref="tappable" {...this.events} >
@@ -33,11 +24,6 @@ class GoButton extends BaseComponent {
       </Tappable>
     );
   };
-
-  _goButtonClass(){
-    console.log(isSafari());
-    return isSafari() ? 'goButtonSafari' : 'goButton';
-  }
 
   _handleClick(){
     if (!this.props.polling) {

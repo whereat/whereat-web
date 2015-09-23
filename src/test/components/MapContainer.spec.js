@@ -38,21 +38,22 @@ describe('MapContainer Component', () => {
 
   const setup = (state) => {
 
-    const app = createApplication(Application, { include: ['locSubStore'] });
-    app.locSubStore.state = state;
-
     const stubs = {
-      getCenter: sinon.stub(),
+      getCenter: sinon.stub().returns(Location(s17)),
       getLocs: sinon.stub()
     };
 
-    app.locSubStore.getCenter = stubs.getCenter;
-    app.locSubStore.getLocs = stubs.getCenter;
+    const app = createApplication(Application, {
+      stub: {
+        locSubStore: createStore(stubs)
+      }
+    });
 
     const component = propTree(app, state.get('locs').valueSeq(), state.get('center'));
 
     return [app, component, stubs];
   };
+
 
   const propTree = (app, locs, ctr) =>(
     testTree(
@@ -84,13 +85,18 @@ describe('MapContainer Component', () => {
     describe('listening to LocSubStore', () => {
 
       it('updates props when store state changes', () => {
-        const [_, mc, {getLocs}] = setup(emptyState);
+        const [app, _, {getLocs}] = setup(emptyState);
 
-        getLocs.returns(Seq());
-        shouldHaveObjectEquality(mc.getProp('locations'), Seq());
+        getLocs.returns(Seq())
+        const mc = tree(app);
+        shouldHaveObjectEquality(
+          mc.innerComponent.getProp('locations'), Seq());
 
-        getLocs.returns(nyse3Seq);
-        shouldHaveObjectEquality(mc.getProp('locations'), nyse3ULSeq);
+
+        getLocs.returns(nyse3ULSeq);
+        const mc2 = tree(app);
+        shouldHaveObjectEquality(
+          mc2.innerComponent.getProp('locations'), nyse3ULSeq);
       });
     });
   });

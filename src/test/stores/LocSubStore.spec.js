@@ -33,14 +33,17 @@ describe('LocSubStore', () => {
     ])
   });
 
+  const nyse3ModTimeState =
+          nyse3State.setIn(['locs', ls.get(2).id], ls.get(2).time + 20);
+
   const clearState = Map({
     center: Location(s17),
     locs: Map()
   });
 
-  const setup = (state = Map()) => {
+  const setup = (state = clearState) => {
     const app = createApplication(Application, { include: ['locSubStore'] });
-    app.locSubStore.state = state;
+    app.locSubStore.replaceState(state);
 
     const listener = sinon.spy();
     app.locSubStore.addChangeListener(listener);
@@ -66,11 +69,10 @@ describe('LocSubStore', () => {
         app.locSubStore.save(UserLocation(s17UL));
         app.locSubStore.save(UserLocation(s17_UL));
 
+        app.locSubStore.state.get('locs').valueSeq().size.should.equal(1);
         shouldHaveObjectEquality(
           app.locSubStore.state.getIn(['locs', s17UL.id]),
           UserLocation(s17_UL));
-
-        app.locSubStore.state.valueSeq().size.should.equal(1);
       });
 
       it('handles LOCATION_RECEIVED', () => {
@@ -99,7 +101,7 @@ describe('LocSubStore', () => {
         app.locSubStore.saveMany(nyse3ULSeq);
 
         app.locSubStore.state.get('locs').valueSeq().size.should.equal(3);
-        shouldHaveObjectEquality( app.locSubStore.state, nyse3State );
+        shouldHaveObjectEquality(app.locSubStore.state, nyse3State);
       });
 
       it('responds to LOCATIONS_RECEIVED', () => {
@@ -117,7 +119,7 @@ describe('LocSubStore', () => {
         app.locSubStore.saveMany(ls);
 
         listener.should.have.been.calledOnce;
-        shouldHaveObjectEquality( listener.getCall(0).args[0], nyse3State );
+        shouldHaveBeenCalledWithImmutable(listener, nyse3State);
       });
     });
 
@@ -150,6 +152,51 @@ describe('LocSubStore', () => {
 
         shouldHaveBeenCalledWithImmutable(listener, clearState);
       });
+    });
+  });
+
+  describe('#forget', () =>{
+
+    const hourLater = s17.time + (60 * 60 * 1000);
+
+    it('clears all locations from store older than an hour ago', () => {
+
+      const [app] = setup(nyse3State);
+      app.locSubStore.state.get('locs').valueSeq().size.should.equal(3);
+      shouldHaveObjectEquality(app.locSubStore.state.get('locs'), nyse3State.get('locs'));
+
+      app.locSubStore.forget(hourLater);
+
+      shouldHaveObjectEquality(app.locSubStore.state.get('locs'), Map());
+      app.locSubStore.state.get('locs').valueSeq().size.should.equal(0);
+    });
+
+    it("doesn't clear locations less than an hour old", () => {
+
+      const [app] = setup(nyse3ModTimeState);
+      app.locSubStore.state.get('locs').valueSeq().size.should.equal(3);
+
+      app.locSubStore.forget(hourLater);
+
+      app.locSubStore.state.get('locs').valueSeq().size.should.equal(1);
+    });
+
+    it('handles LOCATION_FORGET_TRIGGERED', () => {
+
+      const [app] = setup(nyse3State);
+      const forget = sinon.spy(app.locSubStore, 'forget');
+
+      dispatch(app, LocSubConstants.LOCATION_FORGET_TRIGGERED, s17.time);
+
+      forget.should.have.been.calledWith(s17.time);
+      forget.restore();
+    });
+
+    it('notifies listeners of state change', () => {
+      const [app, listener] = setup(nyse3State);
+      app.locSubStore.forget(hourLater);
+
+      shouldHaveBeenCalledWithImmutable(listener, clearState);
     });
   });
 

@@ -206,15 +206,17 @@ describe('LocPubStore', () => {
 
       it('returns current user location wrapped with `lastPing` value', () => {
         const [app, _] = setup(ping1State);
+
         shouldHaveObjectEquality(
           app.locPubStore.getLocRefresh(),
           UserLocationRefresh({ lastPing: -1, location: UserLocation(s17) })
         );
 
         app.locPubStore.setLastPing(s17.time);
+
         shouldHaveObjectEquality(
           app.locPubStore.getLocRefresh(),
-          UserLocationRefresh({ lastPing: -1, location: UserLocation(s17) })
+          UserLocationRefresh({ lastPing: s17.time, location: UserLocation(s17) })
         );
       });
     });
