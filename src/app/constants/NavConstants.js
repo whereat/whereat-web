@@ -1,6 +1,7 @@
 const Marty = require('marty');
 
 module.exports = Marty.createConstants([
+  'NAV_TOGGLED',
   'PAGE_REQUESTED',
-  'NAV_TOGGLED'
+  'SECURITY_ALERT_TRIGGERED'
 ]);
