@@ -14,7 +14,7 @@
     "build": "UV_THREADPOOL_SIZE=128 NODE_ENV=production webpack -p --config webpack_prod_config.js --progress --display-error-details --display-chunks",
     "test": "NODE_ENV=test mocha src/test/**/*.spec.js --compilers js:babel/register --require=src/test/support/dom.js",
     "test-coverage": "istanbul cover _mocha src/test/**/*.spec.js --ui -R  -t=5000 -- --compilers=js:babel-core/register --require=src/test/support/dom.js",
-    "test-debug": "node-inspector --web-port=9000 & mocha src/test/**/*.spec.js --compilers js:babel/register --debug-brk"
+    "test-debug": "node-inspector --web-port=9000 & mocha src/test/**/*.spec.js --compilers js:babel/register --debug-brk --require=src/test/support/dom.js"
   },
   "repository": {
     "type": "git",
