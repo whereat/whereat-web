@@ -53,7 +53,7 @@ describe('Root component', () => {
     });
   });
 
-  describe.only('events', () => {
+  describe('events', () => {
 
     describe('#_forget', () =>{
 
