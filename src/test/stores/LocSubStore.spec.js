@@ -41,9 +41,9 @@ describe('LocSubStore', () => {
     locs: Map()
   });
 
-  const setup = (state = Map()) => {
+  const setup = (state = clearState) => {
     const app = createApplication(Application, { include: ['locSubStore'] });
-    app.locSubStore.state = state;
+    app.locSubStore.replaceState(state);
 
     const listener = sinon.spy();
     app.locSubStore.addChangeListener(listener);
@@ -69,11 +69,10 @@ describe('LocSubStore', () => {
         app.locSubStore.save(UserLocation(s17UL));
         app.locSubStore.save(UserLocation(s17_UL));
 
+        app.locSubStore.state.get('locs').valueSeq().size.should.equal(1);
         shouldHaveObjectEquality(
           app.locSubStore.state.getIn(['locs', s17UL.id]),
           UserLocation(s17_UL));
-
-        app.locSubStore.state.valueSeq().size.should.equal(1);
       });
 
       it('handles LOCATION_RECEIVED', () => {
@@ -102,7 +101,7 @@ describe('LocSubStore', () => {
         app.locSubStore.saveMany(nyse3ULSeq);
 
         app.locSubStore.state.get('locs').valueSeq().size.should.equal(3);
-        shouldHaveObjectEquality( app.locSubStore.state, nyse3State );
+        shouldHaveObjectEquality(app.locSubStore.state, nyse3State);
       });
 
       it('responds to LOCATIONS_RECEIVED', () => {
@@ -120,7 +119,7 @@ describe('LocSubStore', () => {
         app.locSubStore.saveMany(ls);
 
         listener.should.have.been.calledOnce;
-        shouldHaveObjectEquality( listener.getCall(0).args[0], nyse3State );
+        shouldHaveBeenCalledWithImmutable(listener, nyse3State);
       });
     });
 
@@ -193,7 +192,7 @@ describe('LocSubStore', () => {
       forget.restore();
     });
 
-    it.only('notifies listeners of state change', () => {
+    it('notifies listeners of state change', () => {
       const [app, listener] = setup(nyse3State);
       app.locSubStore.forget(hourLater);
 
