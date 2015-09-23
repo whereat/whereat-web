@@ -34,7 +34,17 @@ describe('NavActions', () => {
       });
     });
 
-    describe('toggle', () => {
+    describe('#alert', () => {
+
+      it.only('dispatches SECURITY_ALERT_TRIGGERED', () => {
+        const app = setup();
+        app.navActions.alert();
+
+        hasDispatched(app, NavConstants.SECURITY_ALERT_TRIGGERED).should.equal(true);
+      });
+    });
+
+    describe('#toggle', () => {
 
       it('toggles nav between expanded and collapsed states', () => {
 
