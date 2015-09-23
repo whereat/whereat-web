@@ -62,7 +62,7 @@ describe('NavStore', () => {
         app.navStore.state.get('page').should.equal(SEC);
       });
 
-      it.only('notifies listener of state change', () => {
+      it('notifies listener of state change', () => {
         const [app, listener] = setup(MAP);
 
         app.navStore.goto(HOME);
