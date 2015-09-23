@@ -49,8 +49,7 @@ class LocSubStore extends Marty.Store {
   // (Number) -> Unit
   forget(now){
     const hourAgo = now - (60 * 60 * 1000);
-    const tenSecAgo = now - (10 * 1000);
-    const expiredLocs = this.state.get('locs').valueSeq().filter(l => l.time <= tenSecAgo);
+    const expiredLocs = this.state.get('locs').valueSeq().filter(l => l.time <= hourAgo);
     this.replaceState(
       expiredLocs.reduce(
         (acc, loc) => acc.deleteIn(['locs', loc.id]),
