@@ -67,7 +67,7 @@ describe('Display Component', () => {
 
       describe('when `page` prop is SEC', () => {
 
-        it.only('renders SecurityPage component', () => {
+        it('renders SecurityPage component', () => {
           const [app, d] = setup(SEC);
 
           d.getProp('page').should.equal(SEC);

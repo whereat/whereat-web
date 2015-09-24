@@ -79,41 +79,66 @@ describe('NavStore', () => {
       });
     });
 
+    describe('#hide', () => {
+
+      it('handles PAGE_REQUESTED', () => {
+        const [app] = setup();
+        const hide = sinon.spy(app.navStore, 'hide');
+        dispatch(app, NavConstants.PAGE_REQUESTED, HOME);
+
+        hide.should.have.been.calledOnce;
+      });
+
+      it('sets state.expanded to false', () => {
+        const[app] = setup(HOME);
+        app.navStore.state.set('expanded', true);
+        app.navStore.hide();
+
+        app.navStore.state.get('expanded').should.equal(false);
+      });
+
+      it('notifies listeners of state change', () => {
+        const [app, listener] = setup(HOME);
+        app.navStore.replaceState(app.navStore.state.set('expanded', true));
+        app.navStore.hide();
+
+        shouldHaveBeenCalledNthTimeWithImmutable(
+          listener, 1, Map({ page: HOME, expanded: false })
+        );
+      });
+    });
+
     describe('#toggle()', () => {
 
+      it('handles NAV_TOGGLED', () => {
+        const [app] = setup(HOME);
+        const toggle = sinon.spy(app.navStore, 'toggle');
+        dispatch(app, NavConstants.NAV_TOGGLED);
+
+        toggle.should.have.been.calledOnce;
+      });
+
       it('toggles `expanded` btw true and false', () => {
-        const [app, listener] = setup(HOME);
+        const [app] = setup(HOME);
         app.navStore.state.get('expanded').should.equal(false);
 
-        dispatch(app, NavConstants.NAV_TOGGLED);
+        app.navStore.toggle();
         app.navStore.state.get('expanded').should.equal(true);
 
-        dispatch(app, NavConstants.NAV_TOGGLED);
+        app.navStore.toggle();
         app.navStore.state.get('expanded').should.equal(false);
       });
 
       it('notifies listers of state change', () => {
         const [app, listener] = setup(HOME);
 
-        dispatch(app, NavConstants.NAV_TOGGLED);
-        //listener.should.have.been.calledWith(Map({ page: HOME, expanded: true}));
+        app.navStore.toggle();
+        shouldHaveBeenCalledNthTimeWithImmutable(
+          listener, 0, Map({ page: HOME, expanded: true }));
 
-        dispatch(app, NavConstants.NAV_TOGGLED);
-        //listener.should.have.been.calledWith(Map({ page: HOME, expanded: false }));
-        listener.should.have.been.calledTwice;
-
-      });
-
-      it('responds to both NAV_TOGGLED and PAGE_SELECTED', () => {
-        const [app, listener] = setup(HOME);
-
-        dispatch(app, NavConstants.NAV_TOGGLED);
-        app.navStore.state.get('expanded').should.equal(true);
-
-        dispatch(app, NavConstants.PAGE_REQUESTED);
-        app.navStore.state.get('expanded').should.equal(false);
-
-        listener.should.have.been.calledTwice;
+        app.navStore.toggle();
+        shouldHaveBeenCalledNthTimeWithImmutable(
+          listener, 1, Map({ page: HOME, expanded: false }));
       });
     });
   });
