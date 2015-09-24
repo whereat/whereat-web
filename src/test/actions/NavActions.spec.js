@@ -36,7 +36,7 @@ describe('NavActions', () => {
 
     describe('sec', () => {
 
-      it.only("dispatched PAGE_REQUESTED 'sec'", () => {
+      it("dispatched PAGE_REQUESTED 'sec'", () => {
         const app = setup();
         app.navActions.goto(SEC);
 

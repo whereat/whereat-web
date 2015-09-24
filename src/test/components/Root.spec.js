@@ -87,7 +87,7 @@ describe('Root component', () => {
 
     describe('#_alertSecurity', () => {
 
-      it.only('shows security alert once and only once on load', () => {
+      it('shows security alert once and only once on load', () => {
 
         const [app, comp, {goto} ] = setup();
 
