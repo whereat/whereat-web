@@ -1,8 +1,8 @@
 const chai = require('chai');
 const Application = require('../../app/application');
 const NavConstants = require('../../app/constants/NavConstants');
-const { HOME, MAP } = require('../../app/constants/Pages');
 const { hasDispatched, createApplication } = require('marty/test-utils');
+import { HOME, MAP, SEC } from '../../app/constants/Pages';
 
 const should = chai.should();
 
@@ -34,7 +34,17 @@ describe('NavActions', () => {
       });
     });
 
-    describe('toggle', () => {
+    describe('sec', () => {
+
+      it("dispatched PAGE_REQUESTED 'sec'", () => {
+        const app = setup();
+        app.navActions.goto(SEC);
+
+        hasDispatched(app, NavConstants.PAGE_REQUESTED, SEC).should.equal(true);
+      });
+    });
+
+    describe('#toggle', () => {
 
       it('toggles nav between expanded and collapsed states', () => {
 

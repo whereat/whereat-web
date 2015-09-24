@@ -2,6 +2,7 @@ const Marty = require('marty');
 const BaseComponent = require('./BaseComponent.jsx');
 const Header = require('./Header.jsx');
 const Display = require('./Display.jsx');
+import { SEC } from '../constants/Pages';
 
 const sc = require('../modules/scheduler');
 const everyMinute = 60 * 1000;
@@ -27,8 +28,11 @@ Root
 class Root extends BaseComponent {
   constructor(){
     super();
-    this.state = { hasScheduled: false };
-    this.bindAll('_scheduleOnce', '_forget');
+    this.state = {
+      forgetScheduled: false,
+      securityAlerted: false
+    };
+    this.bindAll('_scheduleForget', '_forget');
   }
 
   render(){
@@ -41,19 +45,28 @@ class Root extends BaseComponent {
   };
 
   componentDidMount(){
-    this._scheduleOnce();
+    this._scheduleForget();
+    this._alertSecurity();
   }
 
-  _scheduleOnce(){
-    if (!this.state.hasScheduled) {
+  _scheduleForget(){
+    if (!this.state.forgetScheduled) {
       sc.schedule(this._forget, everyMinute);
-      this.setState({hasScheduled: true});
+      this.setState({forgetScheduled: true});
     }
   }
 
   _forget(){
     this.app.locSubActions.forget();
   }
+
+  _alertSecurity(){
+    if(!this.state.securityAlerted){
+      this.app.navActions.goto(SEC);
+      this.setState({securityAlerted: true});
+    }
+  }
+
 
 
 }

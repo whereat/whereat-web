@@ -14,7 +14,7 @@ const Display = require('../../app/components/Display');
 const HomePage = require('../../app/components/HomePage');
 const MapPage = require('../../app/components/MapPage');
 const MockComponent = require('../support/mocks/MockComponent');
-const { HOME, MAP } = require('../../app/constants/Pages');
+const { HOME, MAP, SEC } = require('../../app/constants/Pages');
 
 describe('Display Component', () => {
 
@@ -62,6 +62,16 @@ describe('Display Component', () => {
 
           d.getProp('page').should.equal(MAP);
           d.mapPage.should.exist;
+        });
+      });
+
+      describe('when `page` prop is SEC', () => {
+
+        it('renders SecurityPage component', () => {
+          const [app, d] = setup(SEC);
+
+          d.getProp('page').should.equal(SEC);
+          d.securityPage.should.exist;
         });
       });
     });
