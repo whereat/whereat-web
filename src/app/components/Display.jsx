@@ -1,8 +1,9 @@
 const Marty = require('marty');
 const BaseComponent = require('./BaseComponent');
-const { HOME, MAP } = require('../constants/Pages');
+const { HOME, MAP, SEC } = require('../constants/Pages');
 const HomePage = require('./HomePage');
 const MapPage = require('./MapPage');
+const SecurityPage = require('./SecurityPage');
 const NotificationContainer = require('./NotificationContainer');
 
 class Display extends BaseComponent {
@@ -11,7 +12,8 @@ class Display extends BaseComponent {
       <div id="display">
         {{
           [HOME]: () => <HomePage ref='homePage' />,
-          [MAP]: () => <MapPage ref='mapPage' />
+          [MAP]: () => <MapPage ref='mapPage' />,
+          [SEC]: () => <SecurityPage ref='securityPage' />
          }[this.props.page]()}
         <NotificationContainer />
       </div>
