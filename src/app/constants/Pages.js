@@ -1,4 +1,5 @@
 module.exports = {
   HOME: 'home',
-  MAP: 'map'
+  MAP: 'map',
+  SEC: 'sec'
 };

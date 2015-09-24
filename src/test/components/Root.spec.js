@@ -10,31 +10,32 @@ const { createApplication } = require('marty/test-utils');
 
 const MockComponent = require('../support/mocks/MockComponent');
 const Root = require('../../app/components/Root');
+import { HOME, SEC } from '../../app/constants/Pages';
 const sc = require('../../app/modules/scheduler');
+
+import { merge } from 'lodash';
 
 
 describe('Root component', () => {
 
   const setup = (state) => {
-
     const spies = {
-      forget: sinon.spy()
+      locSub: { forget: sinon.spy() },
+      nav: { goto: sinon.spy() }
     };
-
     const app = createApplication(Application, {
-      include: ['locSubActions'],
+      include: ['locSubActions', 'navActions'],
       stub: {
-        locSubActions: spies
+        locSubActions: spies.locSub,
+        navActions: spies.nav
       }
     });
-
     const component = propTree(app);
 
-    return [app, component, spies];
+    return [app, component, merge({}, spies.locSub, spies.nav)];
   };
   const propTree = (app) =>testTree(<Root.InnerComponent />,settings(app));
   const tree = (app) => testTree(<Root />, settings(app));
-
   const settings = (app) => ({
     context: { app: app },
     stub: {
@@ -53,7 +54,7 @@ describe('Root component', () => {
     });
   });
 
-  describe.only('events', () => {
+  describe('events', () => {
 
     describe('#_forget', () =>{
 
@@ -66,7 +67,7 @@ describe('Root component', () => {
       });
     });
 
-    describe('_#scheduleOnce', () => {
+    describe('_#scheduleForget', () => {
 
       it('schedules forgetting once and only once', () => {
 
@@ -79,8 +80,21 @@ describe('Root component', () => {
           60 * 1000
         );
 
-        comp.element._scheduleOnce();
+        comp.element._scheduleForget();
         schedule.should.have.callCount(1);
+      });
+    });
+
+    describe('#_alertSecurity', () => {
+
+      it('shows security alert once and only once on load', () => {
+
+        const [app, comp, {goto} ] = setup();
+
+        goto.should.have.been.calledWith(SEC);
+
+        comp.element._alertSecurity();
+        goto.should.have.callCount(1);
       });
     });
   });

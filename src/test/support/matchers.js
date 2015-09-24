@@ -18,4 +18,8 @@ matchers.shouldHaveObjectEquality = (obj1, obj2) => (
 matchers.shouldHaveBeenCalledWithImmutable = (listener, state) => (
   listener.getCall(0).args[0].equals(state).should.equal(true));
 
+
+matchers.shouldHaveBeenCalledNthTimeWithImmutable = (listener, n, state) => (
+  listener.getCall(n).args[0].equals(state).should.equal(true));
+
 module.exports = matchers;

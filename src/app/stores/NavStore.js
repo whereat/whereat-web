@@ -1,6 +1,6 @@
 const Marty = require('marty');
 const NavConstants = require('../constants/NavConstants');
-const { HOME, MAP } = require('../constants/Pages');
+const { HOME, MAP, SEC } = require('../constants/Pages');
 const { Map } = require('immutable');
 
 class NavStore extends Marty.Store {
@@ -14,7 +14,8 @@ class NavStore extends Marty.Store {
 
     this.handlers = {
       goto: NavConstants.PAGE_REQUESTED,
-      toggle: [NavConstants.NAV_TOGGLED, NavConstants.PAGE_REQUESTED]
+      hide: NavConstants.PAGE_REQUESTED,
+      toggle: NavConstants.NAV_TOGGLED
     };
   }
 
@@ -26,9 +27,15 @@ class NavStore extends Marty.Store {
   }
 
   // () -> Unit
+  hide(){
+    this.replaceState(this.state.set('expanded', false));
+  }
+
+  // () -> Unit
   toggle(){
     this.replaceState(this.state.set('expanded', !this.state.get('expanded')));
   }
+
 
   //ACCESSORS
 
