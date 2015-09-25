@@ -36,7 +36,7 @@ describe('SecurityPage component', () => {
       sp.secBlurb.should.exist;
       sp.secBlurb.getClassName().should.equal('secBlurb');
       sp.secButton.should.exist;
-      sp.secButton.getClassName().should.equal('secButton btn btn-primary');
+      sp.secButton.getClassName().should.equal('secButton btn btn-lg btn-primary');
     });
   });
 
