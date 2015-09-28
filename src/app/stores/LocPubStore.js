@@ -1,5 +1,4 @@
 const Marty = require('marty');
-const uuid = require('node-uuid');
 const { Map, Record, fromJS } = require('immutable');
 
 const LocPubConstants = require('../constants/LocPubConstants');
