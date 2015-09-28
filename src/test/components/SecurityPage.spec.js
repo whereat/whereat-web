@@ -37,6 +37,8 @@ describe('SecurityPage component', () => {
       sp.secBlurb.getClassName().should.equal('secBlurb');
       sp.secButton.should.exist;
       sp.secButton.getClassName().should.equal('secButton btn btn-lg btn-primary');
+      sp.staySafeLink.should.exist;
+      sp.staySafeLink.getAttribute('href').should.equal('https://about.whereat.io/stay-safe');
     });
   });
 
