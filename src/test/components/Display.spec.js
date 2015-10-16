@@ -14,7 +14,7 @@ const Display = require('../../app/components/Display');
 const HomePage = require('../../app/components/HomePage');
 const MapPage = require('../../app/components/MapPage');
 const MockComponent = require('../support/mocks/MockComponent');
-const { HOME, MAP, SEC } = require('../../app/constants/Pages');
+const { HOME, MAP, SEC, SET } = require('../../app/constants/Pages');
 
 describe('Display Component', () => {
 
@@ -74,6 +74,17 @@ describe('Display Component', () => {
           d.securityPage.should.exist;
         });
       });
+
+      describe('when `page` prop is SET', () => {
+
+        it('renders SecurityPage component', () => {
+          const [app, d] = setup(SET);
+
+          d.getProp('page').should.equal(SET);
+          d.settingsPage.should.exist;
+        });
+      });
+
     });
   });
 
@@ -89,6 +100,11 @@ describe('Display Component', () => {
         const d2 = tree(app);
 
         d2.innerComponent.getProp('page').should.equal(MAP);
+
+        app.navStore.replaceState(Map({ page: SET }));
+        const d3 = tree(app);
+
+        d3.innerComponent.getProp('page').should.equal(SET);
       });
     });
   });

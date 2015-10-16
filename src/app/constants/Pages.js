@@ -1,5 +1,6 @@
 module.exports = {
   HOME: 'home',
   MAP: 'map',
-  SEC: 'sec'
+  SEC: 'sec',
+  SET: 'settings'
 };
