@@ -7,10 +7,11 @@ const NotificationConstants = require('../constants/NotificationConstants');
 const LocPubConstants = require('../constants/LocPubConstants');
 const LocSubConstants = require('../constants/LocSubConstants');
 const GoButtonConstants = require('../constants/GoButtonConstants');
-const { FLASH_INTERVAL, NOTIFICATION_INTERVAL } = require('../constants/Intervals');
+const { FLASH_INTERVAL, NOTIFICATION_INTERVAL, USER_LOCATION_INTERVAL } = require('../constants/Intervals');
 const Location = require('../models/Location');
 const UserLocation = require('../models/UserLocation');
 const { partial } = require('lodash');
+const sc = require('../modules/scheduler');
 
 class LocPubActions extends Marty.ActionCreators {
 
@@ -34,44 +35,28 @@ class LocPubActions extends Marty.ActionCreators {
 
   // (Geo, Number, Number) -> Promise[Unit]
   ping(g = geo, pi = FLASH_INTERVAL, ni = NOTIFICATION_INTERVAL){
-    return Promise.all([
-      g.get()
-        .catch(err => Promise.reject(this.app.notificationActions.notify(err)))
-        .then(pos => this.publish(pos, ni))
-        .then(() => this.app.notificationActions.notify('Press and hold to keep on.')),
-      this._flash(pi)
-    ]);
+    return g.get()
+      .catch(err => Promise.reject(this.app.notificationActions.notify(err)))
+      .then(pos => this.publish(pos, ni));
   }
 
-  // (Number) -> Promise[Unit]
-  _flash(interval){
-    return Promise.resolve(this.dispatch(GoButtonConstants.GO_BUTTON_ON))
-      .then(() => wait(interval))
-      .then(() => Promise.resolve(
-        this.dispatch(GoButtonConstants.GO_BUTTON_OFF)));
+  // (Number, Number) -> Promise[Unit]
+  poll(ni = NOTIFICATION_INTERVAL, pi = USER_LOCATION_INTERVAL){
+    const id = sc.schedule(this.app.locPubActions.ping.bind(this), pi * 1000);
+    this.dispatch(GoButtonConstants.GO_BUTTON_ON);
+    this.dispatch(LocPubConstants.POLLING_ON, id);
+    return Promise.resolve(
+      this.app.notificationActions.notify('Location sharing on.', ni));
   }
 
-  // (Geo, Number) -> Promise[Unit]
-  poll(g = geo, ni = NOTIFICATION_INTERVAL){
-    const id = g.poll(
-      this.app.locPubActions.publish.bind(this),
-      () => this.app.notificationActions.notify('Phone not providing location.')
-    );
-    return Promise
-      .resolve(this.dispatch(GoButtonConstants.GO_BUTTON_ON))
-      .then(() => Promise.resolve(this.dispatch(LocPubConstants.POLLING_ON, id)))
-      .then(() => this.app.notificationActions.notify('Location sharing on.', ni));
+  // (Number, Number) -> Promise[Unit]
+  stopPolling(id, ni = NOTIFICATION_INTERVAL){
+    sc.cancel(id);
+    this.dispatch(GoButtonConstants.GO_BUTTON_OFF);
+    this.dispatch(LocPubConstants.POLLING_OFF);
+    return Promise.resolve(
+      this.app.notificationActions.notify('Location sharing off.', ni));
   }
-
-  // (Number, Geo, Number) -> Promise[Unit]
-  stopPolling(id, g = geo, ni = NOTIFICATION_INTERVAL ){
-    g.stopPolling(id);
-    return Promise
-      .resolve(this.dispatch(GoButtonConstants.GO_BUTTON_OFF))
-      .then(() => Promise.resolve(this.dispatch(LocPubConstants.POLLING_OFF)))
-      .then(() => this.app.notificationActions.notify('Location sharing off.', ni));
-  }
-
 }
 
 module.exports = LocPubActions;

@@ -11,7 +11,7 @@ class GoButton extends BaseComponent {
 
   constructor(){
     super();
-    this.bindAll('_handlePress', '_handleClick');
+    this.bindAll('_handleClick');
     this.events = { onClick: this._handleClick, onPress: this._handlePress };
   }
 
@@ -26,17 +26,10 @@ class GoButton extends BaseComponent {
   };
 
   _handleClick(){
-    if (!this.props.polling) {
-      this.app.locPubActions.ping();
-    }
-  }
-
-  _handlePress(){
     this.props.polling ?
       this.app.locPubActions.stopPolling(this.props.pollId) :
       this.app.locPubActions.poll();
   }
-
 }
 
 module.exports = Marty.createContainer(GoButton, {
