@@ -1,5 +1,4 @@
 module.exports = {
   USER_LOCATION_INTERVAL: 5, // in sec
-  FLASH_INTERVAL: .1,
   NOTIFICATION_INTERVAL: 1.5
 };
