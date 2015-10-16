@@ -98,61 +98,25 @@ describe('GoButton Component', () => {
 
       describe('when polling is off', () => {
 
-        it('calls locPubActions#ping', () => {
-          const [app, {ping}] = setup(emptyState);
-          const gb = tree(app);
-          gb.innerComponent.click();
-
-          ping.should.have.been.calledOnce;
-        });
-      });
-
-      describe('when polling is on', () => {
-
-        it('does nothing', () => {
-          const [app, {ping}] = setup(pollState);
-          const gb = tree(app);
-          gb.innerComponent.click();
-
-          ping.should.not.have.been.called;
-        });
-      });
-    });
-
-    describe('pressing go button', () => {
-
-      const press = (node) => (
-        Promise.resolve()
-          .then(() => node.simulate.mouseDown())
-          .then(() => wait(1))
-          .then(() => node.simulate.mouseUp())
-      );
-
-      describe('when polling is off', () => {
-
-        it('calls locPubActions#poll', done => {
+        it('calls locPubActions#poll', () => {
           const [app, {poll, stopPolling}] = setup(emptyState);
           const gb = tree(app);
+          gb.innerComponent.click();
 
-          press(gb).should.be.fulfilled
-            .then(() => {
-              poll.should.have.been.calledOnce;
-              stopPolling.should.not.have.been.called;
-            }).should.notify(done);
+          poll.should.have.been.calledOnce;
+          stopPolling.should.not.have.been.called;
         });
       });
 
       describe('when polling is on', () => {
 
-        it('calls locPubActions#stopPolling', done => {
+        it('calls locPubActions#stopPolling', () => {
           const [app, {poll, stopPolling}] = setup(pollState);
           const gb = tree(app);
+          gb.innerComponent.click();
 
-          press(gb).should.be.fulfilled
-            .then(() => {
-              stopPolling.should.have.been.calledWith(1);
-              poll.should.not.have.been.called;
-            }).should.notify(done);
+          stopPolling.should.have.been.calledWith(1);
+          poll.should.not.have.been.called;
         });
       });
     });
