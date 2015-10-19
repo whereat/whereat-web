@@ -38,7 +38,7 @@ describe('Settings Store', () => {
     describe('#setShare', () => {
 
       it('handles SHARE_INTERVAL_CHANGED', () =>{
-        const app = setup(s1);
+        const [app] = setup(s1);
         const setShare = sinon.spy(app.settingsStore, 'setShare');
         dispatch(app, SettingsConstants.SHARE_INTERVAL_CHANGED, 2);
 
@@ -48,7 +48,7 @@ describe('Settings Store', () => {
       });
 
       it('updates the `share` field', () => {
-        const app = setup(s1);
+        const [app] = setup(s1);
         app.settingsStore.setShare(2);
 
         shouldHaveObjectEquality(app.settingsStore.state, s2);

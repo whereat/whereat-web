@@ -55,4 +55,4 @@ class SettingsPage extends BaseComponent {
   }
 }
 
-module.exports = Marty.createContainer(SettingsPage);
+export default Marty.createContainer(SettingsPage);

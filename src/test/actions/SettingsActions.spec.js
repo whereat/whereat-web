@@ -22,7 +22,7 @@ describe('SettingsActions', () => {
 
   describe('#updateShare', () => {
 
-    it.only('dispatches SHARE_INTERVAL_CHANGED with new index', () => {
+    it('dispatches SHARE_INTERVAL_CHANGED with new index', () => {
 
       const app = setup();
       app.settingsActions.updateShare(3);
