@@ -22,7 +22,8 @@ class LocPubStore extends Marty.Store {
       setLoc: LocPubConstants.USER_LOCATION_ACQUIRED,
       setLastPing:[LocSubConstants.UPDATE_STARTING, LocSubConstants.REMOVE_STARTING],
       pollingOn: LocPubConstants.POLLING_ON,
-      pollingOff: LocPubConstants.POLLING_OFF
+      pollingOff: LocPubConstants.POLLING_OFF,
+      pollingReset: LocPubConstants.POLLING_RESET
     };
   }
 
@@ -48,6 +49,11 @@ class LocPubStore extends Marty.Store {
   pollingOff(){
     this.replaceState(
       this.state.mergeDeep( Map({ polling: false, pollId: -1 })));
+  }
+
+  // (Number) -> Unit
+  pollingReset(id){
+    this.replaceState(this.state.set('pollId', id));
   }
 
   //ACCESSORS

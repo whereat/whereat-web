@@ -175,6 +175,40 @@ describe('LocPubStore', () => {
         shouldHaveBeenCalledWithImmutable(listener, emptyState);
       });
     });
+
+    describe('#pollingReset', () => {
+
+      it('resets pollId field without resetting polling', () => {
+        const [app] = setup(pollState);
+        app.locPubStore.state.get('polling').should.beTrue;
+        app.locPubStore.state.get('pollId').should.equal(1);
+
+        app.locPubStore.pollingReset(2);
+
+        app.locPubStore.state.get('polling').should.beTrue;
+        app.locPubStore.state.get('pollId').should.equal(2);
+      });
+
+      it('handles POLLING_OFF', () => {
+        const [app, _] = setup(pollState);
+        app.locPubStore.state.get('polling').should.equal(true);
+        app.locPubStore.state.get('pollId').should.equal(1);
+        sinon.spy(app.locPubStore, 'pollingOff');
+
+        dispatch(app, LocPubConstants.POLLING_OFF);
+
+        app.locPubStore.pollingOff.should.have.been.calledOnce;
+        app.locPubStore.pollingOff.restore();
+      });
+
+      it('notifies listeners of state changes', () => {
+        const [app, listener] = setup(pollState);
+        app.locPubStore.pollingOff();
+
+        listener.should.have.been.calledOnce;
+        shouldHaveBeenCalledWithImmutable(listener, emptyState);
+      });
+    });
   });
 
   describe('accessors', () => {
