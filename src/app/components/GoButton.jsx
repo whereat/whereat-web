@@ -7,6 +7,9 @@ const { GO_RADIUS, GO_DIAMETER } = require('../constants/Dimensions');
 const { isSafari } = require('../modules/system');
 const cn = require('classname');
 
+import Settings from '../constants/Settings'
+const { share } = Settings;
+
 class GoButton extends BaseComponent {
 
   constructor(){
@@ -28,15 +31,18 @@ class GoButton extends BaseComponent {
   _handleClick(){
     this.props.polling ?
       this.app.locPubActions.stopPolling(this.props.pollId) :
-      this.app.locPubActions.poll();
+      this.app.locPubActions.poll(share[this.props.curShare]);
   }
 }
 
 module.exports = Marty.createContainer(GoButton, {
-  listenTo: ['goButtonStore', 'locPubStore'],
+  listenTo: ['goButtonStore', 'locPubStore', 'settingsStore'],
   fetch: {
-    color() {
+    color(){
       return this.app.goButtonStore.getColor();
+    },
+    curShare(){
+      return this.app.settingsStore.getShare();
     },
     polling(){
       return this.app.locPubStore.isPolling();

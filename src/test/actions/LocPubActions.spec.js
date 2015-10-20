@@ -140,7 +140,7 @@ describe('LocPubActions', () => {
       const ping = app.locPubActions.ping;
       const bind = sinon.stub(ping, 'bind', _ => ping);
 
-      app.locPubActions.poll(.0001, 1).should.be.fulfilled
+      app.locPubActions.poll(1, .0001).should.be.fulfilled
         .then(() => {
 
           schedule.should.have.been.calledWith(ping, 1000);
