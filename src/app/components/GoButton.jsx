@@ -31,7 +31,7 @@ class GoButton extends BaseComponent {
   _handleClick(){
     this.props.polling ?
       this.app.locPubActions.stopPolling(this.props.pollId) :
-      this.app.locPubActions.poll(share[this.props.curShare]);
+      this.app.locPubActions.poll(share.values[this.props.curShare]);
   }
 }
 
