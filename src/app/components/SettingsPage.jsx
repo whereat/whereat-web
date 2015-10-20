@@ -10,7 +10,7 @@ class SettingsPage extends BaseComponent {
 
   constructor(opts){
     super(opts);
-    this.bindAll('_menuItems', '_handleShareSelect');
+    this.bindAll('_menuItems', '_handleShareSelect', '_resetPolling');
     this.state = {
       curShare: 2
     };
@@ -51,15 +51,29 @@ class SettingsPage extends BaseComponent {
   }
 
   _handleShareSelect(index){
-    return () => this.app.settingsActions.setShare(index);
+    return () => {
+      if (this.props.isPolling) this._resetPolling(share[index]);
+      this.app.settingsActions.setShare(index);
+    };
+  }
+
+  _resetPolling(freq){
+    this.app.locPubActions.stopPolling(this.props.pollId);
+    this.app.locPubActions.poll(freq);
   }
 }
 
 export default Marty.createContainer(SettingsPage, {
-  listenTo: ['settingsStore'],
+  listenTo: ['settingsStore', 'locPubStore'],
   fetch: {
     curShare(){
       return this.app.settingsStore.getShare();
-    }
+    },
+    isPolling(){
+      return this.app.locPubStore.isPolling();
+    },
+    pollId(){
+      return this.app.locPubStore.getPollId();
+    },
   }
 });
