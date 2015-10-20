@@ -25,7 +25,7 @@ describe('SettingsActions', () => {
     it('dispatches SHARE_INTERVAL_CHANGED with new index', () => {
 
       const app = setup();
-      app.settingsActions.updateShare(3);
+      app.settingsActions.setShare(3);
 
       shouldHaveDispatchedWith(app, SettingsConstants.SHARE_INTERVAL_CHANGED, 3);
     });

@@ -59,7 +59,6 @@ describe('Settings Store', () => {
         app.settingsStore.setShare(2);
 
         shouldHaveBeenCalledWithImmutable(listener, s2);
-
       });
     });
   });

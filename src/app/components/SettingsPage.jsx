@@ -26,10 +26,10 @@ class SettingsPage extends BaseComponent {
           <DropdownButton
             ref='shareMenu'
             className='shareMenu'
-            title={share.labels[this.state.curShare]}
+            title={share.labels[this.props.curShare]}
             bsStyle='default'
             >
-            {this._menuItems('share', this.state.curShare, this._handleShareSelect)}
+            {this._menuItems('share', this.props.curShare, this._handleShareSelect)}
           </DropdownButton>
         </div>
       </div>
@@ -51,8 +51,15 @@ class SettingsPage extends BaseComponent {
   }
 
   _handleShareSelect(index){
-    return () => this.setState({curShare: index});
+    return () => this.app.settingsActions.setShare(index);
   }
 }
 
-export default Marty.createContainer(SettingsPage);
+export default Marty.createContainer(SettingsPage, {
+  listenTo: ['settingsStore'],
+  fetch: {
+    curShare(){
+      return this.app.settingsStore.getShare();
+    }
+  }
+});
