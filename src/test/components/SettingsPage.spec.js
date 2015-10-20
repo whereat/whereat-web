@@ -12,6 +12,7 @@ import { Map } from 'immutable';
 import {
   shouldHaveBeenCalledWith
 } from '../support/matchers';
+import { s1, s2 } from '../support/sampleSettings';
 
 
 import SettingsPage from '../../app/components/SettingsPage';
@@ -20,9 +21,6 @@ const { share } = Settings;
 
 
 describe('SettingsPage component', () => {
-
-  const s1 = Map({share: 1});
-  const s2 = Map({share: 2});
 
   const setup = (state) => {
 
