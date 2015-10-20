@@ -7,6 +7,12 @@ const should = chai.should();
 const Application = require('../../app/application');
 const { createStore, createApplication } = require('marty/test-utils');
 const testTree = require('react-test-tree');
+import { Map } from 'immutable';
+
+import {
+  shouldHaveBeenCalledWith
+} from '../support/matchers';
+
 
 import SettingsPage from '../../app/components/SettingsPage';
 import Settings from '../../app/constants/Settings';
@@ -15,15 +21,28 @@ const { share } = Settings;
 
 describe('SettingsPage component', () => {
 
+  const s1 = Map({share: 1});
+  const s2 = Map({share: 2});
+
   const setup = (state) => {
-    const app = createApplication(Application, {include: ['settingsStore'] });
+
+    const spies = {
+      setShare: sinon.spy(),
+      setTtl: sinon.spy()
+    };
+
+    const app = createApplication(Application, {
+      include: ['settingsStore'],
+      stub: { settingsActions: spies }
+    });
     app.settingsStore.state = state;
-    const component = propTree(app, state.get('curShare'));
-    return [app, component];
+
+    const component = propTree(app, state.get('share'));
+    return [app, component, spies];
   };
 
-  const propTree = (app, share, ttl) =>(
-    testTree(<SettingsPage.InnerComponent share={share} />, settings(app)));
+  const propTree = (app, share) =>(
+    testTree(<SettingsPage.InnerComponent curShare={share} />, specs(app)));
 
   const tree = (app) => testTree(<SettingsPage />, specs(app));
 
@@ -39,7 +58,7 @@ describe('SettingsPage component', () => {
     describe('on first load', () => {
 
       it('displays correctly', () => {
-        const comp = stateTree({curShare:2});
+        const [app, comp] = setup(s2);
 
         comp.settingsPage.should.exist;
         comp.settingsPage.getClassName().should.equal('settingsPage');
@@ -58,6 +77,37 @@ describe('SettingsPage component', () => {
             item.getClassName().should.equal('shareItem active') :
             item.getClassName().should.equal('shareItem');
         });
+      });
+    });
+  });
+
+  describe('reactivity', () => {
+
+    describe('curShare prop', () =>{
+
+      it('reacts to SettingsStore#getShare', () => {
+        const [app, comp] = setup(s1);
+        comp.getProp('curShare').should.equal(1);
+
+        app.settingsStore.setShare(2);
+        const comp2 = tree(app);
+        comp2.innerComponent.getProp('curShare').should.equal(2);
+      });
+    });
+  });
+
+  describe('interactivity', () => {
+
+    describe('#_handleShareSelect', () => {
+
+      it('calls settingsActions#setShare', () => {
+        const [app, comp, {setShare}] = setup(s1);
+
+        comp.shareItems2.simulate.select();
+        setShare.should.have.been.calledWith(2);
+
+        comp.shareItems3.simulate.select();
+        setShare.should.have.been.calledWith(3);
       });
     });
   });

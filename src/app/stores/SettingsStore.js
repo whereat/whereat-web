@@ -2,7 +2,6 @@ import Marty from 'marty';
 import { Map } from 'immutable';
 import SettingsConstants from '../constants/SettingsConstants';
 import Settings from '../constants/Settings';
-//const { share } = Settings;
 
 class SettingsStore extends Marty.Store {
 
