@@ -42,7 +42,7 @@ class LocPubActions extends Marty.ActionCreators {
 
   // (Number, Number) -> Promise[Unit]
   poll(pi = USER_LOCATION_INTERVAL, ni = NOTIFICATION_INTERVAL){
-    const id = sc.schedule(this.app.locPubActions.ping.bind(this), pi * 1000);
+    const id = sc.schedule(this.app.locPubActions.ping.bind(this), pi);
     this.dispatch(GoButtonConstants.GO_BUTTON_ON);
     this.dispatch(LocPubConstants.POLLING_ON, id);
     return Promise.resolve(

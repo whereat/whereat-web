@@ -23,8 +23,7 @@ import { s1, s2 } from '../support/sampleSettings';
 
 
 import SettingsPage from '../../app/components/SettingsPage';
-import Settings from '../../app/constants/Settings';
-const { share } = Settings;
+import { share } from '../../app/constants/Settings';
 
 
 describe('SettingsPage component', () => {
@@ -167,11 +166,11 @@ describe('SettingsPage component', () => {
 
           setShare.should.have.been.calledWith(2);
           stopPolling.should.have.been.calledWith(1);
-          poll.should.have.been.calledWith(share[2]);
+          poll.should.have.been.calledWith(share.values[2]);
 
           comp.shareItems3.simulate.select();
           stopPolling.should.have.been.calledWith(1);
-          poll.should.have.been.calledWith(share[3]);
+          poll.should.have.been.calledWith(share.values[3]);
         });
       });
     });
