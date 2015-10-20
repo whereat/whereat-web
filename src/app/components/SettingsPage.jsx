@@ -1,6 +1,8 @@
 import Marty from 'marty';
 import cn from 'classnames';
-import { DropdownButton, MenuItem } from 'react-bootstrap';
+import {
+  DropdownButton, MenuItem, Panel, SplitButton
+} from 'react-bootstrap';
 
 import BaseComponent from './BaseComponent';
 import settings from '../constants/Settings';
@@ -21,17 +23,17 @@ class SettingsPage extends BaseComponent {
     return (
       <div className='settingsPage' ref='settingsPage'>
         <div className='shareFreqContainer' ref='shareFreqContainer' >
-          <div className='shareFreqLabel' ref='shareFreqLabel'>
-            Share location every:
-          </div>
-          <DropdownButton
-            ref='shareFreqMenu'
-            className='shareFreqMenu'
-            title={shareFreq.labels[this.props.curShareFreq]}
-            bsStyle='default'
-            >
-            {this._menuItems('shareFreq', this.props.curShareFreq, this._handleShareFreqSelect)}
-          </DropdownButton>
+          <Panel header={<h1>Share location every:</h1>}>
+            <SplitButton
+              ref='shareFreqMenu'
+              id='shareFreqMenu'
+              className='settingsMenu'
+              title={shareFreq.labels[this.props.curShareFreq]}
+              bsStyle='default'
+              >
+              {this._menuItems('shareFreq', this.props.curShareFreq, this._handleShareFreqSelect)}
+            </SplitButton>
+          </Panel>
         </div>
       </div>
     );
