@@ -6,6 +6,7 @@ import BaseComponent from './BaseComponent';
 import settings from '../constants/Settings';
 const { share } = settings;
 
+
 class SettingsPage extends BaseComponent {
 
   constructor(opts){
@@ -52,8 +53,8 @@ class SettingsPage extends BaseComponent {
 
   _handleShareSelect(index){
     return () => {
-      if (this.props.isPolling) this._resetPolling(share[index]);
       this.app.settingsActions.setShare(index);
+      if (this.props.isPolling) this._resetPolling(share.values[index]);
     };
   }
 

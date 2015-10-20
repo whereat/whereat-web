@@ -143,7 +143,7 @@ describe('LocPubActions', () => {
       app.locPubActions.poll(1, .0001).should.be.fulfilled
         .then(() => {
 
-          schedule.should.have.been.calledWith(ping, 1000);
+          schedule.should.have.been.calledWith(ping, 1);
           bind.should.have.been.calledWith(app.locPubActions);
           shouldHaveDispatched(app, GoButtonConstants.GO_BUTTON_ON);
           shouldHaveDispatchedWith(app, LocPubConstants.POLLING_ON, 1);

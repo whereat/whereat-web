@@ -96,13 +96,13 @@ describe('GoButton Component', () => {
           gb.innerComponent.click();
 
           stopPolling.should.not.have.been.called;
-          poll.should.have.been.calledWith(share[1]);
+          poll.should.have.been.calledWith(share.values[1]);
 
           app.settingsStore.setShare(2);
           const gb2 = tree(app);
           gb2.innerComponent.click();
 
-          poll.should.have.been.calledWith(share[2]);
+          poll.should.have.been.calledWith(share.values[2]);
         });
       });
 
