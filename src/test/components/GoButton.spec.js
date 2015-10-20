@@ -1,23 +1,47 @@
-const sinon = require('sinon');
-const chai = require('chai');
-const sinonChai = require('sinon-chai');
+import sinon from 'sinon';
+import chai from 'chai';
+import sinonChai from 'sinon-chai';
+
 chai.use(sinonChai);
 const should = chai.should();
 
-const {wait} = require('../../app/modules/async');
-const { Map } = require('immutable');
+import { createStore, createApplication } from 'marty/test-utils';
+import testTree from 'react-test-tree';
+import { Map } from 'immutable';
 
-const Application = require('../../app/application');
-const { RED, GREEN } = require('../../app/constants/Colors');
-const { GO_RADIUS, GO_DIAMETER } = require('../../app/constants/Dimensions');
-const { s17, s17_, s17Nav, s17_Nav } = require('../support/sampleLocations');
+import Application from '../../app/application';
+import GoButton from '../../app/components/GoButton';
 
-const { createStore, createApplication } = require('marty/test-utils');
-const testTree = require('react-test-tree');
-
-const GoButton = require('../../app/components/GoButton');
+import { wait } from '../../app/modules/async';
+import { RED, GREEN } from '../../app/constants/Colors';
+import { GO_RADIUS, GO_DIAMETER } from '../../app/constants/Dimensions';
+import { s17, s17_, s17Nav, s17_Nav } from '../support/sampleLocations';
+import { emptyState, ping1State, ping2State, pollState} from '../support/sampleLocPubStates';
+import {s1, s2 } from '../support/sampleSettings';
+import { share } from '../../app/constants/Settings';
 
 describe('GoButton Component', () => {
+
+  const setup = (locPubState = emptyState, stgState = s1) => {
+    const spies = {
+      ping: sinon.spy(),
+      poll: sinon.spy(),
+      stopPolling: sinon.spy()
+    };
+    const app = createApplication(Application, {
+      include: ['goButtonStore', 'locPubStore', 'settingsStore'],
+      stub: { locPubActions: spies }
+    });
+    app.locPubStore.state = locPubState;
+    app.settingsStore.state = stgState;
+    return [app, spies];
+  };
+
+  const propTree = (app, color) => (
+    testTree(<GoButton.InnerComponent color={color}/>, settings(app)));
+  const tree = (app) => testTree(<GoButton />, settings(app));
+  const settings = (app) => ({context: { app: app }});
+
 
   describe('contents', () => {
 
@@ -62,49 +86,23 @@ describe('GoButton Component', () => {
 
   describe('events', () =>{
 
-    const emptyState = Map({ polling: false, pollId: -1, uid: s17.id, loc: Map() });
-    const ping1State = Map({ polling: false, pollId: -1, uid: s17.id, loc: Map(s17) });
-    const ping2State = Map({ polling: false, pollId: -1, uid: s17_.id, loc: Map(s17_) });
-    const pollState = Map({ polling: true, pollId: 1, uid: s17.id, loc: Map() });
-
-    const setup = (state) => {
-
-      const spies = {
-        ping: sinon.spy(),
-        poll: sinon.spy(),
-        stopPolling: sinon.spy()
-      };
-
-      const app = createApplication(Application, {
-        include: ['goButtonStore', 'locPubStore'],
-        stub: { locPubActions: spies }
-      });
-
-      app.locPubStore.state = state;
-
-      return [app, spies];
-    };
-
-    const propTree = (app, color) => (
-      testTree(<GoButton.InnerComponent color={color}/>, settings(app)));
-
-    const tree = (app) => testTree(<GoButton />, settings(app));
-
-    const settings = (app) => ({
-      context: { app: app }
-    });
-
     describe('clicking go button', () => {
 
       describe('when polling is off', () => {
 
-        it('calls locPubActions#poll', () => {
-          const [app, {poll, stopPolling}] = setup(emptyState);
+        it('calls locPubActions#poll with correct sharing interval', () => {
+          const [app, {poll, stopPolling}] = setup(emptyState, s1);
           const gb = tree(app);
           gb.innerComponent.click();
 
-          poll.should.have.been.calledOnce;
           stopPolling.should.not.have.been.called;
+          poll.should.have.been.calledWith(share[1]);
+
+          app.settingsStore.setShare(2);
+          const gb2 = tree(app);
+          gb2.innerComponent.click();
+
+          poll.should.have.been.calledWith(share[2]);
         });
       });
 

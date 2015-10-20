@@ -20,7 +20,9 @@ describe('Display Component', () => {
 
   const setup = (page) => {
 
-    const app = createApplication(Application, {include: ['navStore', 'goButtonStore', 'notificationStore'] });
+    const app = createApplication(Application,{
+      include: ['navStore', 'goButtonStore', 'notificationStore']
+    });
     app.navStore.state = Map({page: page});
 
     const component = propTree(app, page);
@@ -37,7 +39,8 @@ describe('Display Component', () => {
     context: { app: app },
     stub: {
       homePage: <MockComponent />,
-      mapPage: <MockComponent />
+      mapPage: <MockComponent />,
+      settingsPage: <MockComponent />
     }
   });
 
