@@ -151,5 +151,21 @@ describe('GoButton Component', () => {
         gb.innerComponent.getProp('pollId').should.equal(1);
       });
     });
+
+    describe('listening to SettingsStore', () =>{
+
+      it('changes when share setting changes', () =>{
+
+        const [app] = setup();
+        const gb = tree(app);
+
+        gb.innerComponent.getProp('curShare').should.equal(1);
+
+        app.settingsStore.setShare(2);
+        const gb2 = tree(app);
+
+        gb2.innerComponent.getProp('curShare').should.equal(2);
+      });
+    });
   });
 });
