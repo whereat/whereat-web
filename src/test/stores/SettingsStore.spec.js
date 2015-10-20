@@ -33,28 +33,28 @@ describe('Settings Store', () => {
 
   describe('handlers', () => {
 
-    describe('#setShare', () => {
+    describe('#setShareFreq', () => {
 
       it('handles SHARE_INTERVAL_CHANGED', () =>{
         const [app] = setup(s1);
-        const setShare = sinon.spy(app.settingsStore, 'setShare');
+        const setShareFreq = sinon.spy(app.settingsStore, 'setShareFreq');
         dispatch(app, SettingsConstants.SHARE_INTERVAL_CHANGED, 2);
 
-        setShare.should.have.been.calledWith(2);
+        setShareFreq.should.have.been.calledWith(2);
 
-        setShare.restore();
+        setShareFreq.restore();
       });
 
-      it('updates the `share` field', () => {
+      it('updates the `shareFreq` field', () => {
         const [app] = setup(s1);
-        app.settingsStore.setShare(2);
+        app.settingsStore.setShareFreq(2);
 
         shouldHaveObjectEquality(app.settingsStore.state, s2);
       });
 
       it('notifies listeners of state change', () =>{
         const [app, listener] = setup(s1);
-        app.settingsStore.setShare(2);
+        app.settingsStore.setShareFreq(2);
 
         shouldHaveBeenCalledWithImmutable(listener, s2);
       });
@@ -63,14 +63,14 @@ describe('Settings Store', () => {
 
   describe('accessors', () => {
 
-    describe('#getShare', () => {
+    describe('#getShareFreq', () => {
 
-      it('gets value of `share` field', () => {
+      it('gets value of `shareFreq` field', () => {
         const [app] = setup(s1);
-        app.settingsStore.getShare().should.equal(1);
+        app.settingsStore.getShareFreq().should.equal(1);
 
         const [app2] = setup(s2);
-        app2.settingsStore.getShare().should.equal(2);
+        app2.settingsStore.getShareFreq().should.equal(2);
       });
     });
   });

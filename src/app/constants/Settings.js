@@ -1,5 +1,5 @@
 module.exports = {
-  share: {
+  shareFreq: {
     labels: [
       '5 sec (most accurate)',
       '15 sec',

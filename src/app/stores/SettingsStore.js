@@ -8,25 +8,25 @@ class SettingsStore extends Marty.Store {
   constructor(options){
     super(options);
     this.state = Map({
-      share: 2
+      shareFreq: 2
     });
 
     this.handlers = {
-      setShare: SettingsConstants.SHARE_INTERVAL_CHANGED
+      setShareFreq: SettingsConstants.SHARE_INTERVAL_CHANGED
     };
   }
 
   //handlers
 
   //(Number) -> Unit
-  setShare(index){
-    this.replaceState(this.state.set('share', index));
+  setShareFreq(index){
+    this.replaceState(this.state.set('shareFreq', index));
   }
 
   //accessors
 
-  getShare(){
-    return this.state.get('share');
+  getShareFreq(){
+    return this.state.get('shareFreq');
   }
 }
 
