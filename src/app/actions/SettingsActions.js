@@ -4,7 +4,7 @@ const SettingsConstants = require('../constants/SettingsConstants');
 class SettingsActions extends Marty.ActionCreators {
 
   //(Number) -> Unit
-  setShare(index){
+  setShareFreq(index){
     this.dispatch(SettingsConstants.SHARE_INTERVAL_CHANGED, index);
   }
 

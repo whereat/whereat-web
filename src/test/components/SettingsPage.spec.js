@@ -23,7 +23,7 @@ import { s1, s2 } from '../support/sampleSettings';
 
 
 import SettingsPage from '../../app/components/SettingsPage';
-import { share } from '../../app/constants/Settings';
+import { shareFreq } from '../../app/constants/Settings';
 
 
 describe('SettingsPage component', () => {
@@ -31,13 +31,12 @@ describe('SettingsPage component', () => {
   const setup = (stgState = s1, locPubState = emptyState) => {
 
     const stgSpies = {
-      setShare: sinon.spy(),
+      setShareFreq: sinon.spy(),
       setTtl: sinon.spy()
     };
 
     const locPubSpies = {
-      poll: sinon.spy(),
-      stopPolling: sinon.spy()
+      resetPolling: sinon.spy()
     };
     const spies = merge({}, stgSpies, locPubSpies);
 
@@ -53,7 +52,7 @@ describe('SettingsPage component', () => {
 
     const component = propTree(
       app,
-      stgState.get('share'),
+      stgState.get('shareFreq'),
       locPubState.get('isPolling'),
       locPubState.get('pollId')
     );
@@ -61,9 +60,9 @@ describe('SettingsPage component', () => {
     return [app, component, spies];
   };
 
-  const propTree = (app, share, isPolling, pollId) =>
+  const propTree = (app, shareFreq, isPolling, pollId) =>
     testTree(<SettingsPage.InnerComponent
-               curShare={share}
+               curShareFreq={shareFreq}
                isPolling={isPolling}
                pollId={pollId}
              />, specs(app));
@@ -81,19 +80,19 @@ describe('SettingsPage component', () => {
         comp.settingsPage.should.exist;
         comp.settingsPage.getClassName().should.equal('settingsPage');
 
-        comp.shareContainer.should.exist;
-        comp.shareContainer.getClassName().should.equal('shareContainer');
-        comp.shareContainer.innerText.should.contain('Share location every:');
+        comp.shareFreqContainer.should.exist;
+        comp.shareFreqContainer.getClassName().should.equal('shareFreqContainer');
+        comp.shareFreqContainer.innerText.should.contain('Share location every:');
 
-        comp.shareMenu.should.exist;
-        comp.shareMenu.getClassName().should.equal('shareMenu btn-group');
-        comp.shareMenu.getProp('title').should.equal(share.labels[2]);
+        comp.shareFreqMenu.should.exist;
+        comp.shareFreqMenu.getClassName().should.equal('shareFreqMenu btn-group');
+        comp.shareFreqMenu.getProp('title').should.equal(shareFreq.labels[2]);
         [0,1,2,3,4].map(i => {
-          const item = comp[`shareItems${i}`];
+          const item = comp[`shareFreqItems${i}`];
           item.should.exist;
           i === 2 ?
-            item.getClassName().should.equal('shareItem active') :
-            item.getClassName().should.equal('shareItem');
+            item.getClassName().should.equal('shareFreqItem active') :
+            item.getClassName().should.equal('shareFreqItem');
         });
       });
     });
@@ -101,15 +100,15 @@ describe('SettingsPage component', () => {
 
   describe('reactivity', () => {
 
-    describe('curShare prop', () =>{
+    describe('curShareFreq prop', () =>{
 
-      it('reacts to SettingsStore#getShare', () => {
+      it('reacts to SettingsStore#getShareFreq', () => {
         const [app, comp] = setup(s1);
-        comp.getProp('curShare').should.equal(1);
+        comp.getProp('curShareFreq').should.equal(1);
 
-        app.settingsStore.setShare(2);
+        app.settingsStore.setShareFreq(2);
         const comp2 = tree(app);
-        comp2.innerComponent.getProp('curShare').should.equal(2);
+        comp2.innerComponent.getProp('curShareFreq').should.equal(2);
       });
     });
 
@@ -139,38 +138,38 @@ describe('SettingsPage component', () => {
 
   describe('interactivity', () => {
 
-    describe('#_handleShareSelect', () => {
+    describe('#_handleShareFreqSelect', () => {
 
       describe('when not polling', () => {
 
-        it('calls settingsActions#setShare but not reset polling', () => {
-          const [app, _, {poll, stopPolling, setShare}] = setup(s1);
+        it('calls settingsActions#setShareFreq but not reset polling', () => {
+          const [app, _, {resetPolling, setShareFreq}] = setup(s1);
           const comp = tree(app).innerComponent;
 
-          comp.shareItems2.simulate.select();
-          setShare.should.have.been.calledWith(2);
+          comp.shareFreqItems2.simulate.select();
+          setShareFreq.should.have.been.calledWith(2);
 
-          comp.shareItems3.simulate.select();
-          setShare.should.have.been.calledWith(3);
+          comp.shareFreqItems3.simulate.select();
+          setShareFreq.should.have.been.calledWith(3);
 
-          stopPolling.should.not.have.beenCalled;
-          poll.should.not.have.beenCalled;
+          resetPolling.should.not.have.beenCalled;
         });
+      });
 
-        it('calls settingsActions#setShare and resets polling', () => {
-          const [app, _, {poll, stopPolling, setShare}] = setup(s1, pollState);
+      describe('when polling', () => {
+
+        it('calls settingsActions#setShareFreq and resets polling', () => {
+          const [app, _, {resetPolling, setShareFreq}] = setup(s1, pollState);
           const comp = tree(app).innerComponent;
           comp.getProp('isPolling').should.beTrue;
 
-          comp.shareItems2.simulate.select();
+          comp.shareFreqItems2.simulate.select();
+          setShareFreq.should.have.been.calledWith(2);
+          resetPolling.should.have.been.calledWith(1, shareFreq.values[2]);
 
-          setShare.should.have.been.calledWith(2);
-          stopPolling.should.have.been.calledWith(1);
-          poll.should.have.been.calledWith(share.values[2]);
-
-          comp.shareItems3.simulate.select();
-          stopPolling.should.have.been.calledWith(1);
-          poll.should.have.been.calledWith(share.values[3]);
+          comp.shareFreqItems3.simulate.select();
+          setShareFreq.should.have.been.calledWith(3);
+          resetPolling.should.have.been.calledWith(1, shareFreq.values[3]);
         });
       });
     });

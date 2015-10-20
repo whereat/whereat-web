@@ -8,7 +8,7 @@ const { isSafari } = require('../modules/system');
 const cn = require('classname');
 
 import Settings from '../constants/Settings'
-const { share } = Settings;
+const { shareFreq } = Settings;
 
 class GoButton extends BaseComponent {
 
@@ -31,7 +31,7 @@ class GoButton extends BaseComponent {
   _handleClick(){
     this.props.polling ?
       this.app.locPubActions.stopPolling(this.props.pollId) :
-      this.app.locPubActions.poll(share.values[this.props.curShare]);
+      this.app.locPubActions.poll(shareFreq.values[this.props.curShareFreq]);
   }
 }
 
@@ -41,8 +41,8 @@ module.exports = Marty.createContainer(GoButton, {
     color(){
       return this.app.goButtonStore.getColor();
     },
-    curShare(){
-      return this.app.settingsStore.getShare();
+    curShareFreq(){
+      return this.app.settingsStore.getShareFreq();
     },
     polling(){
       return this.app.locPubStore.isPolling();

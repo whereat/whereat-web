@@ -4,33 +4,33 @@ import { DropdownButton, MenuItem } from 'react-bootstrap';
 
 import BaseComponent from './BaseComponent';
 import settings from '../constants/Settings';
-const { share } = settings;
+const { shareFreq } = settings;
 
 
 class SettingsPage extends BaseComponent {
 
   constructor(opts){
     super(opts);
-    this.bindAll('_menuItems', '_handleShareSelect', '_resetPolling');
+    this.bindAll('_menuItems', '_handleShareFreqSelect');
     this.state = {
-      curShare: 2
+      curShareFreq: 2
     };
   }
 
   render(){
     return (
       <div className='settingsPage' ref='settingsPage'>
-        <div className='shareContainer' ref='shareContainer' >
-          <div className='shareLabel' ref='shareLabel'>
+        <div className='shareFreqContainer' ref='shareFreqContainer' >
+          <div className='shareFreqLabel' ref='shareFreqLabel'>
             Share location every:
           </div>
           <DropdownButton
-            ref='shareMenu'
-            className='shareMenu'
-            title={share.labels[this.props.curShare]}
+            ref='shareFreqMenu'
+            className='shareFreqMenu'
+            title={shareFreq.labels[this.props.curShareFreq]}
             bsStyle='default'
             >
-            {this._menuItems('share', this.props.curShare, this._handleShareSelect)}
+            {this._menuItems('shareFreq', this.props.curShareFreq, this._handleShareFreqSelect)}
           </DropdownButton>
         </div>
       </div>
@@ -51,24 +51,23 @@ class SettingsPage extends BaseComponent {
     );
   }
 
-  _handleShareSelect(index){
+  _handleShareFreqSelect(index){
     return () => {
-      this.app.settingsActions.setShare(index);
-      if (this.props.isPolling) this._resetPolling(share.values[index]);
+      if (this.props.isPolling) {
+        this.app.locPubActions.resetPolling(
+          this.props.pollId,
+          shareFreq.values[index]);
+      }
+      this.app.settingsActions.setShareFreq(index);
     };
-  }
-
-  _resetPolling(freq){
-    this.app.locPubActions.stopPolling(this.props.pollId);
-    this.app.locPubActions.poll(freq);
   }
 }
 
 export default Marty.createContainer(SettingsPage, {
   listenTo: ['settingsStore', 'locPubStore'],
   fetch: {
-    curShare(){
-      return this.app.settingsStore.getShare();
+    curShareFreq(){
+      return this.app.settingsStore.getShareFreq();
     },
     isPolling(){
       return this.app.locPubStore.isPolling();

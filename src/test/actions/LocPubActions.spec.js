@@ -29,6 +29,7 @@ const sc = require('../../app/modules/scheduler');
 const { s17, s17Nav } = require('../support/sampleLocations');
 const { emptyState, ping1State, ping2State, pollState } = require('../support/samplePingStates');
 const { toJS } = require('immutable');
+import { merge } from 'lodash';
 
 describe('LocPubActions', () => {
 
@@ -44,6 +45,8 @@ describe('LocPubActions', () => {
       notify: sinon.spy()
     };
 
+    const spies = merge({}, locSubSpies, notifySpies);
+
     const app = createApplication(Application, {
       include: ['locPubActions'],
       stub: {
@@ -52,13 +55,13 @@ describe('LocPubActions', () => {
       }
     });
 
-    return [app, locSubSpies, notifySpies];
+    return [app, spies];
   };
 
   describe('#publish', () => {
 
     it('dispatches USER_LOCATION_ACQUIRED and passes loc to Notification and LocSub actions', done => {
-      const [app, {update}, {notify} ] = setup();
+      const [app, {update, notify} ] = setup();
       const _parseUserLoc = sinon.spy(app.locPubActions, '_parseUserLoc');
 
       app.locPubActions.publish(s17Nav, .0001).should.be.fulfilled
@@ -94,7 +97,7 @@ describe('LocPubActions', () => {
       const geoStub = { get: getStub };
 
       it('acquires user location, dispatches to stores, notifies user', done => {
-        const [app, _, {notify}] = setup();
+        const [app, {notify}] = setup();
         const publish = sinon.spy(app.locPubActions, 'publish');
 
         app.locPubActions.ping(geoStub, .0001, .0001).should.be.fulfilled
@@ -115,7 +118,7 @@ describe('LocPubActions', () => {
 
       it('notifies user', done => {
 
-        const [app, _, {notify}] = setup();
+        const [app, {notify}] = setup();
         const publish = sinon.spy(app.locPubActions, 'publish');
 
         app.locPubActions.ping(geoStub, .0001, .0001).should.be.rejected
@@ -135,7 +138,7 @@ describe('LocPubActions', () => {
 
     it('turns on location polling, dispatches, notifies user', (done) => {
 
-      const [app, _, {notify}] = setup();
+      const [app, {notify}] = setup();
       const schedule = sinon.stub(sc, 'schedule').returns(1);
       const ping = app.locPubActions.ping;
       const bind = sinon.stub(ping, 'bind', _ => ping);
@@ -161,7 +164,7 @@ describe('LocPubActions', () => {
 
     it('turns off user location polling, dispathces to stores, notifies user', (done) => {
 
-      const [app, _, {notify}] = setup();
+      const [app, {notify}] = setup();
       const cancel = sinon.spy(sc, 'cancel');
 
       app.locPubActions.stopPolling(1, .0001).should.be.fulfilled.then(() => {
@@ -172,6 +175,32 @@ describe('LocPubActions', () => {
         notify.should.have.been.calledWith('Location sharing off.', .0001);
 
         cancel.restore();
+      }).should.notify(done);
+    });
+  });
+
+  describe('#resetPolling', () => {
+
+    it('turns location polling off then on with new frequency', done => {
+
+      const [[app, {notify}], cancel, schedule] = [
+        setup(),
+        sinon.spy(sc, 'cancel'),
+        sinon.stub(sc, 'schedule').returns(2)
+      ];
+      const ping = app.locPubActions.ping;
+      const bind = sinon.stub(ping, 'bind', _ => ping);
+
+      app.locPubActions.resetPolling(1, 15, .0001).should.be.fulfilled.then(() => {
+
+        cancel.should.have.been.calledWith(1);
+        bind.should.have.been.calledWith(app.locPubActions);
+        schedule.should.have.been.calledWith(ping, 15);
+        shouldHaveDispatchedWith(app, LocPubConstants.POLLING_RESET, 2);
+        notify.should.have.been.calledWith('Location sharing restarted.', .0001);
+
+        cancel.restore();
+        schedule.restore();
       }).should.notify(done);
     });
   });

@@ -18,7 +18,7 @@ import { GO_RADIUS, GO_DIAMETER } from '../../app/constants/Dimensions';
 import { s17, s17_, s17Nav, s17_Nav } from '../support/sampleLocations';
 import { emptyState, ping1State, ping2State, pollState} from '../support/sampleLocPubStates';
 import {s1, s2 } from '../support/sampleSettings';
-import { share } from '../../app/constants/Settings';
+import { shareFreq } from '../../app/constants/Settings';
 
 describe('GoButton Component', () => {
 
@@ -96,13 +96,13 @@ describe('GoButton Component', () => {
           gb.innerComponent.click();
 
           stopPolling.should.not.have.been.called;
-          poll.should.have.been.calledWith(share.values[1]);
+          poll.should.have.been.calledWith(shareFreq.values[1]);
 
-          app.settingsStore.setShare(2);
+          app.settingsStore.setShareFreq(2);
           const gb2 = tree(app);
           gb2.innerComponent.click();
 
-          poll.should.have.been.calledWith(share.values[2]);
+          poll.should.have.been.calledWith(shareFreq.values[2]);
         });
       });
 
@@ -159,12 +159,12 @@ describe('GoButton Component', () => {
         const [app] = setup();
         const gb = tree(app);
 
-        gb.innerComponent.getProp('curShare').should.equal(1);
+        gb.innerComponent.getProp('curShareFreq').should.equal(1);
 
-        app.settingsStore.setShare(2);
+        app.settingsStore.setShareFreq(2);
         const gb2 = tree(app);
 
-        gb2.innerComponent.getProp('curShare').should.equal(2);
+        gb2.innerComponent.getProp('curShareFreq').should.equal(2);
       });
     });
   });
