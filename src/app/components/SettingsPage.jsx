@@ -6,14 +6,14 @@ import {
 
 import BaseComponent from './BaseComponent';
 import settings from '../constants/Settings';
-const { shareFreq } = settings;
+const { shareFreq, locTtl } = settings;
 
 
 class SettingsPage extends BaseComponent {
 
   constructor(opts){
     super(opts);
-    this.bindAll('_menuItems', '_handleShareFreqSelect');
+    this.bindAll('_menuItems', '_handleShareFreqSelect', '_handleLocTtlSelect');
     this.state = {
       curShareFreq: 2
     };
@@ -21,20 +21,39 @@ class SettingsPage extends BaseComponent {
 
   render(){
     return (
-      <div className='settingsPage' ref='settingsPage'>
-        <div className='shareFreqContainer' ref='shareFreqContainer' >
-          <Panel header={<h1>Share location every:</h1>}>
-            <SplitButton
-              ref='shareFreqMenu'
-              id='shareFreqMenu'
-              className='settingsMenu'
-              title={shareFreq.labels[this.props.curShareFreq]}
-              bsStyle='default'
-              >
-              {this._menuItems('shareFreq', this.props.curShareFreq, this._handleShareFreqSelect)}
-            </SplitButton>
-          </Panel>
-        </div>
+      <div ref='settingsPage'>
+
+        <Panel
+          header={<h1>Share location every:</h1>}
+          className="settingsPanel"
+          ref="shareFreqPanel"
+          >
+          <SplitButton
+            title={shareFreq.labels[this.props.curShareFreq]}
+            className='settingsMenu'
+            ref='shareFreqMenu'
+            refCollection='shareFreqMenuChildren'
+            >
+            {this._menuItems(
+              'shareFreq', this.props.curShareFreq, this._handleShareFreqSelect)}
+          </SplitButton>
+        </Panel>
+
+        <Panel
+          header={<h1>Delete locations after:</h1>}
+          className="settingsPanel"
+          ref="locTtlPanel"
+          >
+          <SplitButton
+            title={locTtl.labels[1]}
+            className='settingsMenu'
+            ref='locTtlMenu'
+            >
+            {this._menuItems(
+              'locTtl', this.props.curLocTtl, this._handleLocTtlSelect)}
+          </SplitButton>
+        </Panel>
+
       </div>
     );
   }
@@ -62,6 +81,10 @@ class SettingsPage extends BaseComponent {
       }
       this.app.settingsActions.setShareFreq(index);
     };
+  }
+
+  _handleLocTtlSelect(index){
+    return () => '';
   }
 }
 
