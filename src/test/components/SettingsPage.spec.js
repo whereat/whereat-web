@@ -23,10 +23,10 @@ import { s1, s2 } from '../support/sampleSettings';
 
 
 import SettingsPage from '../../app/components/SettingsPage';
-import { shareFreq } from '../../app/constants/Settings';
+import { shareFreq, locTtl } from '../../app/constants/Settings';
 
 
-describe('SettingsPage component', () => {
+describe.only('SettingsPage component', () => {
 
   const setup = (stgState = s1, locPubState = emptyState) => {
 
@@ -70,30 +70,49 @@ describe('SettingsPage component', () => {
   const tree = (app) => testTree(<SettingsPage />, specs(app));
   const specs = (app) => ({context: { app: app }});
 
-  describe('contents', () => {
+  describe.only('content', () => {
 
-    describe('on first load', () => {
+    const [app, comp] = setup(s2);
 
-      it('displays correctly', () => {
-        const [app, comp] = setup(s2);
+    it('displays wrapping div', () => {
+      comp.settingsPage.should.exist;
+    });
 
-        comp.settingsPage.should.exist;
-        comp.settingsPage.getClassName().should.equal('settingsPage');
+    it('displays share frequency menu', () => {
+      comp.shareFreqPanel.should.exist;
+      comp.shareFreqPanel.getClassName().should.equal('settingsPanel panel panel-default');
+      comp.shareFreqPanel.innerText.should.contain('Share location every:');
 
-        comp.shareFreqContainer.should.exist;
-        comp.shareFreqContainer.getClassName().should.equal('shareFreqContainer');
-        comp.shareFreqContainer.innerText.should.contain('Share location every:');
+      comp.shareFreqMenu.should.exist;
+      comp.shareFreqMenu.getClassName().should.equal('btn-group');
+      comp.shareFreqMenu.button.getClassName().should.equal('settingsMenu btn btn-default');
 
-        comp.shareFreqMenu.should.exist;
-        comp.shareFreqMenu.getClassName().should.equal('shareFreqMenu btn-group');
-        comp.shareFreqMenu.getProp('title').should.equal(shareFreq.labels[2]);
-        [0,1,2,3,4].map(i => {
-          const item = comp[`shareFreqItems${i}`];
-          item.should.exist;
-          i === 2 ?
-            item.getClassName().should.equal('shareFreqItem active') :
-            item.getClassName().should.equal('shareFreqItem');
-        });
+      comp.shareFreqMenu.getProp('title').should.equal(shareFreq.labels[2]);
+      [0,1,2,3,4].map(i => {
+        const item = comp[`shareFreqItems${i}`];
+        item.should.exist;
+        i === 2 ?
+          item.getClassName().should.equal('shareFreqItem active') :
+          item.getClassName().should.equal('shareFreqItem');
+      });
+    });
+
+    it('displays location ttl menu', () => {
+      comp.locTtlPanel.should.exist;
+      comp.locTtlPanel.getClassName().should.equal('settingsPanel panel panel-default');
+      comp.locTtlPanel.innerText.should.contain('Delete locations after:');
+
+      comp.locTtlMenu.should.exist;
+      comp.locTtlMenu.getClassName().should.equal('btn-group');
+      comp.locTtlMenu.button.getClassName().should.equal('settingsMenu btn btn-default');
+
+      comp.locTtlMenu.getProp('title').should.equal(locTtl.labels[1]);
+      [0,1,2].map(i => {
+        const item = comp[`locTtlItems${i}`];
+        item.should.exist;
+        i === 1 ?
+          item.getClassName().should.equal('locTtlItem active') :
+          item.getClassName().should.equal('locTtlItem');
       });
     });
   });
