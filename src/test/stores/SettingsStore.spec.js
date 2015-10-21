@@ -35,10 +35,10 @@ describe('Settings Store', () => {
 
     describe('#setShareFreq', () => {
 
-      it('handles SHARE_INTERVAL_CHANGED', () =>{
+      it('handles SHARE_FREQUENCY_CHANGED', () =>{
         const [app] = setup(s1);
         const setShareFreq = sinon.spy(app.settingsStore, 'setShareFreq');
-        dispatch(app, SettingsConstants.SHARE_INTERVAL_CHANGED, 2);
+        dispatch(app, SettingsConstants.SHARE_FREQUENCY_CHANGED, 2);
 
         setShareFreq.should.have.been.calledWith(2);
 
