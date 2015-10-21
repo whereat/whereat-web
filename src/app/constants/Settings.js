@@ -14,5 +14,17 @@ module.exports = {
       60000,
       300000
     ]
+  },
+  locTtl: {
+    labels: [
+      "30 min (most secure)",
+      "1 hr",
+      "2 hr (most info)"
+    ],
+    values: [
+      1800000,
+      3600000,
+      7200000
+    ]
   }
 };
