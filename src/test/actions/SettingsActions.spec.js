@@ -20,14 +20,25 @@ describe('SettingsActions', () => {
 
   const setup = () => createApplication(Application, { include: ['settingsActions']});
 
-  describe('#updateShare', () => {
+  describe('#setShareFreq', () => {
 
-    it('dispatches SHARE_INTERVAL_CHANGED with new index', () => {
+    it('dispatches SHARE_FREQUENCY_CHANGED with new index', () => {
 
       const app = setup();
       app.settingsActions.setShareFreq(3);
 
-      shouldHaveDispatchedWith(app, SettingsConstants.SHARE_INTERVAL_CHANGED, 3);
+      shouldHaveDispatchedWith(app, SettingsConstants.SHARE_FREQUENCY_CHANGED, 3);
+    });
+  });
+
+  describe('#setLocTtl', () => {
+
+    it('dispatches LOC_TTL_CHANGED with new index', () => {
+
+      const app = setup();
+      app.settingsActions.setLocTtl(1);
+
+      shouldHaveDispatchedWith(app, SettingsConstants.LOC_TTL_CHANGED, 1);
     });
   });
 });

@@ -12,7 +12,7 @@ class SettingsStore extends Marty.Store {
     });
 
     this.handlers = {
-      setShareFreq: SettingsConstants.SHARE_INTERVAL_CHANGED
+      setShareFreq: SettingsConstants.SHARE_FREQUENCY_CHANGED
     };
   }
 
