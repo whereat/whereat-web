@@ -8,11 +8,13 @@ class SettingsStore extends Marty.Store {
   constructor(options){
     super(options);
     this.state = Map({
-      shareFreq: 2
+      shareFreq: 2,
+      locTtl: 1
     });
 
     this.handlers = {
-      setShareFreq: SettingsConstants.SHARE_FREQUENCY_CHANGED
+      setShareFreq: SettingsConstants.SHARE_FREQUENCY_CHANGED,
+      setLocTtl: SettingsConstants.LOC_TTL_CHANGED
     };
   }
 
@@ -23,11 +25,22 @@ class SettingsStore extends Marty.Store {
     this.replaceState(this.state.set('shareFreq', index));
   }
 
+  // (Number) -> Unit
+  setLocTtl(index){
+    this.replaceState(this.state.set('locTtl', index));
+  }
+
   //accessors
 
   getShareFreq(){
     return this.state.get('shareFreq');
   }
+
+  getLocTtl(){
+    return this.state.get('locTtl');
+  }
+
+
 }
 
 export default SettingsStore;
