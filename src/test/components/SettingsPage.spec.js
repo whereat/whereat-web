@@ -26,7 +26,7 @@ import SettingsPage from '../../app/components/SettingsPage';
 import { shareFreq, locTtl } from '../../app/constants/Settings';
 
 
-describe.only('SettingsPage component', () => {
+describe('SettingsPage component', () => {
 
   const setup = (stgState = s1, locPubState = emptyState) => {
 
@@ -70,7 +70,7 @@ describe.only('SettingsPage component', () => {
   const tree = (app) => testTree(<SettingsPage />, specs(app));
   const specs = (app) => ({context: { app: app }});
 
-  describe.only('content', () => {
+  describe('content', () => {
 
     const [app, comp] = setup(s2);
 
@@ -110,8 +110,8 @@ describe.only('SettingsPage component', () => {
       [0,1,2].map(i => {
         const item = comp[`locTtlItems${i}`];
         item.should.exist;
-        i === 1 ?
-          item.getClassName().should.equal('locTtlItem active') :
+        // i === 1 ?
+        //   item.getClassName().should.equal('locTtlItem active') :
           item.getClassName().should.equal('locTtlItem');
       });
     });
