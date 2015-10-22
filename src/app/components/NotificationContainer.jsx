@@ -1,6 +1,6 @@
-const Marty = require('marty');
-const BaseComponent = require('./BaseComponent.jsx');
-const cx = require('classname');
+import Marty from 'marty';
+import BaseComponent from './BaseComponent.jsx';
+import cx from 'classname';
 
 class NotificationContainer extends BaseComponent {
   render(){
@@ -18,7 +18,7 @@ class NotificationContainer extends BaseComponent {
   };
 }
 
-module.exports = Marty.createContainer(NotificationContainer, {
+export default Marty.createContainer(NotificationContainer, {
   listenTo: ['notificationStore'],
   fetch: {
     visible(){

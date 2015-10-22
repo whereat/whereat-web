@@ -1,11 +1,11 @@
-const chai = require('chai');
+import chai from 'chai';
 const should = chai.should();
 
-const UserLocation = require('../../app/models/UserLocation');
-const Location = require('../../app/models/Location');
+import UserLocation from '../../app/models/UserLocation';
+import Location from '../../app/models/Location';
 
-const { s17, s17_, s17UL} = require('../support/sampleLocations');
-const { USER_ID } = require('../../app/constants/Keys');
+import { s17, s17_, s17UL} from '../support/sampleLocations';
+import { USER_ID } from '../../app/constants/Keys';
 
 describe('UserLocation Record', () => {
 

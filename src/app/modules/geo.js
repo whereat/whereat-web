@@ -1,4 +1,4 @@
-const { USER_LOCATION_INTERVAL } = require('../constants/Intervals');
+import { USER_LOCATION_INTERVAL } from '../constants/Intervals';
 
 const geo = {};
 
@@ -9,4 +9,4 @@ geo.get = (nav = navigator) => (
       reject('Phone not providing location.') :
       nav.geolocation.getCurrentPosition(p => resolve(p)))));
 
-module.exports = geo;
+export default geo;

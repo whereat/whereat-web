@@ -1,20 +1,20 @@
-const chai = require('chai');
-const chaiAsPromised = require('chai-as-promised');
+import chai from 'chai';
+import chaiAsPromised from 'chai-as-promised';
 const should = chai.should();
 chai.use(chaiAsPromised);
 
-const http = require('superagent');
-const config = require('../support/mocks/server/config');
+import http from 'superagent';
+import config from '../support/mocks/server/config';
 require('superagent-mock')(http, config);
 
-const api = require('../../app/modules/api');
-const { s17, s17UL, s17_, s17_UL } = require('../support/sampleLocations');
+import api from '../../app/modules/api';
+import { s17, s17UL, s17_, s17_UL } from '../support/sampleLocations';
 
-const Location = require('../../app/models/Location');
-const UserLocation = require('../../app/models/UserLocation');
-const UserLocationRefresh = require('../../app/models/UserLocationRefresh');
-const User = require('../../app/models/User');
-const { USER_ID } = require('../../app/constants/Keys');
+import Location from '../../app/models/Location';
+import UserLocation from '../../app/models/UserLocation';
+import UserLocationRefresh from '../../app/models/UserLocationRefresh';
+import User from '../../app/models/User';
+import { USER_ID } from '../../app/constants/Keys';
 
 describe('Location API', () => {
 

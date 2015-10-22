@@ -1,6 +1,6 @@
-const Marty = require('marty');
-const NotificationConstants = require('../constants/NotificationConstants');
-const { Map } = require('immutable');
+import Marty from 'marty';
+import NotificationConstants from '../constants/NotificationConstants';
+import { Map } from 'immutable';
 
 class NotificationStore extends Marty.Store {
 
@@ -39,4 +39,4 @@ class NotificationStore extends Marty.Store {
     return this.state.get('msg');
   }
 }
-module.exports = NotificationStore;
+export default NotificationStore;

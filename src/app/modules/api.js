@@ -1,4 +1,4 @@
-const http = require('superagent');
+import http from 'superagent';
 
 const api = {};
 
@@ -16,4 +16,4 @@ const post = (req, endpoint) => (new Promise(
     .send(req.toJS())
     .end((err, res) => err ? rej(err) : rslv(res.body))));
 
-module.exports = api;
+export default api;

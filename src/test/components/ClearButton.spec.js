@@ -1,18 +1,18 @@
-const sinon = require('sinon');
-const chai = require('chai');
-const sinonChai = require('sinon-chai');
+import sinon from 'sinon';
+import chai from 'chai';
+import sinonChai from 'sinon-chai';
 chai.use(sinonChai);
 const should = chai.should();
 
 
-const Application = require('../../app/application');
+import Application from '../../app/application';
 
-const { createApplication } = require('marty/test-utils');
-const testTree = require('react-test-tree');
-const { shouldHaveBeenCalledWithImmutable } = require('../support/matchers');
+import { createApplication } from 'marty/test-utils';
+import testTree from 'react-test-tree';
+import { shouldHaveBeenCalledWithImmutable } from '../support/matchers';
 
-const User = require('../../app/models/User');
-const ClearButton = require('../../app/components/ClearButton');
+import User from '../../app/models/User';
+import ClearButton from '../../app/components/ClearButton';
 
 describe('ClearButton Component', () => {
 

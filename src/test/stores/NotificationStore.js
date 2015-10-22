@@ -1,15 +1,15 @@
-const sinon = require('sinon');
-const chai = require('chai');
-const sinonChai = require('sinon-chai');
+import sinon from 'sinon';
+import chai from 'chai';
+import sinonChai from 'sinon-chai';
 const should = chai.should();
 chai.use(sinonChai);
 
-const Marty = require('marty');
-const Application = require('../../app/application');
-const { dispatch, createApplication } = require('marty/test-utils');
+import Marty from 'marty';
+import Application from '../../app/application';
+import { dispatch, createApplication } from 'marty/test-utils';
 
-const NotificationConstants = require('../../app/constants/NotificationConstants');
-const { Map, Seq } = require('immutable');
+import NotificationConstants from '../../app/constants/NotificationConstants';
+import { Map, Seq } from 'immutable';
 
 describe('NotificationStore', () => {
 

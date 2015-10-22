@@ -1,4 +1,4 @@
-const BaseComponent = require('../../../app/components/BaseComponent');
+import BaseComponent from '../../../app/components/BaseComponent';
 
 class MockComponent extends BaseComponent {
   render(){

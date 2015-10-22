@@ -1,7 +1,7 @@
-const Marty = require('marty');
-const { Map } = require('immutable');
-const GoButtonConstants = require('../constants/GoButtonConstants');
-const { RED, GREEN } = require('../constants/Colors');
+import Marty from 'marty';
+import { Map } from 'immutable';
+import GoButtonConstants from '../constants/GoButtonConstants';
+import { RED, GREEN } from '../constants/Colors';
 
 class GoButtonStore extends Marty.Store {
 
@@ -34,4 +34,4 @@ class GoButtonStore extends Marty.Store {
   }
 }
 
-module.exports = GoButtonStore;
+export default GoButtonStore;

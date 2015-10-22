@@ -1,7 +1,7 @@
-const BaseComponent = require('./BaseComponent.jsx');
-const Marty = require('marty');
-const { HOME, MAP, SET } = require('../constants/Pages');
-const { Navbar, Nav, NavItem } = require('react-bootstrap');
+import BaseComponent from './BaseComponent.jsx';
+import Marty from 'marty';
+import { HOME, MAP, SET } from '../constants/Pages';
+import { Navbar, Nav, NavItem } from 'react-bootstrap';
 
 class Header extends BaseComponent {
 
@@ -56,7 +56,7 @@ class Header extends BaseComponent {
   }
 }
 
-module.exports = Marty.createContainer(Header, {
+export default Marty.createContainer(Header, {
   listenTo: ['navStore'],
   fetch: {
     expanded(){

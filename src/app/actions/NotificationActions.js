@@ -1,7 +1,7 @@
-const Marty = require('marty');
-const NotificationConstants = require('../constants/NotificationConstants');
-const { NOTIFICATION_INTERVAL } = require('../constants/Intervals');
-const { wait } = require('../modules/async');
+import Marty from 'marty';
+import NotificationConstants from '../constants/NotificationConstants';
+import { NOTIFICATION_INTERVAL } from '../constants/Intervals';
+import { wait } from '../modules/async';
 
 class NotificationActions extends Marty.ActionCreators {
 
@@ -13,4 +13,4 @@ class NotificationActions extends Marty.ActionCreators {
   }
 }
 
-module.exports = NotificationActions;
+export default NotificationActions;
