@@ -12,24 +12,31 @@ const MockComponent = require('../support/mocks/MockComponent');
 const Root = require('../../app/components/Root');
 import { HOME, SEC } from '../../app/constants/Pages';
 const sc = require('../../app/modules/scheduler');
+import { s1t1, s1t2, s2t1, s2t2 } from '../support/sampleSettings';
+import stgs from '../../app/constants/Settings';
+const { locTtl: { values: ttls } } = stgs;
 
 import { merge } from 'lodash';
 
 
 describe('Root component', () => {
 
-  const setup = (state) => {
+  const setup = (state = s2t1) => {
     const spies = {
-      locSub: { forget: sinon.spy() },
+      locSub: {
+        forget: sinon.spy(),
+        scheduleForget: sinon.spy()
+      },
       nav: { goto: sinon.spy() }
     };
     const app = createApplication(Application, {
-      include: ['locSubActions', 'navActions'],
+      include: ['locSubActions', 'navActions', 'settingsStore'],
       stub: {
         locSubActions: spies.locSub,
         navActions: spies.nav
       }
     });
+    app.settingsStore.state = state;
     const component = propTree(app);
 
     return [app, component, merge({}, spies.locSub, spies.nav)];
@@ -54,7 +61,7 @@ describe('Root component', () => {
     });
   });
 
-  describe('events', () => {
+  describe('on-load events', () => {
 
     describe('#_forget', () =>{
 
@@ -70,18 +77,12 @@ describe('Root component', () => {
     describe('_#scheduleForget', () => {
 
       it('schedules forgetting once and only once', () => {
-
-        const schedule = sinon.spy(sc, 'schedule');
-        schedule.should.not.have.been.called;
-
-        const[app, comp] = setup();
-        schedule.should.have.been.calledWith(
-          comp.element._forget,
-          60 * 1000
-        );
+        const[app, comp, {scheduleForget}] = setup();
+        scheduleForget.should.have.been.calledWith(ttls[1]);
+        comp.element.state.forgetScheduled.should.beTrue;
 
         comp.element._scheduleForget();
-        schedule.should.have.callCount(1);
+        scheduleForget.should.have.callCount(1);
       });
     });
 
@@ -92,6 +93,7 @@ describe('Root component', () => {
         const [app, comp, {goto} ] = setup();
 
         goto.should.have.been.calledWith(SEC);
+        comp.element.state.securityAlerted.should.beTrue;
 
         comp.element._alertSecurity();
         goto.should.have.callCount(1);

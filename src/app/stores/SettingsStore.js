@@ -32,10 +32,12 @@ class SettingsStore extends Marty.Store {
 
   //accessors
 
+  // () -> Number
   getShareFreq(){
     return this.state.get('shareFreq');
   }
 
+  // () -> Number
   getLocTtl(){
     return this.state.get('locTtl');
   }
