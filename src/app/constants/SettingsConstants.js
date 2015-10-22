@@ -1,6 +1,6 @@
 import Marty from 'marty';
 
 export default Marty.createConstants([
-  'NAV_TOGGLED',
-  'PAGE_REQUESTED'
+  'SHARE_FREQUENCY_CHANGED',
+  'LOC_TTL_CHANGED'
 ]);

@@ -1,25 +1,33 @@
-const Marty = require('marty');
+import Marty from 'marty';
 
-const LocSubConstants = require('../constants/LocSubConstants');
-const LocPubConstants = require('../constants/LocPubConstants');
-const UserLocation = require('../models/UserLocation');
-const Location = require('../models/Location');
-const { convertPosition } = require('../models/LocationCompanion');
+import LocSubConstants from '../constants/LocSubConstants';
+import LocPubConstants from '../constants/LocPubConstants';
+import SettingsConstants from '../constants/SettingsConstants';
 
-const { Map, List } = require('immutable');
-const geo = require('../modules/geo');
+import UserLocation from '../models/UserLocation';
+import Location from '../models/Location';
+import { convertPosition } from '../models/LocationCompanion';
+
+import { Map, List } from 'immutable';
+import moment from 'moment';
+import geo from '../modules/geo';
+
 
 class LocSubStore extends Marty.Store {
 
   constructor(options){
     super(options);
-    this.state = Map({locs: Map()});
+    this.state = Map({locs: Map(), forgetJob: -1 });
     this.state.set('center', this.getCenter());
 
     this.handlers = {
       save: LocSubConstants.LOCATION_RECEIVED,
       saveMany: LocSubConstants.LOCATIONS_RECEIVED,
       clear: LocSubConstants.USER_REMOVED,
+      recordForgetJob: [
+        LocSubConstants.LOC_FORGET_SCHEDULED,
+        LocSubConstants.LOC_FORGET_RESCHEDULED
+      ],
       forget: LocSubConstants.LOCATION_FORGET_TRIGGERED
     };
   }
@@ -47,14 +55,18 @@ class LocSubStore extends Marty.Store {
   }
 
   // (Number) -> Unit
-  forget(now){
-    const hourAgo = now - (60 * 60 * 1000);
-    const expiredLocs = this.state.get('locs').valueSeq().filter(l => l.time <= hourAgo);
+  recordForgetJob(id){
+    this.replaceState(this.state.set('forgetJob', id));
+  }
+
+  // (Number, Number) -> Unit
+  forget(ttl, now){
+    const expired = this.state.get('locs')
+            .valueSeq()
+            .filter(l => l.time <= now - ttl);
     this.replaceState(
-      expiredLocs.reduce(
-        (acc, loc) => acc.deleteIn(['locs', loc.id]),
-        this.state,
-        this));
+      expired.reduce(
+        (acc, loc) => acc.deleteIn(['locs', loc.id]), this.state, this));
   }
 
   //ACCESSORS
@@ -82,6 +94,12 @@ class LocSubStore extends Marty.Store {
     return this.state.get('locs').valueSeq();
   }
 
+
+  // () -> Number
+  getForgetJob(){
+    return this.state.get('forgetJob');
+  }
+
 }
 
-module.exports = LocSubStore;
+export default LocSubStore;

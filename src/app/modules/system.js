@@ -8,4 +8,4 @@ sys.isSafari = () => {
   );
 };
 
-module.exports = sys;
+export default sys;

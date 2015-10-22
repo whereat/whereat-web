@@ -1,12 +1,16 @@
-const Marty = require('marty');
+import Marty from 'marty';
+import moment from 'moment';
 
-const api = require('../modules/api');
-const time = require('../modules/time');
+import api from '../modules/api';
+import time from '../modules/time';
+import sc from '../modules/scheduler';
 
-const LocSubConstants = require('../constants/LocSubConstants');
-const Location = require('../models/Location');
-const UserLocation = require('../models/UserLocation');
-const UserLocationRefresh = require('../models/UserLocationRefresh');
+import LocSubConstants from '../constants/LocSubConstants';
+import Location from '../models/Location';
+import UserLocation from '../models/UserLocation';
+import UserLocationRefresh from '../models/UserLocationRefresh';
+
+import { FORGET_INTERVAL, NOTIFICATION_INTERVAL } from '../constants/Intervals';
 
 class LocSubActions extends Marty.ActionCreators {
 
@@ -23,20 +27,36 @@ class LocSubActions extends Marty.ActionCreators {
   }
 
   // (User, () => Number)  -> Promise[Unit]
-  remove(user, now = time.now){
+  remove(user, now = time.now()){
     return Promise
-      .resolve(this.dispatch(LocSubConstants.REMOVE_STARTING, now())) // overwrites `lastPing`
+      .resolve(this.dispatch(LocSubConstants.REMOVE_STARTING, now)) // overwrites `lastPing`
       .then(() => api.remove(user))
       .then(() => this.dispatch(LocSubConstants.USER_REMOVED))
       .then(() => this.app.notificationActions.notify('User data removed from server.'));
   }
 
-  // (Number) => Unit
-  forget(now = time.now){
-    return Promise
-      .resolve(this.dispatch(LocSubConstants.LOCATION_FORGET_TRIGGERED, now()))
-      .then(() => this.app.notificationActions.notify('Erasing all pins older than 1 hour.'));
+  // (Number, Number) => Promise[Unit]
+  forget(ttl, now = time.now()){
+    this.dispatch(LocSubConstants.LOCATION_FORGET_TRIGGERED, ttl, now);
+    return Promise.resolve(
+      this.app.notificationActions.notify(
+        `Deleting location data older than ${moment(now - ttl).format('dddd h:mmA')}`));
+  }
+
+  // (Number) -> Unit
+  scheduleForget(ttl){
+    const id = sc.schedule(this.forget.bind(this, ttl), FORGET_INTERVAL);
+    this.dispatch(LocSubConstants.LOC_FORGET_SCHEDULED, id);
+  }
+
+  // (Number, Number) -> Unit
+  rescheduleForget(jobId, ttl, ni = NOTIFICATION_INTERVAL){
+    sc.cancel(jobId);
+    const id = sc.schedule(this.forget.bind(this, ttl), FORGET_INTERVAL);
+    this.dispatch(LocSubConstants.LOC_FORGET_RESCHEDULED, id);
+    return Promise.resolve(
+      this.app.notificationActions.notify('Restarting data deletion.'), ni);
   }
 }
 
-module.exports = LocSubActions;
+export default LocSubActions;

@@ -6,4 +6,4 @@ sc.schedule = (fn, millis) => setInterval(fn, millis);
 // (Cancellable) => Unit
 sc.cancel = (job) => clearInterval(job);
 
-module.exports = sc;
+export default sc;

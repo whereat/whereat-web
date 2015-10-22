@@ -1,39 +1,45 @@
-const sinon = require('sinon');
-const chai = require('chai');
-const sinonChai = require('sinon-chai');
-const chaiAsPromised = require('chai-as-promised');
+import sinon from'sinon';
+import chai from'chai';
+import sinonChai from'sinon-chai';
+import chaiAsPromised from'chai-as-promised';
 const should = chai.should();
 chai.use(sinonChai);
 chai.use(chaiAsPromised);
 
-const http = require('superagent');
-const config = require('../support/mocks/server/config');
+import http from'superagent';
 require('superagent-mock')(http, config);
-const api = require('../../app/modules/api');
+import moment from 'moment';
+import config from'../support/mocks/server/config';
+import api from'../../app/modules/api';
+import sc from '../../app/modules/scheduler';
+import time from'../../app/modules/time';
 
-const Application = require('../../app/application');
-const { createApplication, getDispatchedActionsWithType } = require('marty/test-utils');
-const {
+import Application from'../../app/application';
+import { createApplication, getDispatchedActionsWithType } from'marty/test-utils';
+import {
   shouldHaveDispatched,
   shouldHaveDispatchedWith,
+  shouldHaveDispatchedNthTimeWith,
   shouldHaveDispatchedWithImmutable,
   shouldHaveBeenCalledWithImmutable
-} = require('../support/matchers');
+} from'../support/matchers';
 
-const LocSubConstants = require('../../app/constants/LocSubConstants');
-const Location = require('../../app/models/Location');
-const UserLocation = require('../../app/models/UserLocation');
-const UserLocationRefresh = require('../../app/models/UserLocationRefresh');
-const User = require('../../app/models/User');
-const USER_ID = require('../../app/constants/Keys');
+import LocSubConstants from'../../app/constants/LocSubConstants';
+import Location from'../../app/models/Location';
+import UserLocation from'../../app/models/UserLocation';
+import UserLocationRefresh from'../../app/models/UserLocationRefresh';
+import User from'../../app/models/User';
+import USER_ID from'../../app/constants/Keys';
+import { FORGET_INTERVAL } from '../../app/constants/Intervals';
 
-const time = require('../../app/modules/time');
-const { s17, s17_, s17UL } = require('../support/sampleLocations');
-const { emptyState, ping1State, ping2State, pollState } = require('../support/samplePingStates');
+import { s17, s17_, s17UL } from'../support/sampleLocations';
+import { emptyState, ping1State, ping2State, pollState } from'../support/samplePingStates';
+import stgs from '../../app/constants/Settings';
+const { locTtl: { values: ttls } } = stgs;
 
 describe('LocSubActions', () => {
 
-  const setup = (state) => {
+  const setup = (state = emptyState) => {
 
     const notifySpies = {
       notify: sinon.spy()
@@ -113,7 +119,7 @@ describe('LocSubActions', () => {
       const [app, {notify}] = setup(ping2State);
       const remove = sinon.spy(api, 'remove');
 
-      app.locSubActions.remove(User(USER_ID), () => s17_.time).should.be.fulfilled
+      app.locSubActions.remove(User(USER_ID), s17_.time).should.be.fulfilled
         .then(() => {
 
           shouldHaveDispatchedWith( app, LocSubConstants.REMOVE_STARTING, s17_.time );
@@ -126,18 +132,121 @@ describe('LocSubActions', () => {
     });
   });
 
+  describe('#scheduleForget', () => {
+
+    it("schedules forget every minute with a given TTL param", () => {
+
+      const [app] = setup();
+      const schedule = sinon.stub(sc, 'schedule');
+      schedule.onCall(0).returns(0).onCall(1).returns(1);
+      const forget = app.locSubActions.forget;
+      const forgetPartials = [ttls[0], ttls[1]].map( ttl => () => forget(ttl));
+      const bind = sinon.stub(forget, 'bind');
+      bind.withArgs(app.locSubActions, ttls[0]).returns(forgetPartials[0]);
+      bind.withArgs(app.locSubActions, ttls[1]).returns(forgetPartials[1]);
+
+      app.locSubActions.scheduleForget(ttls[0]);
+      bind.should.have.been.calledWith(app.locSubActions, ttls[0]);
+      schedule.should.have.been.calledWith(forgetPartials[0], FORGET_INTERVAL);
+      shouldHaveDispatchedNthTimeWith(
+        app, 0, LocSubConstants.LOC_FORGET_SCHEDULED, 0);
+
+      app.locSubActions.scheduleForget(ttls[1]);
+      bind.should.have.been.calledWith(app.locSubActions, ttls[1]);
+      schedule.should.have.been.calledWith(forgetPartials[1]);
+      shouldHaveDispatchedNthTimeWith(
+        app, 1, LocSubConstants.LOC_FORGET_SCHEDULED, 1);
+
+      schedule.restore();
+      bind.restore();
+    });
+  });
+
+  describe('#rescheduleForget', () => {
+
+    it('cancels current forget job and schedules a new one with new ttl', () => {
+      const [app] = setup();
+      const schedule = sinon.stub(sc, 'schedule');
+      schedule.onCall(0).returns(0).onCall(1).returns(1);
+      const cancel = sinon.spy(sc, 'cancel');
+      const forget = app.locSubActions.forget;
+      const forgetPartials = [ttls[0], ttls[1]].map( ttl => () => forget(ttl));
+      const bind = sinon.stub(forget, 'bind');
+      bind.withArgs(app.locSubActions, ttls[0]).returns(forgetPartials[0]);
+      bind.withArgs(app.locSubActions, ttls[1]).returns(forgetPartials[1]);
+
+      app.locSubActions.rescheduleForget(-1, ttls[0]);
+      bind.should.have.been.calledWith(app.locSubActions, ttls[0]);
+      cancel.should.have.been.calledWith(-1);
+      schedule.should.have.been.calledWith(forgetPartials[0]);
+      shouldHaveDispatchedNthTimeWith(
+        app, 0, LocSubConstants.LOC_FORGET_RESCHEDULED, 0);
+
+      app.locSubActions.rescheduleForget(0, ttls[1]);
+      bind.should.have.been.calledWith(app.locSubActions, ttls[1]);
+      cancel.should.have.been.calledWith(0);
+      schedule.should.have.been.calledWith(forgetPartials[1]);
+      shouldHaveDispatchedNthTimeWith(
+        app, 1, LocSubConstants.LOC_FORGET_RESCHEDULED, 1);
+
+      schedule.restore();
+      cancel.restore();
+      bind.restore();
+
+
+    });
+  });
+
   describe('#forget', () => {
 
-    it('initates erasure of  LocationStore and notifies user', done => {
+    describe('when ttl is 30 min', () => {
 
-      const [app, {notify}] = setup(ping1State);
+      it('initiates deletion w/ specified ttl, notifies user', done => {
+        const [app, {notify}] = setup(ping1State);
 
-      app.locSubActions.forget(() => s17.time).should.be.fulfilled
-        .then(() => {
+        app.locSubActions.forget(ttls[0], s17.time).should.be.fulfilled.then(() => {
+
           shouldHaveDispatchedWith(
-            app, LocSubConstants.LOCATION_FORGET_TRIGGERED, s17.time);
-          notify.should.have.been.calledWith('Erasing all pins older than 1 hour.');
+            app, LocSubConstants.LOCATION_FORGET_TRIGGERED, ttls[0], s17.time);
+          notify.should.have.been.calledWith(
+            'Deleting location data older than Friday 11:30PM');
+
         }).should.notify(done);
+      });
     });
+
+    describe('when ttl is 1 hr', () => {
+
+      it('initiates deletion w/ specified ttl, notifies user', done => {
+        const [app, {notify}] = setup(ping1State);
+
+        app.locSubActions.forget(ttls[1], s17.time).should.be.fulfilled.then(() => {
+
+          shouldHaveDispatchedWith(
+            app, LocSubConstants.LOCATION_FORGET_TRIGGERED, ttls[1], s17.time);
+          notify.should.have.been.calledWith(
+            'Deleting location data older than Friday 11:00PM');
+
+        }).should.notify(done);
+      });
+    });
+
+    describe('when ttl is 2 hr', () => {
+
+      it('initiates deletion w/ specified ttl, notifies user', done => {
+        const [app, {notify}] = setup(ping1State);
+
+        app.locSubActions.forget(ttls[2], s17.time).should.be.fulfilled.then(() => {
+
+          shouldHaveDispatchedWith(
+            app, LocSubConstants.LOCATION_FORGET_TRIGGERED, ttls[2], s17.time);
+          notify.should.have.been.calledWith(
+            'Deleting location data older than Friday 10:00PM');
+
+        }).should.notify(done);
+      });
+    });
+
+
   });
 });

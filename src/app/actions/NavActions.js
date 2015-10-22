@@ -1,5 +1,5 @@
-const Marty = require('marty');
-const NavConstants = require('../constants/NavConstants');
+import Marty from 'marty';
+import NavConstants from '../constants/NavConstants';
 
 class NavActions extends Marty.ActionCreators {
 
@@ -14,4 +14,4 @@ class NavActions extends Marty.ActionCreators {
   }
 }
 
-module.exports = NavActions;
+export default NavActions;

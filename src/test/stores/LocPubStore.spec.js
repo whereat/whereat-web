@@ -1,23 +1,23 @@
-const sinon = require('sinon');
-const chai = require('chai');
-const sinonChai = require('sinon-chai');
+import sinon from 'sinon';
+import chai from 'chai';
+import sinonChai from 'sinon-chai';
 const should = chai.should();
 chai.use(sinonChai);
 
-const Marty = require('marty');
-const Application = require('../../app/application');
-const { Map } = require('immutable');
-const { dispatch, hasDispatched, createApplication } = require('marty/test-utils');
-const { shouldHaveObjectEquality, shouldHaveBeenCalledWithImmutable } = require('../support/matchers');
+import Marty from 'marty';
+import Application from '../../app/application';
+import { Map } from 'immutable';
+import { dispatch, hasDispatched, createApplication } from 'marty/test-utils';
+import { shouldHaveObjectEquality, shouldHaveBeenCalledWithImmutable } from '../support/matchers';
 
-const LocPubConstants = require('../../app/constants/LocPubConstants');
-const LocSubConstants = require('../../app/constants/LocSubConstants');
+import LocPubConstants from '../../app/constants/LocPubConstants';
+import LocSubConstants from '../../app/constants/LocSubConstants';
 
-const Location = require('../../app/models/Location');
-const UserLocation = require('../../app/models/UserLocation');
-const UserLocationRefresh = require('../../app/models/UserLocationRefresh');
-const { s17, s17_, s17Nav, s17_Nav } = require('../support/sampleLocations');
-const { emptyState, ping1State, ping2State, pollState } = require('../support/samplePingStates');
+import Location from '../../app/models/Location';
+import UserLocation from '../../app/models/UserLocation';
+import UserLocationRefresh from '../../app/models/UserLocationRefresh';
+import { s17, s17_, s17Nav, s17_Nav } from '../support/sampleLocations';
+import { emptyState, ping1State, ping2State, pollState } from '../support/samplePingStates';
 
 describe('LocPubStore', () => {
 
@@ -153,6 +153,40 @@ describe('LocPubStore', () => {
 
         app.locPubStore.state.get('polling').should.equal(false);
         app.locPubStore.state.get('pollId').should.equal(-1);
+      });
+
+      it('handles POLLING_OFF', () => {
+        const [app, _] = setup(pollState);
+        app.locPubStore.state.get('polling').should.equal(true);
+        app.locPubStore.state.get('pollId').should.equal(1);
+        sinon.spy(app.locPubStore, 'pollingOff');
+
+        dispatch(app, LocPubConstants.POLLING_OFF);
+
+        app.locPubStore.pollingOff.should.have.been.calledOnce;
+        app.locPubStore.pollingOff.restore();
+      });
+
+      it('notifies listeners of state changes', () => {
+        const [app, listener] = setup(pollState);
+        app.locPubStore.pollingOff();
+
+        listener.should.have.been.calledOnce;
+        shouldHaveBeenCalledWithImmutable(listener, emptyState);
+      });
+    });
+
+    describe('#pollingReset', () => {
+
+      it('resets pollId field without resetting polling', () => {
+        const [app] = setup(pollState);
+        app.locPubStore.state.get('polling').should.beTrue;
+        app.locPubStore.state.get('pollId').should.equal(1);
+
+        app.locPubStore.pollingReset(2);
+
+        app.locPubStore.state.get('polling').should.beTrue;
+        app.locPubStore.state.get('pollId').should.equal(2);
       });
 
       it('handles POLLING_OFF', () => {

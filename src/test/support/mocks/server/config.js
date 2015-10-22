@@ -1,7 +1,7 @@
-const {  keys, isEqual, isNumber, isString } = require('lodash');
-const { s17UL } = require('../../../support/sampleLocations');
-const { isUserLocation, isUserLocationRefresh, isUser } = require('./helpers');
-const UserLocation = require('../../../../app/models/UserLocation');
+import {  keys, isEqual, isNumber, isString } from 'lodash';
+import { s17UL } from '../../../support/sampleLocations';
+import { isUserLocation, isUserLocationRefresh, isUser } from './helpers';
+import UserLocation from '../../../../app/models/UserLocation';
 const cb = (match, data) => ({ body: data });
 
 module.exports = [{

@@ -1,4 +1,4 @@
-const { hasDispatched, getDispatchedActionsWithType } = require('marty/test-utils');
+import { hasDispatched, getDispatchedActionsWithType } from 'marty/test-utils';
 
 const matchers = {};
 
@@ -8,8 +8,15 @@ matchers.shouldHaveDispatched = (app, type) => (
 matchers.shouldHaveDispatchedWith = (app, type, arg) => (
   getDispatchedActionsWithType(app, type)[0].arguments[0].should.eql(arg));
 
+matchers.shouldHaveDispatchedNthTimeWith = (app, n, type, arg) => (
+  getDispatchedActionsWithType(app, type)[n].arguments[0].should.eql(arg));
+
 matchers.shouldHaveDispatchedWithImmutable = (app, type, arg) => (
   getDispatchedActionsWithType(app, type)[0].arguments[0]
+    .equals(arg).should.equal(true));
+
+matchers.shouldHaveDispatchedNthTimeWithImmutable = (app, n, type, arg) => (
+  getDispatchedActionsWithType(app, type)[n].arguments[0]
     .equals(arg).should.equal(true));
 
 matchers.shouldHaveObjectEquality = (obj1, obj2) => (

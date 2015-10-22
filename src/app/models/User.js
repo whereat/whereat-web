@@ -1,6 +1,6 @@
-const { Record } = require('immutable');
-const { USER_ID } = require('../constants/Keys');
+import { Record } from 'immutable';
+import { USER_ID } from '../constants/Keys';
 
 const User = Record({ id: USER_ID });
 
-module.exports = User;
+export default User;

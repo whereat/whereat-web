@@ -1,8 +1,8 @@
-const chai = require('chai');
+import chai from 'chai';
 const should = chai.should();
 
-const Location = require('../../app/models/Location');
-const { s17, s17UL } = require('../support/sampleLocations');
+import Location from '../../app/models/Location';
+import { s17, s17UL } from '../support/sampleLocations';
 
 describe('Location Record', () => {
 

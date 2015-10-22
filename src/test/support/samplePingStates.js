@@ -1,6 +1,6 @@
-const { Map } = require('immutable');
-const UserLocation = require('../../app/models/UserLocation');
-const { s17, s17_} = require('./sampleLocations');
+import { Map } from 'immutable';
+import UserLocation from '../../app/models/UserLocation';
+import { s17, s17_} from './sampleLocations';
 
 const ps = {};
 

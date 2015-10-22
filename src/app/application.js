@@ -1,4 +1,4 @@
-const Marty = require('marty');
+import Marty from 'marty';
 
 class Application extends Marty.Application {
   constructor(options){
@@ -10,4 +10,4 @@ class Application extends Marty.Application {
   }
 }
 
-module.exports = Application;
+export default Application;

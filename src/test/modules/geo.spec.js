@@ -1,16 +1,16 @@
-const chai = require('chai');
+import chai from 'chai';
 const should = chai.should();
 
-const sinon = require('sinon');
-const sinonChai = require('sinon-chai');
+import sinon from 'sinon';
+import sinonChai from 'sinon-chai';
 chai.use(sinonChai);
 
-const chaiAsPromised = require('chai-as-promised');
+import chaiAsPromised from 'chai-as-promised';
 chai.use(chaiAsPromised);
 
-const geo = require('../../app/modules/geo');
-const wait = require('../../app/modules/async');
-const { s17, s17_ } = require('../support/sampleLocations');
+import geo from '../../app/modules/geo';
+import wait from '../../app/modules/async';
+import { s17, s17_ } from '../support/sampleLocations';
 
 xdescribe('geo module', () => { //TODO: figure out how to test this!
 

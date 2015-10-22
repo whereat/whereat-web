@@ -1,4 +1,4 @@
-const {  keys, isEqual, isNumber, isString } = require('lodash');
+import {  keys, isEqual, isNumber, isString } from 'lodash';
 
 const h = {};
 
