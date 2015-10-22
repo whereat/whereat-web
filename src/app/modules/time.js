@@ -1,7 +1,5 @@
 const time = {};
 
-time.now = () => new Date().getTime();
-
-time.pretty = (millis) => 'hmmm..';
+time.now = () => (new Date().getTime());
 
 module.exports = time;

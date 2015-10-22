@@ -45,7 +45,7 @@ class SettingsPage extends BaseComponent {
           ref="locTtlPanel"
           >
           <SplitButton
-            title={locTtl.labels[1]}
+            title={locTtl.labels[this.props.curLocTtl]}
             className='settingsMenu'
             ref='locTtlMenu'
             >
@@ -77,28 +77,41 @@ class SettingsPage extends BaseComponent {
       if (this.props.isPolling) {
         this.app.locPubActions.resetPolling(
           this.props.pollId,
-          shareFreq.values[index]);
+          shareFreq.values[index]
+        );
       }
       this.app.settingsActions.setShareFreq(index);
     };
   }
 
   _handleLocTtlSelect(index){
-    return () => '';
+    return () => {
+      this.app.locSubActions.rescheduleForget(
+        this.props.curForgetJob,
+        locTtl.values[index]
+      );
+      this.app.settingsActions.setLocTtl(index);
+    };
   }
 }
 
 export default Marty.createContainer(SettingsPage, {
-  listenTo: ['settingsStore', 'locPubStore'],
+  listenTo: ['settingsStore', 'locPubStore', 'locSubStore'],
   fetch: {
+    curLocTtl(){
+      return this.app.settingsStore.getLocTtl();
+    },
     curShareFreq(){
       return this.app.settingsStore.getShareFreq();
+    },
+    curForgetJob(){
+      return this.app.locSubStore.getForgetJob();
     },
     isPolling(){
       return this.app.locPubStore.isPolling();
     },
     pollId(){
       return this.app.locPubStore.getPollId();
-    },
+    }
   }
 });
