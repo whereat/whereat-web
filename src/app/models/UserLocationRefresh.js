@@ -1,10 +1,10 @@
-const { Record } = require('immutable');
-const UserLocation = require('./UserLocation');
-const { USER_ID } = require('../constants/Keys');
+import { Record } from 'immutable';
+import UserLocation from './UserLocation';
+import { USER_ID } from '../constants/Keys';
 
 const UserLocationRefresh = Record({
   lastPing: 0,
   location: UserLocation()
 });
 
-module.exports = UserLocationRefresh;
+export default UserLocationRefresh;

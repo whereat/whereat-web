@@ -1,9 +1,9 @@
 'use strict';
 
-const Marty = require('marty');
-const Root = require('./components/Root.jsx');
-const React = require('react');
-const Application = require('./application.js');
+import Marty from 'marty';
+import Root from './components/Root.jsx';
+import React from 'react';
+import Application from './application.js';
 
 require('./styles/main.less');
 
@@ -11,7 +11,7 @@ window.React = React;
 window.Marty = Marty;
 
 const app = new Application();
-const { ApplicationContainer } = require('marty');
+import { ApplicationContainer } from 'marty';
 
 let rootInstance = React.render((
   <ApplicationContainer app={app}>

@@ -54,16 +54,17 @@ body {
   opacity: .66;
 
   //position
-  position: fixed;
-  top: calc(100% - 8em);
-  left: 50%;
-  transform: translate(-50%, -50%);
+  position: absolute;
+  top: calc(100% - 18em);
+  margin-left: 1em;
+  margin-right: 1em;
+
+  //transform:(50%);
 
   //shape
-  height: 2.5em;
   width: 90%;
-  padding: .5em 1em .25em 1em;
-  border-radius: 1em;
+  padding: .5em 1em .5em 1em;
+  border-radius: .8em;
 
   //text
   text-align: center;
@@ -137,4 +138,19 @@ body {
   left: 0.5em;
   width: 2em;
   height: 2em;
+}
+
+// settings
+
+.settingsPanel {
+  margin: 1em;
+}
+
+.settingsMenu.btn {
+  width: 12em;
+  text-align: left;
+}
+
+.settingsMenu.dropdown-toggle{
+  width: inherit;
 }

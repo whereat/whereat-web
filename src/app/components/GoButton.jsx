@@ -1,17 +1,20 @@
-const Marty = require('marty');
-const BaseComponent = require('./BaseComponent.jsx');
-const Tappable = require('react-tappable');
-const { wait } = require('../modules/async');
-const { RED, GREEN } = require('../constants/Colors');
-const { GO_RADIUS, GO_DIAMETER } = require('../constants/Dimensions');
-const { isSafari } = require('../modules/system');
-const cn = require('classname');
+import Marty from 'marty';
+import BaseComponent from './BaseComponent.jsx';
+import Tappable from 'react-tappable';
+import { wait } from '../modules/async';
+import { RED, GREEN } from '../constants/Colors';
+import { GO_RADIUS, GO_DIAMETER } from '../constants/Dimensions';
+import { isSafari } from '../modules/system';
+import cn from 'classname';
+
+import Settings from '../constants/Settings'
+const { shareFreq } = Settings;
 
 class GoButton extends BaseComponent {
 
   constructor(){
     super();
-    this.bindAll('_handlePress', '_handleClick');
+    this.bindAll('_handleClick');
     this.events = { onClick: this._handleClick, onPress: this._handlePress };
   }
 
@@ -26,24 +29,20 @@ class GoButton extends BaseComponent {
   };
 
   _handleClick(){
-    if (!this.props.polling) {
-      this.app.locPubActions.ping();
-    }
-  }
-
-  _handlePress(){
     this.props.polling ?
       this.app.locPubActions.stopPolling(this.props.pollId) :
-      this.app.locPubActions.poll();
+      this.app.locPubActions.poll(shareFreq.values[this.props.curShareFreq]);
   }
-
 }
 
-module.exports = Marty.createContainer(GoButton, {
-  listenTo: ['goButtonStore', 'locPubStore'],
+export default Marty.createContainer(GoButton, {
+  listenTo: ['goButtonStore', 'locPubStore', 'settingsStore'],
   fetch: {
-    color() {
+    color(){
       return this.app.goButtonStore.getColor();
+    },
+    curShareFreq(){
+      return this.app.settingsStore.getShareFreq();
     },
     polling(){
       return this.app.locPubStore.isPolling();

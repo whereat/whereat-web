@@ -1,11 +1,11 @@
-const Marty = require('marty');
-const BaseComponent = require('./BaseComponent.jsx');
-const { TileLayer, Map, Marker, Popup } = require('react-leaflet');
-const { Seq } = require('immutable');
-const { url, attribution, id, token } = require('../constants/MapSpecs');
-const { s17, nyse2, nyse3 } = require('../../test/support/sampleLocations');
-const Location = require('../models/Location');
-const pd = require('pretty-date');
+import Marty from 'marty';
+import BaseComponent from './BaseComponent.jsx';
+import { TileLayer, Map, Marker, Popup } from 'react-leaflet';
+import { Seq } from 'immutable';
+import { url, attribution, id, token } from '../constants/MapSpecs';
+import { s17, nyse2, nyse3 } from '../../test/support/sampleLocations';
+import Location from '../models/Location';
+import pd from 'pretty-date';
 
 class MapContainer extends BaseComponent {
 
@@ -53,7 +53,7 @@ class MapContainer extends BaseComponent {
 
 }
 
-module.exports = Marty.createContainer(MapContainer, {
+export default Marty.createContainer(MapContainer, {
   listenTo: ['locSubStore'],
   fetch: {
     center(){

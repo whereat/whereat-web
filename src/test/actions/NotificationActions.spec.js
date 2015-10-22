@@ -1,11 +1,11 @@
-const chai = require('chai');
+import chai from 'chai';
 const should = chai.should();
 
-const Application = require('../../app/application');
+import Application from '../../app/application';
 
-const NotificationConstants = require('../../app/constants/NotificationConstants');
-const { shouldHaveDispatched, shouldHaveDispatchedWith } = require('../support/matchers');
-const { hasDispatched, createApplication } = require('marty/test-utils');
+import NotificationConstants from '../../app/constants/NotificationConstants';
+import { shouldHaveDispatched, shouldHaveDispatchedWith } from '../support/matchers';
+import { hasDispatched, createApplication } from 'marty/test-utils';
 
 describe('NotificationActions', () => {
 

@@ -1,7 +1,7 @@
-const Marty = require('marty');
-const BaseComponent = require('./BaseComponent.jsx');
-const MapContainer = require('./MapContainer');
-const ClearButton = require('./ClearButton');
+import Marty from 'marty';
+import BaseComponent from './BaseComponent.jsx';
+import MapContainer from './MapContainer';
+import ClearButton from './ClearButton';
 
 class MapPage extends BaseComponent {
   render(){
@@ -14,4 +14,4 @@ class MapPage extends BaseComponent {
   };
 }
 
-module.exports = Marty.createContainer(MapPage);
+export default Marty.createContainer(MapPage);

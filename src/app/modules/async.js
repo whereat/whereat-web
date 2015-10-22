@@ -11,4 +11,4 @@ async.waitAndPass = (secs, res) => {
   return new Promise((resolve) => setTimeout(resolve.bind(this, res), secs*1000));
 };
 
-module.exports = async;
+export default async;
