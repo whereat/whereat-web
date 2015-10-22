@@ -1,5 +1,5 @@
-const Marty = require('marty');
+import Marty from 'marty';
 
-module.exports = Marty.createConstants([
+export default Marty.createConstants([
   'NOTIFICATION' // 'NOTIFICATION_STARTING', 'NOTIFICATION_DONE'
 ]);

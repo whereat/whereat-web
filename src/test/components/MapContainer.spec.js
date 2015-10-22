@@ -1,22 +1,22 @@
-const sinon = require('sinon');
-const chai = require('chai');
-const sinonChai = require('sinon-chai');
+import sinon from 'sinon';
+import chai from 'chai';
+import sinonChai from 'sinon-chai';
 chai.use(sinonChai);
 const should = chai.should();
 
-const Application = require('../../app/application');
-const testTree = require('react-test-tree');
-const { createStore, createApplication } = require('marty/test-utils');
-const { shouldHaveObjectEquality } = require('../support/matchers');
+import Application from '../../app/application';
+import testTree from 'react-test-tree';
+import { createStore, createApplication } from 'marty/test-utils';
+import { shouldHaveObjectEquality } from '../support/matchers';
 
-const MapContainer = require('../../app/components/MapContainer');
-const MockComponent = require('../support/mocks/MockComponent');
+import MapContainer from '../../app/components/MapContainer';
+import MockComponent from '../support/mocks/MockComponent';
 
-const Location = require('../../app/models/Location');
-const UserLocation = require('../../app/models/UserLocation');
+import Location from '../../app/models/Location';
+import UserLocation from '../../app/models/UserLocation';
 
-const { Map, Seq } = require('immutable');
-const { s17, s17UL, nyse3Seq, nyse3ULSeq } = require('../support/sampleLocations');
+import { Map, Seq } from 'immutable';
+import { s17, s17UL, nyse3Seq, nyse3ULSeq } from '../support/sampleLocations';
 
 describe('MapContainer Component', () => {
 

@@ -1,6 +1,6 @@
-const Marty = require('marty');
+import Marty from 'marty';
 
-module.exports = Marty.createConstants([
+export default Marty.createConstants([
   'GO_BUTTON_ON',
   'GO_BUTTON_OFF'
 ]);

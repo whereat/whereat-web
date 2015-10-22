@@ -1,7 +1,7 @@
-const chai = require('chai');
-const Application = require('../../app/application');
-const NavConstants = require('../../app/constants/NavConstants');
-const { hasDispatched, createApplication } = require('marty/test-utils');
+import chai from 'chai';
+import Application from '../../app/application';
+import NavConstants from '../../app/constants/NavConstants';
+import { hasDispatched, createApplication } from 'marty/test-utils';
 import { HOME, MAP, SEC } from '../../app/constants/Pages';
 
 const should = chai.should();

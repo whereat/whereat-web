@@ -1,11 +1,11 @@
-const Marty = require('marty');
-const BaseComponent = require('./BaseComponent.jsx');
-const Header = require('./Header.jsx');
-const Display = require('./Display.jsx');
+import Marty from 'marty';
+import BaseComponent from './BaseComponent.jsx';
+import Header from './Header.jsx';
+import Display from './Display.jsx';
 import { SEC } from '../constants/Pages';
 import { locTtl } from '../constants/Settings';
 
-const sc = require('../modules/scheduler');
+import sc from '../modules/scheduler';
 const everyMinute = 60 * 1000;
 
 /*

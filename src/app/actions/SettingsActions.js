@@ -1,5 +1,5 @@
-const Marty = require('marty');
-const SettingsConstants = require('../constants/SettingsConstants');
+import Marty from 'marty';
+import SettingsConstants from '../constants/SettingsConstants';
 
 class SettingsActions extends Marty.ActionCreators {
 

@@ -1,17 +1,17 @@
-const Marty = require('marty');
+import Marty from 'marty';
 
-const { wait } = require('../modules/async');
-const geo = require('../modules/geo');
+import { wait } from '../modules/async';
+import geo from '../modules/geo';
 
-const NotificationConstants = require('../constants/NotificationConstants');
-const LocPubConstants = require('../constants/LocPubConstants');
-const LocSubConstants = require('../constants/LocSubConstants');
-const GoButtonConstants = require('../constants/GoButtonConstants');
-const { FLASH_INTERVAL, NOTIFICATION_INTERVAL, USER_LOCATION_INTERVAL } = require('../constants/Intervals');
-const Location = require('../models/Location');
-const UserLocation = require('../models/UserLocation');
-const { partial } = require('lodash');
-const sc = require('../modules/scheduler');
+import NotificationConstants from '../constants/NotificationConstants';
+import LocPubConstants from '../constants/LocPubConstants';
+import LocSubConstants from '../constants/LocSubConstants';
+import GoButtonConstants from '../constants/GoButtonConstants';
+import { NOTIFICATION_INTERVAL, USER_LOCATION_INTERVAL } from '../constants/Intervals';
+import Location from '../models/Location';
+import UserLocation from '../models/UserLocation';
+import { partial } from 'lodash';
+import sc from '../modules/scheduler';
 
 class LocPubActions extends Marty.ActionCreators {
 
@@ -42,7 +42,7 @@ class LocPubActions extends Marty.ActionCreators {
 
   // (Number, Number) -> Promise[Unit]
   poll(shareFreq, ni = NOTIFICATION_INTERVAL){
-    const id = sc.schedule(this.ping.bind(this), shareFreq);
+    const id = sc.schedule(this.app.locPubActions.ping.bind(this), shareFreq);
     this.dispatch(GoButtonConstants.GO_BUTTON_ON);
     this.dispatch(LocPubConstants.POLLING_ON, id);
     return Promise.resolve(
@@ -69,4 +69,4 @@ class LocPubActions extends Marty.ActionCreators {
 
 }
 
-module.exports = LocPubActions;
+export default LocPubActions;

@@ -1,12 +1,12 @@
-const sinon = require('sinon');
-const chai = require('chai');
-const sinonChai = require('sinon-chai');
+import sinon from 'sinon';
+import chai from 'chai';
+import sinonChai from 'sinon-chai';
 chai.use(sinonChai);
 const should = chai.should();
 
-const Application = require('../../app/application');
-const { createStore, createApplication } = require('marty/test-utils');
-const testTree = require('react-test-tree');
+import Application from '../../app/application';
+import { createStore, createApplication } from 'marty/test-utils';
+import testTree from 'react-test-tree';
 import { Map } from 'immutable';
 import { merge } from 'lodash';
 

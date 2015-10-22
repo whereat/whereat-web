@@ -1,7 +1,7 @@
-const Marty = require('marty');
-const BaseComponent = require('./BaseComponent.jsx');
-const { Button } = require('react-bootstrap');
-const User = require('../models/User');
+import Marty from 'marty';
+import BaseComponent from './BaseComponent.jsx';
+import { Button } from 'react-bootstrap';
+import User from '../models/User';
 
 class ClearButton extends BaseComponent {
 
@@ -31,4 +31,4 @@ class ClearButton extends BaseComponent {
   }
 }
 
-module.exports = Marty.createContainer(ClearButton);
+export default Marty.createContainer(ClearButton);

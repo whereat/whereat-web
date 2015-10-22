@@ -1,7 +1,7 @@
-const Marty = require('marty');
-const NavConstants = require('../constants/NavConstants');
-const { HOME, MAP, SEC } = require('../constants/Pages');
-const { Map } = require('immutable');
+import Marty from 'marty';
+import NavConstants from '../constants/NavConstants';
+import { HOME, MAP, SEC } from '../constants/Pages';
+import { Map } from 'immutable';
 
 class NavStore extends Marty.Store {
 
@@ -50,4 +50,4 @@ class NavStore extends Marty.Store {
   }
 }
 
-module.exports = NavStore;
+export default NavStore;

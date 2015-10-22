@@ -1,13 +1,13 @@
-const sinon = require('sinon');
-const chai = require('chai');
-const sinonChai = require('sinon-chai');
-const chaiAsPromised = require('chai-as-promised');
+import sinon from 'sinon';
+import chai from 'chai';
+import sinonChai from 'sinon-chai';
+import chaiAsPromised from 'chai-as-promised';
 const should = chai.should();
 chai.use(sinonChai);
 chai.use(chaiAsPromised);
 
-const Application = require('../../app/application');
-const { createApplication } = require('marty/test-utils');
+import Application from '../../app/application';
+import { createApplication } from 'marty/test-utils';
 
 const {
   shouldHaveDispatched,
@@ -17,18 +17,18 @@ const {
   shouldHaveObjectEquality
 } = require('../support/matchers');
 
-const LocPubConstants = require('../../app/constants/LocPubConstants');
-const LocSubConstants = require('../../app/constants/LocSubConstants');
-const NotificationConstants = require('../../app/constants/NotificationConstants');
-const GoButtonConstants = require('../../app/constants/GoButtonConstants');
-const Location = require('../../app/models/Location');
-const UserLocation = require('../../app/models/UserLocation');
+import LocPubConstants from '../../app/constants/LocPubConstants';
+import LocSubConstants from '../../app/constants/LocSubConstants';
+import NotificationConstants from '../../app/constants/NotificationConstants';
+import GoButtonConstants from '../../app/constants/GoButtonConstants';
+import Location from '../../app/models/Location';
+import UserLocation from '../../app/models/UserLocation';
 
-const geo = require('../../app/modules/geo');
-const sc = require('../../app/modules/scheduler');
-const { s17, s17Nav } = require('../support/sampleLocations');
-const { emptyState, ping1State, ping2State, pollState } = require('../support/samplePingStates');
-const { toJS } = require('immutable');
+import geo from '../../app/modules/geo';
+import sc from '../../app/modules/scheduler';
+import { s17, s17Nav } from '../support/sampleLocations';
+import { emptyState, ping1State, ping2State, pollState } from '../support/samplePingStates';
+import { toJS } from 'immutable';
 import { merge } from 'lodash';
 
 describe('LocPubActions', () => {

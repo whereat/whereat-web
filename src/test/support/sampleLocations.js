@@ -1,7 +1,7 @@
-const Location = require('../../app/models/Location');
-const UserLocation = require('../../app/models/UserLocation');
+import Location from '../../app/models/Location';
+import UserLocation from '../../app/models/UserLocation';
 
-const { Seq } = require('immutable');
+import { Seq } from 'immutable';
 
 const l = {};
 

@@ -1,5 +1,5 @@
-const Marty = require('marty');
-const BaseComponent = require('./BaseComponent.jsx');
+import Marty from 'marty';
+import BaseComponent from './BaseComponent.jsx';
 import { Button } from 'react-bootstrap';
 import { HOME } from '../constants/Pages';
 
@@ -37,4 +37,4 @@ class SecurityPage extends BaseComponent {
   }
 }
 
-module.exports = Marty.createContainer(SecurityPage);
+export default Marty.createContainer(SecurityPage);
