@@ -59,4 +59,4 @@ class LocSubActions extends Marty.ActionCreators {
   }
 }
 
-module.exports = LocSubActions;
+export default LocSubActions;

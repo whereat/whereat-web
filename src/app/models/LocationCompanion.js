@@ -1,4 +1,4 @@
-const Location = require('../models/Location');
+import Location from '../models/Location';
 
 const lc = {};
 
@@ -10,4 +10,4 @@ lc.convertPosition = (pos) =>
     time: pos.timestamp || new Date().getTime()
   });
 
-module.exports = lc;
+export default lc;

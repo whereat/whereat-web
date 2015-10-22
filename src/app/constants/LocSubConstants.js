@@ -1,6 +1,6 @@
-const Marty = require('marty');
+import Marty from 'marty';
 
-module.exports = Marty.createConstants([
+export default Marty.createConstants([
   'UPDATE_STARTING',
   'LOCATION_RECEIVED',
   'LOCATIONS_RECEIVED',

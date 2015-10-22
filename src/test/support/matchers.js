@@ -1,4 +1,4 @@
-const { hasDispatched, getDispatchedActionsWithType } = require('marty/test-utils');
+import { hasDispatched, getDispatchedActionsWithType } from 'marty/test-utils';
 
 const matchers = {};
 

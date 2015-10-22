@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   goButtonStore: require('./GoButtonStore'),
   locPubStore: require('./LocPubStore'),
   locSubStore: require('./LocSubStore'),

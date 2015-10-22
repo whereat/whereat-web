@@ -1,17 +1,17 @@
-const sinon = require('sinon');
-const chai = require('chai');
-const sinonChai = require('sinon-chai');
+import sinon from 'sinon';
+import chai from 'chai';
+import sinonChai from 'sinon-chai';
 chai.use(sinonChai);
 const should = chai.should();
 
-const Application = require('../../app/application');
-const testTree = require('react-test-tree');
-const { createApplication } = require('marty/test-utils');
+import Application from '../../app/application';
+import testTree from 'react-test-tree';
+import { createApplication } from 'marty/test-utils';
 
-const MockComponent = require('../support/mocks/MockComponent');
-const Root = require('../../app/components/Root');
+import MockComponent from '../support/mocks/MockComponent';
+import Root from '../../app/components/Root';
 import { HOME, SEC } from '../../app/constants/Pages';
-const sc = require('../../app/modules/scheduler');
+import sc from '../../app/modules/scheduler';
 import { s1t1, s1t2, s2t1, s2t2 } from '../support/sampleSettings';
 import stgs from '../../app/constants/Settings';
 const { locTtl: { values: ttls } } = stgs;

@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   shareFreq: {
     labels: [
       '5 sec (most accurate)',

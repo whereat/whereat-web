@@ -1,11 +1,11 @@
-const Marty = require('marty');
-const BaseComponent = require('./BaseComponent');
-const { HOME, MAP, SEC, SET } = require('../constants/Pages');
-const HomePage = require('./HomePage');
-const MapPage = require('./MapPage');
-const SecurityPage = require('./SecurityPage');
-const SettingsPage = require('./SettingsPage');
-const NotificationContainer = require('./NotificationContainer');
+import Marty from 'marty';
+import BaseComponent from './BaseComponent';
+import { HOME, MAP, SEC, SET } from '../constants/Pages';
+import HomePage from './HomePage';
+import MapPage from './MapPage';
+import SecurityPage from './SecurityPage';
+import SettingsPage from './SettingsPage';
+import NotificationContainer from './NotificationContainer';
 
 class Display extends BaseComponent {
   render(){
@@ -23,7 +23,7 @@ class Display extends BaseComponent {
   };
 }
 
-module.exports = Marty.createContainer(Display, {
+export default Marty.createContainer(Display, {
   listenTo: ['navStore'],
   fetch: {
     page(){

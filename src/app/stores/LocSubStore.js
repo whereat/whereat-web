@@ -102,4 +102,4 @@ class LocSubStore extends Marty.Store {
 
 }
 
-module.exports = LocSubStore;
+export default LocSubStore;

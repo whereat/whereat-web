@@ -1,12 +1,12 @@
-const sinon = require('sinon');
-const chai = require('chai');
-const sinonChai = require('sinon-chai');
-const Marty = require('marty');
-const { Map } = require('immutable');
-const Application = require('../../app/application');
-const NavConstants = require('../../app/constants/NavConstants');
-const { HOME, MAP, SEC } = require('../../app/constants/Pages');
-const { dispatch, createApplication } = require('marty/test-utils');
+import sinon from 'sinon';
+import chai from 'chai';
+import sinonChai from 'sinon-chai';
+import Marty from 'marty';
+import { Map } from 'immutable';
+import Application from '../../app/application';
+import NavConstants from '../../app/constants/NavConstants';
+import { HOME, MAP, SEC } from '../../app/constants/Pages';
+import { dispatch, createApplication } from 'marty/test-utils';
 import {
   shouldHaveBeenCalledWithImmutable,
   shouldHaveBeenCalledNthTimeWithImmutable

@@ -1,6 +1,6 @@
-const Marty = require('marty');
-const BaseComponent = require('./BaseComponent.jsx');
-const GoButton = require('./GoButton');
+import Marty from 'marty';
+import BaseComponent from './BaseComponent.jsx';
+import GoButton from './GoButton';
 
 class HomePage extends BaseComponent {
   render(){
@@ -12,4 +12,4 @@ class HomePage extends BaseComponent {
   };
 }
 
-module.exports = Marty.createContainer(HomePage);
+export default Marty.createContainer(HomePage);
