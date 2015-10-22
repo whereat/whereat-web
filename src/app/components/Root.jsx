@@ -3,6 +3,7 @@ const BaseComponent = require('./BaseComponent.jsx');
 const Header = require('./Header.jsx');
 const Display = require('./Display.jsx');
 import { SEC } from '../constants/Pages';
+import { locTtl } from '../constants/Settings';
 
 const sc = require('../modules/scheduler');
 const everyMinute = 60 * 1000;
@@ -51,7 +52,7 @@ class Root extends BaseComponent {
 
   _scheduleForget(){
     if (!this.state.forgetScheduled) {
-      sc.schedule(this._forget, everyMinute);
+      this.app.locSubActions.scheduleForget(locTtl.values[1]);
       this.setState({forgetScheduled: true});
     }
   }
@@ -66,9 +67,6 @@ class Root extends BaseComponent {
       this.setState({securityAlerted: true});
     }
   }
-
-
-
 }
 
-module.exports = Marty.createContainer(Root);
+export default  Marty.createContainer(Root);

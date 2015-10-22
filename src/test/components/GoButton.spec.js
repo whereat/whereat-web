@@ -17,12 +17,12 @@ import { RED, GREEN } from '../../app/constants/Colors';
 import { GO_RADIUS, GO_DIAMETER } from '../../app/constants/Dimensions';
 import { s17, s17_, s17Nav, s17_Nav } from '../support/sampleLocations';
 import { emptyState, ping1State, ping2State, pollState} from '../support/sampleLocPubStates';
-import {s1, s2 } from '../support/sampleSettings';
+import {s1t1, s1t2, s2t1, s2t2 } from '../support/sampleSettings';
 import { shareFreq } from '../../app/constants/Settings';
 
 describe('GoButton Component', () => {
 
-  const setup = (locPubState = emptyState, stgState = s1) => {
+  const setup = (locPubState = emptyState, stgState = s1t1) => {
     const spies = {
       ping: sinon.spy(),
       poll: sinon.spy(),
@@ -91,7 +91,7 @@ describe('GoButton Component', () => {
       describe('when polling is off', () => {
 
         it('calls locPubActions#poll with correct sharing interval', () => {
-          const [app, {poll, stopPolling}] = setup(emptyState, s1);
+          const [app, {poll, stopPolling}] = setup(emptyState, s1t1);
           const gb = tree(app);
           gb.innerComponent.click();
 
@@ -113,7 +113,7 @@ describe('GoButton Component', () => {
           const gb = tree(app);
           gb.innerComponent.click();
 
-          stopPolling.should.have.been.calledWith(1);
+          stopPolling.should.have.been.calledWith(0);
           poll.should.not.have.been.called;
         });
       });
