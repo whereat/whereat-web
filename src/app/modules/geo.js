@@ -1,4 +1,4 @@
-const { USER_LOCATION_INTERVAL } = require('../constants/Intervals');
+import { USER_LOCATION_INTERVAL } from '../constants/Intervals';
 
 const geo = {};
 
@@ -9,15 +9,4 @@ geo.get = (nav = navigator) => (
       reject('Phone not providing location.') :
       nav.geolocation.getCurrentPosition(p => resolve(p)))));
 
-// ((LatLon => Unit), (Error => Unit), Number) -> Number [id]
-geo.poll = (publisher, err, sec = USER_LOCATION_INTERVAL) => (
-  navigator.geolocation.watchPosition(
-    publisher, err, {
-      enableHighAccuracy: true,
-      timeout: 5000,
-      maximumAge: sec * 1000 }));
-
-// (Number) -> Unit
-geo.stopPolling = (id) => navigator.geolocation.clearWatch(id);
-
-module.exports = geo;
+export default geo;

@@ -1,5 +1,6 @@
-module.exports = {
+export default {
   HOME: 'home',
   MAP: 'map',
-  SEC: 'sec'
+  SEC: 'sec',
+  SET: 'settings'
 };

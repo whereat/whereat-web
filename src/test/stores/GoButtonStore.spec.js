@@ -1,13 +1,13 @@
-const sinon = require('sinon');
-const chai = require('chai');
-const sinonChai = require('sinon-chai');
-const Marty = require('marty');
-const Application = require('../../app/application');
-const LocPubConstants = require('../../app/constants/LocPubConstants');
-const GoButtonConstants = require('../../app/constants/GoButtonConstants');
-const { Map } = require('immutable');
-const { RED, GREEN } = require('../../app/constants/Colors');
-const { dispatch, hasDispatched, createApplication } = require('marty/test-utils');
+import sinon from 'sinon';
+import chai from 'chai';
+import sinonChai from 'sinon-chai';
+import Marty from 'marty';
+import Application from '../../app/application';
+import LocPubConstants from '../../app/constants/LocPubConstants';
+import GoButtonConstants from '../../app/constants/GoButtonConstants';
+import { Map } from 'immutable';
+import { RED, GREEN } from '../../app/constants/Colors';
+import { dispatch, hasDispatched, createApplication } from 'marty/test-utils';
 
 const should = chai.should();
 chai.use(sinonChai);

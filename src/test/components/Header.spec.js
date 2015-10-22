@@ -1,15 +1,15 @@
-const sinon = require('sinon');
-const chai = require('chai');
-const sinonChai = require('sinon-chai');
+import sinon from 'sinon';
+import chai from 'chai';
+import sinonChai from 'sinon-chai';
 chai.use(sinonChai);
 const should = chai.should();
 
-const testTree = require('react-test-tree');
-const { createApplication } = require('marty/test-utils');
+import testTree from 'react-test-tree';
+import { createApplication } from 'marty/test-utils';
 
-const Application = require('../../app/application');
-const Header = require('../../app/components/Header');
-const { HOME, MAP } = require('../../app/constants/Pages');
+import Application from '../../app/application';
+import Header from '../../app/components/Header';
+import { HOME, MAP, SET } from '../../app/constants/Pages';
 
 describe('Header Component', () => {
 
@@ -38,6 +38,7 @@ describe('Header Component', () => {
 
         hdr.navItem1.innerText.trim().should.equal(HOME);
         hdr.navItem2.innerText.trim().should.equal(MAP);
+        hdr.navItem3.innerText.trim().should.equal(SET);
       });
     });
   });
@@ -62,6 +63,15 @@ describe('Header Component', () => {
           const[_, hdr, {goto}] = setup();
           hdr.navItem2.simulate.select();
           goto.should.have.been.calledWith(MAP);
+        });
+      });
+
+      describe('SET', () => {
+
+        it('calls navAction#goto(SET)', () => {
+          const[_, hdr, {goto}] = setup();
+          hdr.navItem3.simulate.select();
+          goto.should.have.been.calledWith(SET);
         });
       });
     });

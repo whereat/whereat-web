@@ -1,7 +1,8 @@
-const Marty = require('marty');
+import Marty from 'marty';
 
-module.exports = Marty.createConstants([
+export default Marty.createConstants([
   'USER_LOCATION_ACQUIRED',
   'POLLING_ON',
-  'POLLING_OFF'
+  'POLLING_OFF',
+  'POLLING_RESET'
 ]);

@@ -1,26 +1,28 @@
-const sinon = require('sinon');
-const chai = require('chai');
-const sinonChai = require('sinon-chai');
+import sinon from 'sinon';
+import chai from 'chai';
+import sinonChai from 'sinon-chai';
 chai.use(sinonChai);
 const should = chai.should();
 
-const testTree = require('react-test-tree');
-const { createStore, createApplication } = require('marty/test-utils');
+import testTree from 'react-test-tree';
+import { createStore, createApplication } from 'marty/test-utils';
 
-const Application = require('../../app/application');
-const { Map } = require('immutable');
+import Application from '../../app/application';
+import { Map } from 'immutable';
 
-const Display = require('../../app/components/Display');
-const HomePage = require('../../app/components/HomePage');
-const MapPage = require('../../app/components/MapPage');
-const MockComponent = require('../support/mocks/MockComponent');
-const { HOME, MAP, SEC } = require('../../app/constants/Pages');
+import Display from '../../app/components/Display';
+import HomePage from '../../app/components/HomePage';
+import MapPage from '../../app/components/MapPage';
+import MockComponent from '../support/mocks/MockComponent';
+import { HOME, MAP, SEC, SET } from '../../app/constants/Pages';
 
 describe('Display Component', () => {
 
   const setup = (page) => {
 
-    const app = createApplication(Application, {include: ['navStore', 'goButtonStore', 'notificationStore'] });
+    const app = createApplication(Application,{
+      include: ['navStore', 'goButtonStore', 'notificationStore']
+    });
     app.navStore.state = Map({page: page});
 
     const component = propTree(app, page);
@@ -37,7 +39,8 @@ describe('Display Component', () => {
     context: { app: app },
     stub: {
       homePage: <MockComponent />,
-      mapPage: <MockComponent />
+      mapPage: <MockComponent />,
+      settingsPage: <MockComponent />
     }
   });
 
@@ -74,6 +77,17 @@ describe('Display Component', () => {
           d.securityPage.should.exist;
         });
       });
+
+      describe('when `page` prop is SET', () => {
+
+        it('renders SecurityPage component', () => {
+          const [app, d] = setup(SET);
+
+          d.getProp('page').should.equal(SET);
+          d.settingsPage.should.exist;
+        });
+      });
+
     });
   });
 
@@ -89,6 +103,11 @@ describe('Display Component', () => {
         const d2 = tree(app);
 
         d2.innerComponent.getProp('page').should.equal(MAP);
+
+        app.navStore.replaceState(Map({ page: SET }));
+        const d3 = tree(app);
+
+        d3.innerComponent.getProp('page').should.equal(SET);
       });
     });
   });

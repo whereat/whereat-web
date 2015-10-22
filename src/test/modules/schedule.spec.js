@@ -1,11 +1,11 @@
-const chai = require('chai');
+import chai from 'chai';
 const should = chai.should();
-const sinon = require('sinon');
-const sinonChai = require('sinon-chai');
+import sinon from 'sinon';
+import sinonChai from 'sinon-chai';
 chai.use(sinonChai);
 
-const sc = require('../../app/modules/scheduler');
-const { wait } = require('../../app/modules/async');
+import sc from '../../app/modules/scheduler';
+import { wait } from '../../app/modules/async';
 
 describe('schedule module', () =>{
 
