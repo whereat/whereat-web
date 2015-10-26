@@ -33,10 +33,18 @@ describe('SecurityPage component', () => {
 
       sp.secHeader.should.exist;
       sp.secHeader.getClassName().should.equal('secHeader');
+
       sp.secBlurb.should.exist;
       sp.secBlurb.getClassName().should.equal('secBlurb');
-      sp.secButton.should.exist;
-      sp.secButton.getClassName().should.equal('secButton btn btn-lg btn-primary');
+
+      sp.secNoButton.should.exist;
+      sp.secNoButton.getClassName()
+        .should.equal('secButton secNoButton btn btn-lg btn-primary');
+
+      sp.secYesButton.should.exist;
+      sp.secYesButton.getClassName()
+        .should.equal('secButton secYesButton btn btn-lg btn-primary');
+
       sp.staySafeLink.should.exist;
       sp.staySafeLink.getAttribute('href').should.equal('https://about.whereat.io/stay-safe');
     });
