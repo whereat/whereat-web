@@ -97,14 +97,15 @@ body {
   margin: 1em;
 
   .secHeader {
-    font-size: 1.5em;
+    font-size: 1.2em;
+    font-weight: bold;
     text-align: center;
-    color: white;
     background-color: @RED;
     border-radius: .25em;
     padding: 5% .2em 5% .2em;
     height: 50%;
     .shadowed;
+    .btn-danger;
   }
   .secBlurb {
     margin: .5em .5em 1.5em .5em;
@@ -117,14 +118,16 @@ body {
     margin-right: .5em;
     border: 0;
     width: 44%;
+    font-weight: bold;
     text-align: center;
   }
   .secNoButton {
     float: left;
-    background-color: @RED;
+    //background-color: @RED;
+    .btn-danger;
   }
   .secYesButton {
-    background-color: @GREEN;
+    .btn-success;
     float: right;
     a {
       color: white;
