@@ -32,6 +32,10 @@ body {
   visibility: visible;
 }
 
+.shadowed {
+  text-shadow: .05em .05em black;
+}
+
 // header
 
 .navbar {
@@ -68,7 +72,7 @@ body {
 
   //text
   text-align: center;
-  text-shadow: .05em .05em black;
+  .shadowed;
 }
 
 // display
@@ -93,25 +97,38 @@ body {
   margin: 1em;
 
   .secHeader {
-    font-size: 2em;
-    text-decoration: blink;
+    font-size: 1.5em;
     text-align: center;
     color: white;
     background-color: @RED;
-    border-radius: .5em;
-    padding: .2em;
+    border-radius: .25em;
+    padding: 5% .2em 5% .2em;
+    height: 50%;
+    .shadowed;
   }
   .secBlurb {
     margin: .5em .5em 1.5em .5em;
+    font-size: .9em;
     text-align: justify;
   }
-  .secSignature{
-    text-align: right;
-  }
   .secButton {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
+    font-size: .8em;
+    margin-left: .5em;
+    margin-right: .5em;
+    border: 0;
+    width: 44%;
+    text-align: center;
+  }
+  .secNoButton {
+    float: left;
+    background-color: @RED;
+  }
+  .secYesButton {
+    background-color: @GREEN;
+    float: right;
+    a {
+      color: white;
+    }
   }
 }
 
