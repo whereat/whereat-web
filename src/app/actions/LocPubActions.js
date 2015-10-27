@@ -34,7 +34,7 @@ class LocPubActions extends Marty.ActionCreators {
   }
 
   // (Geo, Number, Number) -> Promise[Unit]
-  ping(g = geo, pi = FLASH_INTERVAL, ni = NOTIFICATION_INTERVAL){
+  ping(g = geo, ni = NOTIFICATION_INTERVAL){
     return g.get()
       .catch(err => Promise.reject(this.app.notificationActions.notify(err)))
       .then(pos => this.publish(pos, ni));
