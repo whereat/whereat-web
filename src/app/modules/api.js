@@ -2,7 +2,7 @@ const http = require('superagent');
 
 const api = {};
 
-api.URL = "https://whereat-server.herokuapp.com";
+api.URL = "https://api.whereat.io";
 
 // (UserLocationRefresh) -> Promise[Array[UserLocation]]
 api.update = (req) => post(req, 'update');

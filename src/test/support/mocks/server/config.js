@@ -5,19 +5,19 @@ const UserLocation = require('../../../../app/models/UserLocation');
 const cb = (match, data) => ({ body: data });
 
 module.exports = [{
-  pattern: "https://whereat-server.herokuapp.com/locations/update",
+  pattern: "https://api.whereat.io/locations/update",
   fixtures: (match, data) => isUserLocationRefresh(data) ?
     [s17UL, UserLocation(data.location).toJS()] :
     new Error('Bad Request'),
   callback: cb
 }, {
-  pattern: "https://whereat-server.herokuapp.com/locations/remove",
+  pattern: "https://api.whereat.io/locations/remove",
   fixtures: (match, data) => isUser(data) ?
     '1 record(s) deleted.' :
     new Error('Bad Request'),
   callback: cb
 }, {
-  pattern: "https://whereat-server.herokuapp.com/locations/refresh",
+  pattern: "https://api.whereat.io/locations/refresh",
   fixtures: (match, data) => isUserLocationRefresh(data) ?
     [s17UL, UserLocation(data.location).toJS()] :
     new Error('Bad Request'),
