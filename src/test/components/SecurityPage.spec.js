@@ -57,7 +57,7 @@ describe('SecurityPage component', () => {
       it('calls `navActions.goto(HOME)`', () => {
 
         const[app, sp, {goto}] = setup();
-        sp.secButton.click();
+        sp.secNoButton.click();
 
         goto.should.have.been.calledWith(HOME);
       });
