@@ -18,7 +18,7 @@ describe('RefreshButton Component', () => {
 
   const setup = () => {
 
-    const spies = { remove: sinon.spy() };
+    const spies = { refresh: sinon.spy() };
     const app = createApplication(Application, {
       stub: { locSubActions: spies }
     });
@@ -48,12 +48,12 @@ describe('RefreshButton Component', () => {
 
     describe('clicking clear button', () => {
 
-      it('calls locPubActions#remove', () => {
-        const [app, {remove}] = setup();
-        const cb = tree(app);
-        cb.innerComponent.click();
+      it('calls locSubActions#refresh', () => {
+        const [app, {refresh}] = setup();
+        const comp = tree(app);
+        comp.innerComponent.click();
 
-        shouldHaveBeenCalledWithImmutable(remove, User());
+        refresh.should.have.been.calledOnce;
       });
     });
 

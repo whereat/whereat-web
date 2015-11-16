@@ -35,6 +35,13 @@ class LocSubActions extends Marty.ActionCreators {
       .then(() => this.app.notificationActions.notify('User data removed from server.'));
   }
 
+  //() -> Promise[Unit]
+  refresh(){
+    // return Promise
+    //   .resolve(this.dispatch(LocSubActions.LOC_REFRESH_STARTED))
+    //   .then(() => this.app.locPubActions.ping());
+  }
+
   // (Number, Number) => Promise[Unit]
   forget(ttl, now = time.now()){
     this.dispatch(LocSubConstants.LOCATION_FORGET_TRIGGERED, ttl, now);
