@@ -5,7 +5,7 @@ import { Seq } from 'immutable';
 import { url, attribution, id, token } from '../constants/MapSpecs';
 import { s17, nyse2, nyse3 } from '../../test/support/sampleLocations';
 import Location from '../models/Location';
-import pd from 'pretty-date';
+import moment from 'moment';
 
 class MapContainer extends BaseComponent {
 
@@ -31,7 +31,6 @@ class MapContainer extends BaseComponent {
 
   // (Location) -> Array[Number]
   _positionify(loc) {
-    //return [loc.lat, loc.lon];
     return [loc.get('lat'), loc.get('lon')];
   }
 
@@ -40,17 +39,11 @@ class MapContainer extends BaseComponent {
     return (
       <Marker position={this._positionify(loc)} key={i} ref={`marker${i}`} >
         <Popup>
-          <span>{'Hi!'}</span>
+          <span ref={`popup${i}`}>{moment(loc.time).format('dddd h:mmA')}</span>
         </Popup>
       </Marker>
     );
   }
-
-  // (Number) -> String
-  _pretty(millis){
-    return pd.format(new Date(millis));
-  }
-
 }
 
 export default Marty.createContainer(MapContainer, {
