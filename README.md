@@ -19,8 +19,8 @@ __In its mature form, Where@ will:__
 
 The app has the following components:
 
-* [Server (Scala)](https://github.com/the-learning-collective/whereat-server)
-* [Android client (Java)](https://github.com/the-learning-collective/whereat-android)
+* [Server (Scala)](https://github.com/whereat/whereat-server)
+* [Android client (Java)](https://github.com/whereat/whereat-android)
 * (Mobile) web client  (this repo)
 * IOS client (not started, will use React Native)
-* [Simulation scripts (JS)](https://github.com/the-learning-collective/whereat-simu
+* [Simulation scripts (JS)](https://github.com/whereat/whereat-simulate)
