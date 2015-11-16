@@ -27,7 +27,7 @@ class RefreshButton extends BaseComponent {
   };
 
   _handleClick(){
-    this.app.locSubActions.remove(User());
+    this.app.locSubActions.refresh();
   }
 }
 
