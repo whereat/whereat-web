@@ -8,5 +8,6 @@ export default Marty.createConstants([
   'LOCATION_FORGET_TRIGGERED',
   'LOC_FORGET_SCHEDULED',
   'LOC_FORGET_RESCHEDULED',
+  'LOC_REFRESH_TRIGGERED',
   'USER_REMOVED'
 ]);
