@@ -37,9 +37,9 @@ class LocSubActions extends Marty.ActionCreators {
 
   //() -> Promise[Unit]
   refresh(){
-    // return Promise
-    //   .resolve(this.dispatch(LocSubActions.LOC_REFRESH_STARTED))
-    //   .then(() => this.app.locPubActions.ping());
+    return Promise
+      .resolve(this.dispatch(LocSubConstants.LOC_REFRESH_TRIGGERED))
+      .then(() => this.app.locPubActions.ping());
   }
 
   // (Number, Number) => Promise[Unit]

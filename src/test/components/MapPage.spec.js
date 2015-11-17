@@ -17,7 +17,7 @@ describe('MapPage Component', () => {
 
   describe('contents', () => {
 
-    it.only('renders HomePage component', () => {
+    it('renders HomePage component', () => {
       const comp = testTree(<MapPage.InnerComponent />, {
         stub: {
           mapContainer: <MockComponent />
