@@ -1,6 +1,6 @@
 import Marty from 'marty';
 import BaseComponent from './BaseComponent.jsx';
-import cx from 'classname';
+import cx from 'classnames';
 
 class NotificationContainer extends BaseComponent {
   render(){
