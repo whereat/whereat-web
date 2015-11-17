@@ -5,7 +5,6 @@ import { wait } from '../modules/async';
 import { RED, GREEN } from '../constants/Colors';
 import { GO_RADIUS, GO_DIAMETER } from '../constants/Dimensions';
 import { isSafari } from '../modules/system';
-import cn from 'classname';
 
 import Settings from '../constants/Settings'
 const { shareFreq } = Settings;

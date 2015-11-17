@@ -1,7 +1,6 @@
-const nacl = require('../modules/nacl').instance;
-
+const uuid = require('node-uuid');
 const keys = {};
 
-keys.USER_ID = nacl.to_hex(nacl.random_bytes(32));
+keys.USER_ID = uuid.v4();
 
 export default keys;
