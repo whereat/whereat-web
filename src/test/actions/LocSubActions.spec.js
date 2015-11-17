@@ -133,26 +133,6 @@ describe('LocSubActions', () => {
     });
   });
 
-  describe('#remove', () => {
-
-    it('sends remove request to server, dispatches results, notfies user', done => {
-
-      const [app, {notify}] = setup(ping2State);
-      const remove = sinon.spy(api, 'remove');
-
-      app.locSubActions.remove(User(USER_ID), s17_.time).should.be.fulfilled
-        .then(() => {
-
-          shouldHaveDispatchedWith( app, LocSubConstants.REMOVE_STARTING, s17_.time );
-          shouldHaveBeenCalledWithImmutable( remove, User(USER_ID) );
-          shouldHaveDispatched( app, LocSubConstants.USER_REMOVED );
-          notify.should.have.been.calledWith('User data removed from server.');
-
-          remove.restore();
-        }).should.notify(done);
-    });
-  });
-
   describe('#scheduleForget', () => {
 
     it("schedules forget every minute with a given TTL param", () => {

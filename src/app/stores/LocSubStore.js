@@ -23,7 +23,7 @@ class LocSubStore extends Marty.Store {
     this.handlers = {
       save: LocSubConstants.LOCATION_RECEIVED,
       saveMany: LocSubConstants.LOCATIONS_RECEIVED,
-      clear: LocSubConstants.USER_REMOVED,
+      clear: LocSubConstants.LOC_REFRESH_TRIGGERED,
       recordForgetJob: [
         LocSubConstants.LOC_FORGET_SCHEDULED,
         LocSubConstants.LOC_FORGET_RESCHEDULED
