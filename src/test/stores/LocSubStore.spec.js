@@ -116,7 +116,7 @@ describe('LocSubStore', () => {
         const [app] = setup(nyse3State);
         const clear = sinon.spy(app.locSubStore, 'clear');
 
-        dispatch(app, LocSubConstants.USER_REMOVED);
+        dispatch(app, LocSubConstants.LOC_REFRESH_TRIGGERED);
 
         clear.should.have.been.calledOnce;
         clear.restore();
