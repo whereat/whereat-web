@@ -37,20 +37,26 @@ import { emptyState, ping1State, ping2State, pollState } from'../support/sampleP
 import stgs from '../../app/constants/Settings';
 const { locTtl: { values: ttls } } = stgs;
 
+import { merge } from 'lodash';
+
 describe('LocSubActions', () => {
 
   const setup = (state = emptyState) => {
 
-    const notifySpies = {
-      notify: sinon.spy()
+    const spies = {
+      notify: { notify: sinon.spy() },
+      locPub: { ping: sinon.spy() }
     };
 
     const app = createApplication(Application, {
       include: ['locSubActions', 'locPubStore'],
-      stub: { notificationActions: notifySpies  }
+      stub: {
+        notificationActions: spies.notify,
+        locPubActions: spies.locPub
+      }
     });
     app.locPubStore.state = state;
-    return [app, notifySpies];
+    return [app, merge({}, spies.notify, spies.locPub)];
   };
 
 
@@ -112,23 +118,18 @@ describe('LocSubActions', () => {
     });
   });
 
-  describe('#remove', () => {
+  describe('#refresh', () => {
 
-    it('sends remove request to server, dispatches results, notfies user', done => {
+    it('dispatches refresh request then pings new location', done => {
 
-      const [app, {notify}] = setup(ping2State);
-      const remove = sinon.spy(api, 'remove');
+      const [app, {ping}] = setup(ping2State);
 
-      app.locSubActions.remove(User(USER_ID), s17_.time).should.be.fulfilled
-        .then(() => {
+      app.locSubActions.refresh().should.be.fulfilled.then(() => {
 
-          shouldHaveDispatchedWith( app, LocSubConstants.REMOVE_STARTING, s17_.time );
-          shouldHaveBeenCalledWithImmutable( remove, User(USER_ID) );
-          shouldHaveDispatched( app, LocSubConstants.USER_REMOVED );
-          notify.should.have.been.calledWith('User data removed from server.');
+        shouldHaveDispatched(app, LocSubConstants.LOC_REFRESH_TRIGGERED);
+        ping.should.have.been.calledOnce;
 
-          remove.restore();
-        }).should.notify(done);
+      }).should.notify(done);
     });
   });
 

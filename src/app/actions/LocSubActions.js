@@ -26,13 +26,11 @@ class LocSubActions extends Marty.ActionCreators {
       .then(locs => this.dispatch(LocSubConstants.LOCATIONS_RECEIVED, locs));
   }
 
-  // (User, () => Number)  -> Promise[Unit]
-  remove(user, now = time.now()){
+  //() -> Promise[Unit]
+  refresh(){
     return Promise
-      .resolve(this.dispatch(LocSubConstants.REMOVE_STARTING, now)) // overwrites `lastPing`
-      .then(() => api.remove(user))
-      .then(() => this.dispatch(LocSubConstants.USER_REMOVED))
-      .then(() => this.app.notificationActions.notify('User data removed from server.'));
+      .resolve(this.dispatch(LocSubConstants.LOC_REFRESH_TRIGGERED))
+      .then(() => this.app.locPubActions.ping());
   }
 
   // (Number, Number) => Promise[Unit]
