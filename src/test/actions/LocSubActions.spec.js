@@ -37,20 +37,26 @@ import { emptyState, ping1State, ping2State, pollState } from'../support/sampleP
 import stgs from '../../app/constants/Settings';
 const { locTtl: { values: ttls } } = stgs;
 
+import { merge } from 'lodash';
+
 describe('LocSubActions', () => {
 
   const setup = (state = emptyState) => {
 
-    const notifySpies = {
-      notify: sinon.spy()
+    const spies = {
+      notify: { notify: sinon.spy() },
+      locPub: { ping: sinon.spy() }
     };
 
     const app = createApplication(Application, {
       include: ['locSubActions', 'locPubStore'],
-      stub: { notificationActions: notifySpies  }
+      stub: {
+        notificationActions: spies.notify,
+        locPubActions: spies.locPub
+      }
     });
     app.locPubStore.state = state;
-    return [app, notifySpies];
+    return [app, merge({}, spies.notify, spies.locPub)];
   };
 
 
@@ -109,6 +115,21 @@ describe('LocSubActions', () => {
             update.restore();
           }).should.notify(done);
       });
+    });
+  });
+
+  describe('#refresh', () => {
+
+    it('dispatches refresh request then pings new location', done => {
+
+      const [app, {ping}] = setup(ping2State);
+
+      app.locSubActions.refresh().should.be.fulfilled.then(() => {
+
+        shouldHaveDispatched(app, LocSubConstants.LOC_REFRESH_TRIGGERED);
+        ping.should.have.been.calledOnce;
+
+      }).should.notify(done);
     });
   });
 
