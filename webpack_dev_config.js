@@ -38,29 +38,37 @@ var config = {
   },
   module: {
     loaders: [
-      { test: path.resolve(node_modules, deps[0]),
-        loader: "expose?React" },
-      { test: /\.jsx?$/,
-        exclude: [node_modules],
-        loaders: ['react-hot', 'babel'] },
       {
+        test: path.resolve(node_modules, deps[0]),
+        loader: "expose?React"
+      }, {
+        test: /\.jsx?$/,
+        exclude: [node_modules],
+        loaders: ['react-hot', 'babel']
+      }, {
         test: /\.css$/,
         loader: 'style-loader!css-loader!postcss-loader'
-      },
-      { test: /\.less$/,
-        loader: 'style-loader!css-loader!postcss-loader!less-loader' },
-      {
+      }, {
+        test: /\.less$/,
+        loader: 'style-loader!css-loader!postcss-loader!less-loader'
+      }, {
         test: /\.(eot|ttf|woff|woff2|svg|svgz)($|\?)/,
         loader: 'file'
-      },
-      { test: /\.xml$/,
-        loader: 'xml-loader' },
-      { test: /\.(jpe?g|png|gif)$/i,
+      }, {
+        test: /\.xml$/,
+        loader: 'xml-loader'
+      }, {
+        test: /\.(jpe?g|png|gif)$/i,
         loaders: [
             'file?hash=sha512&digest=hex&name=[hash].[ext]',
-            'image-webpack?bypassOnDebug&optimizationLevel=7&interlaced=false']},
-      { test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
-        loader: "url?limit=10000&minetype=image/svg+xml" }
+          'image-webpack?bypassOnDebug&optimizationLevel=7&interlaced=false']
+      }, {
+        test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
+        loader: "url?limit=10000&minetype=image/svg+xml"
+      }, {
+        test: /\.md$/,
+        loader: "html!markdown"
+      }
     ],
     noParse:[]
   },
