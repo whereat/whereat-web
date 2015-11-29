@@ -21,16 +21,12 @@ var config = {
       { test: /\.jsx?$/,
         exclude: [node_modules],
         loader: 'babel' },
-      {
-        test: /\.css$/,
-        loader: 'style-loader!css-loader!postcss-loader'
-      },
+      { test: /\.css$/,
+        loader: 'style-loader!css-loader!postcss-loader' },
       { test: /\.less$/,
         loader: 'style-loader!css-loader!postcss-loader!less-loader' },
-      {
-        test: /\.(eot|ttf|woff|woff2|svg|svgz)($|\?)/,
-        loader: 'file'
-      },
+      { test: /\.(eot|ttf|woff|woff2|svg|svgz)($|\?)/,
+        loader: 'file' },
       { test: /\.xml$/,
         loader: 'xml-loader' },
       { test: /\.(jpe?g|png|gif)$/i,
@@ -38,7 +34,9 @@ var config = {
           'file?hash=sha512&digest=hex&name=[hash].[ext]',
           'image-webpack?bypassOnDebug&optimizationLevel=7&interlaced=false']},
       { test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
-        loader: "url?limit=10000&minetype=image/svg+xml" }
+        loader: "url?limit=10000&minetype=image/svg+xml" },
+      { test: /\.md$/,
+        loader: "html!markdown" }
     ]
   },
   resolve: {

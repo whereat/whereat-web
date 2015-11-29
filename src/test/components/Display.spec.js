@@ -40,7 +40,8 @@ describe('Display Component', () => {
     stub: {
       homePage: <MockComponent />,
       mapPage: <MockComponent />,
-      settingsPage: <MockComponent />
+      settingsPage: <MockComponent />,
+      securityPage: <MockComponent />
     }
   });
 
