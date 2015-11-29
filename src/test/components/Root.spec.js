@@ -85,19 +85,5 @@ describe('Root component', () => {
         scheduleForget.should.have.callCount(1);
       });
     });
-
-    describe('#_alertSecurity', () => {
-
-      it('shows security alert once and only once on load', () => {
-
-        const [app, comp, {goto} ] = setup();
-
-        goto.should.have.been.calledWith(SEC);
-        comp.element.state.securityAlerted.should.beTrue;
-
-        comp.element._alertSecurity();
-        goto.should.have.callCount(1);
-      });
-    });
   });
 });

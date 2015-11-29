@@ -31,7 +31,6 @@ class Root extends BaseComponent {
     super();
     this.state = {
       forgetScheduled: false,
-      securityAlerted: false
     };
     this.bindAll('_scheduleForget', '_forget');
   }
@@ -47,7 +46,6 @@ class Root extends BaseComponent {
 
   componentDidMount(){
     this._scheduleForget();
-    this._alertSecurity();
   }
 
   _scheduleForget(){
@@ -59,13 +57,6 @@ class Root extends BaseComponent {
 
   _forget(){
     this.app.locSubActions.forget();
-  }
-
-  _alertSecurity(){
-    if(!this.state.securityAlerted){
-      this.app.navActions.goto(SEC);
-      this.setState({securityAlerted: true});
-    }
   }
 }
 

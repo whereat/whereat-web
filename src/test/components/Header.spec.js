@@ -9,7 +9,7 @@ import { createApplication } from 'marty/test-utils';
 
 import Application from '../../app/application';
 import Header from '../../app/components/Header';
-import { HOME, MAP, SET } from '../../app/constants/Pages';
+import { HOME, MAP, SET, SEC } from '../../app/constants/Pages';
 
 describe('Header Component', () => {
 
@@ -39,6 +39,7 @@ describe('Header Component', () => {
         hdr.navItem1.innerText.trim().should.equal(HOME);
         hdr.navItem2.innerText.trim().should.equal(MAP);
         hdr.navItem3.innerText.trim().should.equal(SET);
+        hdr.navItem4.innerText.trim().should.equal(SEC);
       });
     });
   });
@@ -72,6 +73,15 @@ describe('Header Component', () => {
           const[_, hdr, {goto}] = setup();
           hdr.navItem3.simulate.select();
           goto.should.have.been.calledWith(SET);
+        });
+      });
+
+      describe('SET', () => {
+
+        it('calls navAction#goto(SEC)', () => {
+          const[_, hdr, {goto}] = setup();
+          hdr.navItem4.simulate.select();
+          goto.should.have.been.calledWith(SEC);
         });
       });
     });
