@@ -37,18 +37,17 @@ describe('Header Component', () => {
         const [_, hdr, __] = setup();
 
         hdr.navItem1.innerText.trim().should.equal(MAP);
-        hdr.navItem2.innerText.trim().should.equal(POWER);
-        hdr.navItem3.innerText.trim().should.equal(SET);
-        hdr.navItem4.innerText.trim().should.equal(SEC);
+        hdr.navItem2.innerText.trim().should.equal(SET);
+        hdr.navItem3.innerText.trim().should.equal(SEC);
       });
     });
   });
 
   describe('events', () =>{
 
-    describe('selecting nav elements', () => {
+    describe('selecting menu items', () => {
 
-      describe('POWER', () => {
+      describe('first item', () => {
 
         it('calls navAction#goto(MAP)', () => {
           const[_, hdr, {goto}] = setup();
@@ -58,29 +57,20 @@ describe('Header Component', () => {
         });
       });
 
-      describe('MAP', () => {
-
-        it('calls navAction#goto(POWER)', () => {
-          const[_, hdr, {goto}] = setup();
-          hdr.navItem2.simulate.select();
-          goto.should.have.been.calledWith(POWER);
-        });
-      });
-
-      describe('SET', () => {
+      describe('second item', () => {
 
         it('calls navAction#goto(SET)', () => {
           const[_, hdr, {goto}] = setup();
-          hdr.navItem3.simulate.select();
+          hdr.navItem2.simulate.select();
           goto.should.have.been.calledWith(SET);
         });
       });
 
-      describe('SET', () => {
+      describe('third item', () => {
 
         it('calls navAction#goto(SEC)', () => {
           const[_, hdr, {goto}] = setup();
-          hdr.navItem4.simulate.select();
+          hdr.navItem3.simulate.select();
           goto.should.have.been.calledWith(SEC);
         });
       });

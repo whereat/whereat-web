@@ -11,6 +11,8 @@ class MapPage extends BaseComponent {
           <MapContainer ref="mapContainer"/>
         <div>
           <PowerButton ref="powerButton" className="powerButton" />
+        </div>
+        <div>
           <RefreshButton ref="refreshButton" className="refreshButton"/>
         </div>
       </div>

@@ -1,6 +1,6 @@
 import BaseComponent from './BaseComponent.jsx';
 import Marty from 'marty';
-import { POWER, MAP, SET, SEC } from '../constants/Pages';
+import { MAP, SET, SEC } from '../constants/Pages';
 import { Navbar, Nav, NavItem } from 'react-bootstrap';
 
 class Header extends BaseComponent {
@@ -25,7 +25,7 @@ class Header extends BaseComponent {
           onToggle={this._handleToggle}
         >
           <Nav right eventKey={0} ref="nav">
-            {this._menuItems([MAP, POWER, SET, SEC])}
+            {this._menuItems([MAP, SET, SEC])}
           </Nav>
 
         </Navbar>

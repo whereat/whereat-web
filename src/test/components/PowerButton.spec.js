@@ -58,13 +58,13 @@ describe('PowerButton Component', () => {
 
       it('has correct text and color', () => {
         const comp = testTree(<PowerButton.InnerComponent polling={false}/>);
-        comp.button.getClassName().should.equal('powerButton power Off btn btn-default');
+        comp.button.getClassName().should.equal('powerButton powerOff btn btn-default');
         comp.button.innerText.should.equal('OFF');
       });
     });
   });
 
-  describe.only('events', () =>{
+  describe('events', () =>{
 
 
     describe('clicking power button', () => {
