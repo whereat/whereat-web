@@ -14,7 +14,7 @@ import Display from '../../app/components/Display';
 import HomePage from '../../app/components/HomePage';
 import MapPage from '../../app/components/MapPage';
 import MockComponent from '../support/mocks/MockComponent';
-import { HOME, MAP, SEC, SET } from '../../app/constants/Pages';
+import { POWER, MAP, SEC, SET } from '../../app/constants/Pages';
 
 describe('Display Component', () => {
 
@@ -49,12 +49,12 @@ describe('Display Component', () => {
 
     describe('page', () => {
 
-      describe('when `page` prop is HOME', () => {
+      describe('when `page` prop is POWER', () => {
 
         it('renders HomePage component', () => {
-          const [app, d] = setup(HOME);
+          const [app, d] = setup(POWER);
 
-          d.getProp('page').should.equal(HOME);
+          d.getProp('page').should.equal(POWER);
           d.homePage.should.exist;
         });
       });
@@ -97,8 +97,8 @@ describe('Display Component', () => {
 
       it('changes page when store page changes', () => {
 
-        const [app, d] = setup(HOME);
-        d.getProp('page').should.equal(HOME);
+        const [app, d] = setup(POWER);
+        d.getProp('page').should.equal(POWER);
 
         app.navStore.replaceState(Map({ page: MAP }));
         const d2 = tree(app);

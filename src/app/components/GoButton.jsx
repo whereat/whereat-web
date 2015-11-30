@@ -18,10 +18,29 @@ class GoButton extends BaseComponent {
   }
 
   render(){
+
+    const msg = this.props.polling ? "ON" : "OFF";
+    const fontSize = this.props.polling ? '6em' : '5.1em';
+    const color = this.props.polling ? GREEN : RED;
+
     return (
       <Tappable ref="tappable" {...this.events} >
         <svg ref="svg" className="goButton" width={GO_DIAMETER} height={GO_DIAMETER} >
-          <circle ref="circle" cx={GO_RADIUS} cy={GO_RADIUS} r={GO_RADIUS} fill={this.props.color} />
+          <circle
+           ref="circle"
+           cx={GO_RADIUS}
+           cy={GO_RADIUS}
+           r={GO_RADIUS}
+           fill={color}
+          />
+          <text
+            x={GO_RADIUS * .20}
+            y={GO_RADIUS * 1.33}
+            fontSize={fontSize}
+            ref="msg"
+            >
+            {msg}
+          </text>
         </svg>
       </Tappable>
     );
@@ -35,11 +54,8 @@ class GoButton extends BaseComponent {
 }
 
 export default Marty.createContainer(GoButton, {
-  listenTo: ['goButtonStore', 'locPubStore', 'settingsStore'],
+  listenTo: ['locPubStore', 'settingsStore'],
   fetch: {
-    color(){
-      return this.app.goButtonStore.getColor();
-    },
     curShareFreq(){
       return this.app.settingsStore.getShareFreq();
     },

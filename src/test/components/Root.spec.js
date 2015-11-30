@@ -10,7 +10,7 @@ import { createApplication } from 'marty/test-utils';
 
 import MockComponent from '../support/mocks/MockComponent';
 import Root from '../../app/components/Root';
-import { HOME, SEC } from '../../app/constants/Pages';
+import { POWER, SEC } from '../../app/constants/Pages';
 import sc from '../../app/modules/scheduler';
 import { s1t1, s1t2, s2t1, s2t2 } from '../support/sampleSettings';
 import stgs from '../../app/constants/Settings';
@@ -27,19 +27,23 @@ describe('Root component', () => {
         forget: sinon.spy(),
         scheduleForget: sinon.spy()
       },
+      locPub: {
+        poll: sinon.spy()
+      },
       nav: { goto: sinon.spy() }
     };
     const app = createApplication(Application, {
       include: ['locSubActions', 'navActions', 'settingsStore'],
       stub: {
         locSubActions: spies.locSub,
+        locPubActions: spies.locPub,
         navActions: spies.nav
       }
     });
     app.settingsStore.state = state;
     const component = propTree(app);
 
-    return [app, component, merge({}, spies.locSub, spies.nav)];
+    return [app, component, merge({}, spies.locSub, spies.locPub, spies.nav)];
   };
   const propTree = (app) =>testTree(<Root.InnerComponent />,settings(app));
   const tree = (app) => testTree(<Root />, settings(app));
@@ -53,7 +57,7 @@ describe('Root component', () => {
 
   describe('contents', () => {
 
-    it('renders header and display childredn', () => {
+    it('renders header and display children', () => {
       const [app, comp] = setup();
       comp.root.should.exist;
       comp.header.should.exist;
@@ -74,15 +78,18 @@ describe('Root component', () => {
       });
     });
 
-    describe('_#scheduleForget', () => {
+    describe('#_onFirstLoad', () => {
 
-      it('schedules forgetting once and only once', () => {
-        const[app, comp, {scheduleForget}] = setup();
+      it('schedules forgetting and starts polling once and only once', () => {
+        const[app, comp, {scheduleForget, poll}] = setup();
+
+        comp.element.state.firstLoad.should.beFalse;
         scheduleForget.should.have.been.calledWith(ttls[1]);
-        comp.element.state.forgetScheduled.should.beTrue;
+        poll.should.have.been.calledWith(5000);
 
-        comp.element._scheduleForget();
+        comp.element.componentDidMount();
         scheduleForget.should.have.callCount(1);
+        poll.should.have.callCount(1);
       });
     });
   });

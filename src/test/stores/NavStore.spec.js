@@ -5,7 +5,7 @@ import Marty from 'marty';
 import { Map } from 'immutable';
 import Application from '../../app/application';
 import NavConstants from '../../app/constants/NavConstants';
-import { HOME, MAP, SEC } from '../../app/constants/Pages';
+import { POWER, MAP, SEC } from '../../app/constants/Pages';
 import { dispatch, createApplication } from 'marty/test-utils';
 import {
   shouldHaveBeenCalledWithImmutable,
@@ -28,6 +28,16 @@ describe('NavStore', () => {
     return [app, listener];
   };
 
+  describe('initial state', () => {
+
+    it('starts at map page with menu hidden', () => {
+      const app = createApplication(Application, { include: ['navStore'] });
+
+      app.navStore.state.get('page').should.equal(MAP);
+      app.navStore.state.get('expanded').should.equal(false);
+    });
+  });
+
   describe('handlers', () => {
 
     describe('#goto', () => {
@@ -36,8 +46,8 @@ describe('NavStore', () => {
         const [app] = setup(MAP);
         const goto = sinon.spy(app.navStore, 'goto');
 
-        dispatch(app, NavConstants.PAGE_REQUESTED, HOME);
-        goto.should.have.been.calledWith(HOME);
+        dispatch(app, NavConstants.PAGE_REQUESTED, POWER);
+        goto.should.have.been.calledWith(POWER);
 
         dispatch(app, NavConstants.PAGE_REQUESTED, MAP);
         goto.should.have.been.calledWith(MAP);
@@ -52,8 +62,8 @@ describe('NavStore', () => {
       it('records new page in store', () => {
         const [app] = setup(MAP);
 
-        app.navStore.goto(HOME);
-        app.navStore.state.get('page').should.equal(HOME);
+        app.navStore.goto(POWER);
+        app.navStore.state.get('page').should.equal(POWER);
 
         app.navStore.goto(MAP);
         app.navStore.state.get('page').should.equal(MAP);
@@ -65,9 +75,9 @@ describe('NavStore', () => {
       it('notifies listener of state change', () => {
         const [app, listener] = setup(MAP);
 
-        app.navStore.goto(HOME);
+        app.navStore.goto(POWER);
         shouldHaveBeenCalledNthTimeWithImmutable(
-          listener, 0, Map({ page: HOME, expanded: false }));
+          listener, 0, Map({ page: POWER, expanded: false }));
 
         app.navStore.goto(MAP);
         shouldHaveBeenCalledNthTimeWithImmutable(
@@ -84,13 +94,13 @@ describe('NavStore', () => {
       it('handles PAGE_REQUESTED', () => {
         const [app] = setup();
         const hide = sinon.spy(app.navStore, 'hide');
-        dispatch(app, NavConstants.PAGE_REQUESTED, HOME);
+        dispatch(app, NavConstants.PAGE_REQUESTED, POWER);
 
         hide.should.have.been.calledOnce;
       });
 
       it('sets state.expanded to false', () => {
-        const[app] = setup(HOME);
+        const[app] = setup(POWER);
         app.navStore.state.set('expanded', true);
         app.navStore.hide();
 
@@ -98,12 +108,12 @@ describe('NavStore', () => {
       });
 
       it('notifies listeners of state change', () => {
-        const [app, listener] = setup(HOME);
+        const [app, listener] = setup(POWER);
         app.navStore.replaceState(app.navStore.state.set('expanded', true));
         app.navStore.hide();
 
         shouldHaveBeenCalledNthTimeWithImmutable(
-          listener, 1, Map({ page: HOME, expanded: false })
+          listener, 1, Map({ page: POWER, expanded: false })
         );
       });
     });
@@ -111,7 +121,7 @@ describe('NavStore', () => {
     describe('#toggle()', () => {
 
       it('handles NAV_TOGGLED', () => {
-        const [app] = setup(HOME);
+        const [app] = setup(POWER);
         const toggle = sinon.spy(app.navStore, 'toggle');
         dispatch(app, NavConstants.NAV_TOGGLED);
 
@@ -119,7 +129,7 @@ describe('NavStore', () => {
       });
 
       it('toggles `expanded` btw true and false', () => {
-        const [app] = setup(HOME);
+        const [app] = setup(POWER);
         app.navStore.state.get('expanded').should.equal(false);
 
         app.navStore.toggle();
@@ -130,15 +140,15 @@ describe('NavStore', () => {
       });
 
       it('notifies listers of state change', () => {
-        const [app, listener] = setup(HOME);
+        const [app, listener] = setup(POWER);
 
         app.navStore.toggle();
         shouldHaveBeenCalledNthTimeWithImmutable(
-          listener, 0, Map({ page: HOME, expanded: true }));
+          listener, 0, Map({ page: POWER, expanded: true }));
 
         app.navStore.toggle();
         shouldHaveBeenCalledNthTimeWithImmutable(
-          listener, 1, Map({ page: HOME, expanded: false }));
+          listener, 1, Map({ page: POWER, expanded: false }));
       });
     });
   });
@@ -148,8 +158,8 @@ describe('NavStore', () => {
     describe('#getPage', () => {
 
       it('returns current page', ()=> {
-        const app = setup(HOME)[0];
-        app.navStore.getPage().should.equal(HOME);
+        const app = setup(POWER)[0];
+        app.navStore.getPage().should.equal(POWER);
 
         app.navStore.goto(MAP);
         app.navStore.getPage().should.equal(MAP);
@@ -159,7 +169,7 @@ describe('NavStore', () => {
     describe('#isExpanded', () => {
 
       it('returns expanded state', () => {
-        const app = setup(HOME)[0];
+        const app = setup(POWER)[0];
         app.navStore.isExpanded().should.equal(false);
 
         app.navStore.toggle();
