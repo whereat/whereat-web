@@ -29,7 +29,7 @@ describe('GoButton Component', () => {
       stopPolling: sinon.spy()
     };
     const app = createApplication(Application, {
-      include: ['goButtonStore', 'locPubStore', 'settingsStore'],
+      include: ['locPubStore', 'settingsStore'],
       stub: { locPubActions: spies }
     });
     app.locPubStore.state = locPubState;
@@ -37,8 +37,8 @@ describe('GoButton Component', () => {
     return [app, spies];
   };
 
-  const propTree = (app, color) => (
-    testTree(<GoButton.InnerComponent color={color}/>, settings(app)));
+  const propTree = (app, polling) => (
+    testTree(<GoButton.InnerComponent polling={polling}/>, settings(app)));
   const tree = (app) => testTree(<GoButton />, settings(app));
   const settings = (app) => ({context: { app: app }});
 
@@ -73,18 +73,40 @@ describe('GoButton Component', () => {
         gb.circle.getAttribute('cy').should.equal(GO_RADIUS);
         gb.circle.getAttribute('r').should.equal(GO_RADIUS);
       });
+
+
+      it('is rendered with correct color based on prop', () => {
+        const gb = testTree(<GoButton.InnerComponent polling={false} />);
+        gb.circle.getAttribute('fill').should.equal(RED);
+
+        const gb2 = testTree(<GoButton.InnerComponent polling={true} />);
+        gb2.circle.getAttribute('fill').should.equal(GREEN);
+      });
     });
 
-    it('is rendered with correct color based on prop', () => {
-      const gb = testTree(<GoButton.InnerComponent color={RED} />);
-      gb.circle.getAttribute('fill').should.equal(RED);
+    describe('message', () => {
 
-      const gb2 = testTree(<GoButton.InnerComponent color={GREEN} />);
-      gb2.circle.getAttribute('fill').should.equal(GREEN);
+      it('is rendered in correct position', () => {
+        const gb = testTree(<GoButton.InnerComponent />);
+
+        gb.msg.getAttribute('x').should.equal((GO_RADIUS * .20).toString());
+        gb.msg.getAttribute('y').should.equal((GO_RADIUS * 1.33).toString());
+      });
+
+
+      it('is rendered with correct text and size based on prop', () => {
+        const gb = testTree(<GoButton.InnerComponent polling={true} />);
+        gb.msg.getAttribute('font-size').should.equal('6em');
+        gb.innerText.should.equal('ON');
+
+        const gb2 = testTree(<GoButton.InnerComponent polling={false} />);
+        gb2.msg.getAttribute('font-size').should.equal('5.1em');
+        gb2.innerText.should.equal('OFF');
+      });
     });
   });
 
-  describe('events', () =>{
+  describe.only('events', () =>{
 
     describe('clicking go button', () => {
 
@@ -116,22 +138,6 @@ describe('GoButton Component', () => {
           stopPolling.should.have.been.calledWith(0);
           poll.should.not.have.been.called;
         });
-      });
-    });
-
-    describe('listening to GoButtonStore', () => {
-
-      it('changes color when store color changes', () => {
-        const [app, _] = setup(emptyState);
-        app.goButtonStore.replaceState(Map({ color: RED }));
-        const gb = tree(app);
-
-        gb.innerComponent.getProp('color').should.equal(RED);
-
-        app.goButtonStore.replaceState(Map({ color: GREEN }));
-        const gb2 = tree(app);
-
-        gb2.innerComponent.getProp('color').should.equal(GREEN);
       });
     });
 
