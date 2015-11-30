@@ -29,10 +29,8 @@ Root
 class Root extends BaseComponent {
   constructor(){
     super();
-    this.state = {
-      forgetScheduled: false,
-    };
-    this.bindAll('_scheduleForget', '_forget');
+    this.state = { firstLoad: true };
+    this.bindAll('_onFirstLoad', '_forget');
   }
 
   render(){
@@ -45,14 +43,13 @@ class Root extends BaseComponent {
   };
 
   componentDidMount(){
-    this._scheduleForget();
+    if(this.state.firstLoad) this._onFirstLoad();
   }
 
-  _scheduleForget(){
-    if (!this.state.forgetScheduled) {
-      this.app.locSubActions.scheduleForget(locTtl.values[1]);
-      this.setState({forgetScheduled: true});
-    }
+  _onFirstLoad(){
+    this.app.locSubActions.scheduleForget(locTtl.values[1]);
+    this.app.locPubActions.poll(5000);
+    this.state.firstLoad = false;
   }
 
   _forget(){

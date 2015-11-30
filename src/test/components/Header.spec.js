@@ -9,7 +9,7 @@ import { createApplication } from 'marty/test-utils';
 
 import Application from '../../app/application';
 import Header from '../../app/components/Header';
-import { HOME, MAP, SET, SEC } from '../../app/constants/Pages';
+import { POWER, MAP, SET, SEC } from '../../app/constants/Pages';
 
 describe('Header Component', () => {
 
@@ -36,8 +36,8 @@ describe('Header Component', () => {
       it('contains correctly ordered list of pages', () => {
         const [_, hdr, __] = setup();
 
-        hdr.navItem1.innerText.trim().should.equal(HOME);
-        hdr.navItem2.innerText.trim().should.equal(MAP);
+        hdr.navItem1.innerText.trim().should.equal(MAP);
+        hdr.navItem2.innerText.trim().should.equal(POWER);
         hdr.navItem3.innerText.trim().should.equal(SET);
         hdr.navItem4.innerText.trim().should.equal(SEC);
       });
@@ -48,22 +48,22 @@ describe('Header Component', () => {
 
     describe('selecting nav elements', () => {
 
-      describe('HOME', () => {
+      describe('POWER', () => {
 
-        it('calls navAction#goto(HOME)', () => {
+        it('calls navAction#goto(MAP)', () => {
           const[_, hdr, {goto}] = setup();
           hdr.navItem1.simulate.select();
 
-          goto.should.have.been.calledWith(HOME);
+          goto.should.have.been.calledWith(MAP);
         });
       });
 
       describe('MAP', () => {
 
-        it('calls navAction#goto(MAP)', () => {
+        it('calls navAction#goto(POWER)', () => {
           const[_, hdr, {goto}] = setup();
           hdr.navItem2.simulate.select();
-          goto.should.have.been.calledWith(MAP);
+          goto.should.have.been.calledWith(POWER);
         });
       });
 

@@ -36,7 +36,7 @@ describe('Settings Store', () => {
     it('has correct defaults', () =>{
       const app = createApplication(Application, {include: ['settingsStore'] });
 
-      app.settingsStore.state.get('shareFreq').should.equal(2);
+      app.settingsStore.state.get('shareFreq').should.equal(0);
       app.settingsStore.state.get('locTtl').should.equal(1);
     });
   });

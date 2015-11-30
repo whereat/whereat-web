@@ -8,7 +8,7 @@ class SettingsStore extends Marty.Store {
   constructor(options){
     super(options);
     this.state = Map({
-      shareFreq: 2,
+      shareFreq: 0,
       locTtl: 1
     });
 
