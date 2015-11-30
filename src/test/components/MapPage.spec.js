@@ -17,24 +17,19 @@ describe('MapPage Component', () => {
 
   describe('contents', () => {
 
-    it('renders HomePage component', () => {
+    it('renders MapPage component', () => {
       const comp = testTree(<MapPage.InnerComponent />, {
         stub: {
-          mapContainer: <MockComponent />
+          mapContainer: <MockComponent />,
+          powerButton: <MockComponent />,
+          refreshButton: <MockComponent />
         }
       });
 
       comp.mapPage.should.exist;
       comp.mapContainer.should.exist;
-
       comp.powerButton.should.exist;
-      comp.powerButton.getClassName()
-        .should.equal('refreshButton btn btn-default');
-
       comp.refreshButton.should.exist;
-      comp.refreshButton.getClassName()
-        .should.equal('refreshButton btn btn-default');
-
     });
   });
 });
