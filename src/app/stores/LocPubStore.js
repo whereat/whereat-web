@@ -13,7 +13,7 @@ class LocPubStore extends Marty.Store {
     super(options);
     this.state = Map({
       loc: UserLocation(), // UserLocation
-      polling: false, // Boolean
+      polling: true, // Boolean
       pollId: -1, // Number
       lastPing: -1 // Number
     });
