@@ -1,7 +1,6 @@
 import Marty from 'marty';
 import BaseComponent from './BaseComponent';
 import { POWER, MAP, SEC, SET } from '../constants/Pages';
-import HomePage from './HomePage';
 import MapPage from './MapPage';
 import SecurityPage from './SecurityPage';
 import SettingsPage from './SettingsPage';
@@ -12,7 +11,6 @@ class Display extends BaseComponent {
     return (
       <div id="display">
         {{
-          [POWER]: () => <HomePage ref='homePage' />,
           [MAP]: () => <MapPage ref='mapPage' />,
           [SEC]: () => <SecurityPage ref='securityPage' />,
           [SET]: () => <SettingsPage ref='settingsPage' />
