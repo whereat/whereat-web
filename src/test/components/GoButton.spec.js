@@ -106,7 +106,7 @@ describe('GoButton Component', () => {
     });
   });
 
-  describe.only('events', () =>{
+  describe('events', () =>{
 
     describe('clicking go button', () => {
 
