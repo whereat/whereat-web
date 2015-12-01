@@ -43,7 +43,6 @@ class LocPubActions extends Marty.ActionCreators {
   // (Number, Number) -> Promise[Unit]
   poll(shareFreq, ni = NOTIFICATION_INTERVAL){
     const id = sc.schedule(this.app.locPubActions.ping.bind(this), shareFreq);
-    this.dispatch(GoButtonConstants.GO_BUTTON_ON);
     this.dispatch(LocPubConstants.POLLING_ON, id);
     return Promise.resolve(
       this.app.notificationActions.notify('Location sharing on.', ni));
@@ -52,7 +51,6 @@ class LocPubActions extends Marty.ActionCreators {
   // (Number, Number) -> Promise[Unit]
   stopPolling(id, ni = NOTIFICATION_INTERVAL){
     sc.cancel(id);
-    this.dispatch(GoButtonConstants.GO_BUTTON_OFF);
     this.dispatch(LocPubConstants.POLLING_OFF);
     return Promise.resolve(
       this.app.notificationActions.notify('Location sharing off.', ni));

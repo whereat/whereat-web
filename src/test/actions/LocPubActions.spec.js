@@ -148,7 +148,6 @@ describe('LocPubActions', () => {
 
           schedule.should.have.been.calledWith(ping, 1);
           bind.should.have.been.calledWith(app.locPubActions);
-          shouldHaveDispatched(app, GoButtonConstants.GO_BUTTON_ON);
           shouldHaveDispatchedWith(app, LocPubConstants.POLLING_ON, 1);
           notify.should.have.been.calledWith('Location sharing on.', .0001);
 
@@ -170,7 +169,6 @@ describe('LocPubActions', () => {
       app.locPubActions.stopPolling(1, .0001).should.be.fulfilled.then(() => {
 
         cancel.should.have.been.calledOnce;
-        shouldHaveDispatched(app, GoButtonConstants.GO_BUTTON_OFF);
         shouldHaveDispatched(app, LocPubConstants.POLLING_OFF);
         notify.should.have.been.calledWith('Location sharing off.', .0001);
 

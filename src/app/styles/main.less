@@ -3,6 +3,10 @@
 @RED: #dd3b47;
 @GREEN: #30ff40;
 
+.trans-gray-border {
+
+}
+
 
 // there appears to be a bootstrap bug here
 .glyphicon-plus:before {
@@ -84,6 +88,7 @@ body {
   width: 100%;
   height: calc(100% - 3*@DISPLAY_OFFSET);
   top: @DISPLAY_OFFSET;
+  overflow: scroll;
 }
 
 .menuItem {
@@ -147,29 +152,23 @@ body {
   left: 50%;
   margin-top: -@GO_RADIUS;
   margin-left: -@GO_RADIUS;
+
 }
 
 // map
 
-.clearButton {
-  position: relative;
-  padding: 0;
-  top: -3em;
-  left: 0.5em;
-  width: 2em;
-  height: 2em;
-}
-
-.refreshButton {
+.map-button {
   position: fixed;
-  top: 3.2em;
-  left: calc(100% - 12em);
   width: 2em;
   height: 2em;
   font-size: 1em;
+  z-index: 10;
+  .trans-gray-border;
+}
+
+.trans-gray-border {
   border: 2px solid rgba(0,0,0,0.2);
   padding: 0;
-
   -moz-background-clip: border;
   -webkit-background-clip: border;
   background-clip: border-box;
@@ -179,15 +178,34 @@ body {
   -moz-background-clip: content;
   -webkit-background-clip: content;
   background-clip: content-box;
+}
 
+.refreshButton {
+  .map-button;
+  top: 3.2em;
+  left: calc(100% - 12em);
   .glyphicon{
     margin: .1em 0 0 .05em;
   }
 }
 
+.powerButton {
+  .map-button;
+  width: 3em;
+  text-align: center;
+  top: 3.2em;
+  left: calc(100% - 28em);
+}
 
+.powerOn {
+  background-color: @GREEN !important;
+}
 
-.leaflet-left {
+.powerOff {
+  background-color: @RED !important;
+}
+
+.leaflet-left { // to alter position of zoom buttons
   position: fixed;
   top: calc(100% - 10em);
 }

@@ -9,7 +9,7 @@ import Application from '../../app/application';
 
 import MapPage from '../../app/components/MapPage';
 import MapContainer from '../../app/components/MapContainer';
-import ClearButton from '../../app/components/ClearButton';
+import PowerButton from '../../app/components/PowerButton';
 import MockComponent from '../support/mocks/MockComponent';
 
 
@@ -17,19 +17,19 @@ describe('MapPage Component', () => {
 
   describe('contents', () => {
 
-    it('renders HomePage component', () => {
+    it('renders MapPage component', () => {
       const comp = testTree(<MapPage.InnerComponent />, {
         stub: {
-          mapContainer: <MockComponent />
+          mapContainer: <MockComponent />,
+          powerButton: <MockComponent />,
+          refreshButton: <MockComponent />
         }
       });
 
       comp.mapPage.should.exist;
       comp.mapContainer.should.exist;
+      comp.powerButton.should.exist;
       comp.refreshButton.should.exist;
-      comp.refreshButton.getClassName()
-        .should.equal('refreshButton btn btn-default');
-
     });
   });
 });
