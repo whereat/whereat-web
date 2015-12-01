@@ -11,10 +11,9 @@ import Application from '../../app/application';
 import { Map } from 'immutable';
 
 import Display from '../../app/components/Display';
-import HomePage from '../../app/components/HomePage';
 import MapPage from '../../app/components/MapPage';
 import MockComponent from '../support/mocks/MockComponent';
-import { HOME, MAP, SEC, SET } from '../../app/constants/Pages';
+import { MAP, SEC, SET } from '../../app/constants/Pages';
 
 describe('Display Component', () => {
 
@@ -40,23 +39,14 @@ describe('Display Component', () => {
     stub: {
       homePage: <MockComponent />,
       mapPage: <MockComponent />,
-      settingsPage: <MockComponent />
+      settingsPage: <MockComponent />,
+      securityPage: <MockComponent />
     }
   });
 
   describe('contents', () => {
 
     describe('page', () => {
-
-      describe('when `page` prop is HOME', () => {
-
-        it('renders HomePage component', () => {
-          const [app, d] = setup(HOME);
-
-          d.getProp('page').should.equal(HOME);
-          d.homePage.should.exist;
-        });
-      });
 
       describe('when `page` prop is MAP', () => {
 
@@ -95,19 +85,16 @@ describe('Display Component', () => {
     describe('listening to NavStore', () => {
 
       it('changes page when store page changes', () => {
-
-        const [app, d] = setup(HOME);
-        d.getProp('page').should.equal(HOME);
-
-        app.navStore.replaceState(Map({ page: MAP }));
-        const d2 = tree(app);
-
-        d2.innerComponent.getProp('page').should.equal(MAP);
+        const [app, d] = setup(MAP);
+        d.getProp('page').should.equal(MAP);
 
         app.navStore.replaceState(Map({ page: SET }));
-        const d3 = tree(app);
+        const d2 = tree(app);
+        d2.innerComponent.getProp('page').should.equal(SET);
 
-        d3.innerComponent.getProp('page').should.equal(SET);
+        app.navStore.replaceState(Map({ page: SEC }));
+        const d3 = tree(app);
+        d3.innerComponent.getProp('page').should.equal(SEC);
       });
     });
   });

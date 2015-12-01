@@ -2,7 +2,7 @@ import chai from 'chai';
 import Application from '../../app/application';
 import NavConstants from '../../app/constants/NavConstants';
 import { hasDispatched, createApplication } from 'marty/test-utils';
-import { HOME, MAP, SEC } from '../../app/constants/Pages';
+import { POWER, MAP, SEC } from '../../app/constants/Pages';
 
 const should = chai.should();
 
@@ -18,9 +18,9 @@ describe('NavActions', () => {
 
       it('dispatches PAGE_REQUESTED, \'home\'', () =>{
         const app = setup();
-        app.navActions.goto(HOME);
+        app.navActions.goto(POWER);
 
-        hasDispatched(app, NavConstants.PAGE_REQUESTED, HOME).should.equal(true);
+        hasDispatched(app, NavConstants.PAGE_REQUESTED, POWER).should.equal(true);
       });
     });
 

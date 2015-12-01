@@ -1,6 +1,6 @@
 import Marty from 'marty';
 import NavConstants from '../constants/NavConstants';
-import { HOME, MAP, SEC } from '../constants/Pages';
+import { POWER, MAP, SEC, SET } from '../constants/Pages';
 import { Map } from 'immutable';
 
 class NavStore extends Marty.Store {
@@ -8,7 +8,7 @@ class NavStore extends Marty.Store {
   constructor(options){
     super(options);
     this.state = Map({
-      page: HOME,
+      page: MAP,
       expanded: false
     });
 

@@ -1,6 +1,5 @@
 export default {
-  HOME: 'home',
-  MAP: 'map',
-  SEC: 'sec',
-  SET: 'settings'
+  MAP: 'Map',
+  SEC: 'Security',
+  SET: 'Settings'
 };

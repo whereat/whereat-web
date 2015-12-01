@@ -9,7 +9,7 @@ import { createApplication } from 'marty/test-utils';
 
 import Application from '../../app/application';
 import Header from '../../app/components/Header';
-import { HOME, MAP, SET } from '../../app/constants/Pages';
+import { POWER, MAP, SET, SEC } from '../../app/constants/Pages';
 
 describe('Header Component', () => {
 
@@ -36,42 +36,42 @@ describe('Header Component', () => {
       it('contains correctly ordered list of pages', () => {
         const [_, hdr, __] = setup();
 
-        hdr.navItem1.innerText.trim().should.equal(HOME);
-        hdr.navItem2.innerText.trim().should.equal(MAP);
-        hdr.navItem3.innerText.trim().should.equal(SET);
+        hdr.navItem1.innerText.trim().should.equal(MAP);
+        hdr.navItem2.innerText.trim().should.equal(SET);
+        hdr.navItem3.innerText.trim().should.equal(SEC);
       });
     });
   });
 
   describe('events', () =>{
 
-    describe('selecting nav elements', () => {
+    describe('selecting menu items', () => {
 
-      describe('HOME', () => {
-
-        it('calls navAction#goto(HOME)', () => {
-          const[_, hdr, {goto}] = setup();
-          hdr.navItem1.simulate.select();
-
-          goto.should.have.been.calledWith(HOME);
-        });
-      });
-
-      describe('MAP', () => {
+      describe('first item', () => {
 
         it('calls navAction#goto(MAP)', () => {
           const[_, hdr, {goto}] = setup();
-          hdr.navItem2.simulate.select();
+          hdr.navItem1.simulate.select();
+
           goto.should.have.been.calledWith(MAP);
         });
       });
 
-      describe('SET', () => {
+      describe('second item', () => {
 
         it('calls navAction#goto(SET)', () => {
           const[_, hdr, {goto}] = setup();
-          hdr.navItem3.simulate.select();
+          hdr.navItem2.simulate.select();
           goto.should.have.been.calledWith(SET);
+        });
+      });
+
+      describe('third item', () => {
+
+        it('calls navAction#goto(SEC)', () => {
+          const[_, hdr, {goto}] = setup();
+          hdr.navItem3.simulate.select();
+          goto.should.have.been.calledWith(SEC);
         });
       });
     });
