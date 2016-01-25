@@ -1,3 +1,20 @@
+/**
+ *
+ * Copyright (c) 2015-present, Total Location Test Paragraph.
+ * All rights reserved.
+ *
+ * This file is part of Where@. Where@ is free software:
+ * you can redistribute it and/or modify it under the terms of
+ * the GNU General Public License (GPL), either version 3
+ * of the License, or (at your option) any later version.
+ *
+ * Where@ is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. For more details,
+ * see the full license at <http://www.gnu.org/licenses/gpl-3.0.en.html>
+ *
+ */
+
 # Security Tips
 
 As one who protests, you are (sadly) the target of a broad arsenal of surveillance tactics. We've designed where@ to protect you from [as many of these tactics as possible](https://about.whereat.io/threat-model), but some things are beyond our control. To have maximum safety while using this app during a protest, we __strongly encourage you to do the following:
